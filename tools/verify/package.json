@@ -1,0 +1,15 @@
+{
+  "name": "qguard-website-verify",
+  "private": true,
+  "description": "Dev-only regression checks: static build vs the live WordPress site. Not used by the website.",
+  "type": "module",
+  "scripts": {
+    "compare": "node compare.mjs",
+    "pixel": "node pixel.mjs"
+  },
+  "devDependencies": {
+    "pixelmatch": "^6.0.0",
+    "pngjs": "^7.0.0",
+    "puppeteer-core": "^23.0.0"
+  }
+}

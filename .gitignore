@@ -1,3 +1,6 @@
 ._*
 .DS_Store
 node_modules/
+reference/
+tools/export/raw/
+tools/export/build/

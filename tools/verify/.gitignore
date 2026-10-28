@@ -1,0 +1,5 @@
+node_modules/
+shots/
+compare-report.json
+pixel-report.json
+*.png
