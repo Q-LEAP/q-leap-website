@@ -1,6 +1,6 @@
 ._*
 .DS_Store
 node_modules/
-reference/
+/reference/
 tools/export/raw/
 tools/export/build/
