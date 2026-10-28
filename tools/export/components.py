@@ -60,12 +60,18 @@ def process(path):
     full = os.path.join(ROOT, path)
     markup = open(full).read()
     prefix = '../' * path.count('/')
+    markup = markup.replace('?export=1&amp;', '?').replace('?export=1&', '?').replace('&amp;export=1', '').replace('&export=1', '').replace('?export=1', '')
     match = re.search(r'<rs-module-wrap.*?</rs-module-wrap>', markup, re.S)
     if match:
         markup = markup[:match.start()] + hero(match.group(0), prefix) + markup[match.end():]
         if 'assets/css/hero.css' not in markup:
             markup = markup.replace('assets/css/main.css">', 'assets/css/main.css">\n<link rel="stylesheet" href="' + prefix + 'assets/css/hero.css">', 1)
         print(path, 'hero rebuilt')
+    if 'elementor-invisible' in markup and 'assets/css/animations.css' not in markup:
+        markup = markup.replace('assets/css/main.css">', 'assets/css/main.css">\n<link rel="stylesheet" href="' + prefix + 'assets/css/animations.css">', 1)
+    swiper = f'<script src="{prefix}assets/js/vendor/swiper-5.4.5.min.js" defer></script>\n'
+    if 'swiper-5.4.5.min.js' not in markup and 'slider_swiper' in markup:
+        markup = markup.replace(f'<script src="{prefix}assets/js/main.js"', swiper + f'<script src="{prefix}assets/js/main.js"', 1)
     open(full, 'w').write(markup)
 
 

@@ -1,0 +1,3 @@
+/* Elementor entrance animations (plugins/elementor/assets/lib/animations/styles/*.min.css), loaded on demand by Elementor's JavaScript on WordPress. */
+@keyframes fadeInUp{from{opacity:0;transform:translate3d(0,100%,0)}to{opacity:1;transform:none}}.fadeInUp{animation-name:fadeInUp}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}.fadeIn{animation-name:fadeIn}

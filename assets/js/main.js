@@ -89,7 +89,275 @@
     update();
   }
 
+  // Run callback once, the first time the element enters the viewport (trx_addons_in_viewport).
+  function whenVisible(element, callback) {
+    if (!('IntersectionObserver' in window)) { callback(); return; }
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) { observer.disconnect(); callback(); }
+    });
+    observer.observe(element);
+  }
+
+  // trx_addons skills counters. "odometer": digit n rolls n*10 + its final value times, the
+  // rolls of one digit share (duration - 300) ms, and digit n waits n roll lengths before starting.
+  // "counter": the number counts up by data-step every data-speed ms.
+  function animateOdometerDigit(digit, index, finalValue, duration) {
+    const ribbon = digit.querySelector('.sc_skills_digit_ribbon');
+    const firstValue = digit.querySelector('.sc_skills_digit_value');
+    if (!ribbon || !firstValue) return;
+    const rounds = index * 10 + finalValue;
+    const delay = Math.floor((duration - 300) / Math.max(1, rounds));
+    let round = 0;
+    let skipped = 0;
+    const step = () => {
+      if (round >= rounds) return;
+      if (skipped++ < index) { setTimeout(step, delay); return; }
+      round += 1;
+      const current = ribbon.querySelector('.sc_skills_digit_value');
+      const next = current.cloneNode(true);
+      next.textContent = String(round % 10);
+      current.after(next);
+      const height = current.offsetHeight;
+      const animation = ribbon.animate([{ top: '0px' }, { top: `-${height}px` }], { duration: delay, easing: 'linear' });
+      animation.onfinish = () => { current.remove(); ribbon.style.top = '0px'; step(); };
+    };
+    step();
+  }
+
+  function initSkills() {
+    document.querySelectorAll('.sc_skills_item').forEach((item) => {
+      const total = item.querySelector('.sc_skills_total');
+      if (!total) return;
+      whenVisible(item, () => {
+        item.classList.add('trx_addons_in_viewport', 'inited');
+        const stop = parseFloat(total.dataset.stop);
+        const start = parseFloat(total.dataset.start) || 0;
+        const step = parseFloat(total.dataset.step) || 1;
+        const speed = parseInt(total.dataset.speed, 10) || 15;
+        const duration = parseInt(total.dataset.duration, 10) || Math.ceil((parseInt(total.dataset.max, 10) || stop) / step) * speed;
+        if (reducedMotion) {
+          if (total.dataset.style !== 'odometer') total.textContent = stop + (total.dataset.ed || '');
+          else total.querySelectorAll('.sc_skills_digit').forEach((digit, index) => { const value = digit.querySelector('.sc_skills_digit_value'); if (value) value.textContent = String(stop).charAt(index); });
+          return;
+        }
+        if (total.dataset.style === 'odometer') {
+          const digits = String(stop);
+          total.querySelectorAll('.sc_skills_digit').forEach((digit, index) => animateOdometerDigit(digit, index, Number(digits.charAt(index)) || 0, duration));
+          return;
+        }
+        const decimals = Math.max(0, ...[start, stop].map((value) => (String(value).split('.')[1] || '').length));
+        let value = start;
+        const tick = () => {
+          value = Math.min(stop, value + step);
+          total.textContent = value.toFixed(decimals) + (total.dataset.ed || '');
+          if (value < stop) setTimeout(tick, speed);
+        };
+        tick();
+      });
+    });
+  }
+
+  // trx_addons sliders: same Swiper (5.4.5) and the same options trx_addons_init_sliders passes.
+  function slidesPerView(slider) {
+    let perView = Number(slider.dataset.slidesPerView) || 1;
+    try {
+      const breakpoints = JSON.parse(slider.dataset.slidesPerViewBreakpoints || 'null');
+      if (breakpoints) {
+        for (const max of Object.keys(breakpoints)) { if (window.innerWidth <= Number(max)) { perView = breakpoints[max]; break; } }
+      }
+    } catch {}
+    return perView;
+  }
+
+  function initSliders() {
+    if (!window.Swiper) return;
+    document.querySelectorAll('.slider_swiper:not(.inited)').forEach((slider, index) => {
+      if (!slider.id) slider.id = `ql_swiper_${index}`;
+      const outer = slider.parentElement.classList.contains('slider_swiper_outer') ? slider.parentElement : slider;
+      if (outer !== slider && !outer.id) outer.id = `${slider.id}_outer`;
+      slider.querySelectorAll('.swiper-slide').forEach((slide, number) => slide.setAttribute('data-slide-number', number));
+      slider.style.display = 'block';
+      slider.style.opacity = '0';
+      slider.classList.add('inited');
+      const data = slider.dataset;
+      const direction = data.direction === 'vertical' ? 'vertical' : 'horizontal';
+      const minWidth = data.slidesMinWidth !== undefined ? Number(data.slidesMinWidth) : 150;
+      let perView = slidesPerView(slider);
+      const width = slider.offsetWidth || slider.parentElement.offsetWidth;
+      if (direction === 'horizontal' && width / perView < minWidth) perView = Math.max(1, Math.floor(width / minWidth));
+      // trx_addons uses a random 5-10 s interval when the slider sets none.
+      const interval = data.interval === undefined ? Math.round(5000 * (1 + Math.random())) : (parseInt(data.interval, 10) || 0);
+      const pagination = slider.classList.contains('slider_pagination')
+        ? outer.querySelector(':scope > .slider_pagination_wrap') || slider.querySelector(':scope > .slider_pagination_wrap')
+        : null;
+      const controls = slider.classList.contains('slider_controls');
+      const control = (name) => slider.querySelector(`:scope > .slider_controls_wrap > .slider_${name}`) || slider.parentElement.querySelector(`:scope > .slider_controls_wrap > .slider_${name}`);
+      const autoplay = slider.classList.contains('slider_noautoplay') || data.autoplay === '0' || reducedMotion ? false : { delay: interval, disableOnInteraction: true };
+      // eslint-disable-next-line no-new
+      new window.Swiper(slider, {
+        freeMode: Number(data.freeMode) > 0,
+        direction,
+        initialSlide: 0,
+        speed: data.speed !== undefined ? Number(data.speed) : 600,
+        loop: (data.loop === undefined || Number(data.loop) > 0) && data.slidesOverflow !== '1',
+        loopedSlides: perView,
+        slidesPerView: perView,
+        spaceBetween: Number(data.slidesSpace) || 0,
+        centeredSlides: data.slidesCentered === '1',
+        grabCursor: true,
+        autoHeight: false,
+        preloadImages: true,
+        updateOnImagesReady: true,
+        effect: data.effect || 'slide',
+        pagination: { el: pagination, clickable: Boolean(pagination), type: data.pagination || 'bullets' },
+        navigation: { nextEl: controls ? control('next') : null, prevEl: controls ? control('prev') : null },
+        autoplay,
+      });
+      slider.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, fill: 'forwards' });
+    });
+  }
+
+  // Elementor entrance animations: an .elementor-invisible element with an "_animation" (widgets)
+  // or "animation" (sections, columns) setting gets "animated <name>" when any part of it enters
+  // the viewport, after its delay. Device-specific settings (_tablet / _mobile) win when set.
+  function elementorDevice() {
+    if (window.innerWidth <= 767) return 'mobile';
+    if (window.innerWidth <= 1279) return 'tablet';
+    return '';
+  }
+
+  function initEntranceAnimations() {
+    const device = elementorDevice();
+    document.querySelectorAll('.elementor-invisible[data-settings]').forEach((element) => {
+      let settings = {};
+      try { settings = JSON.parse(element.dataset.settings); } catch {}
+      const pick = (key) => (device && settings[`${key}_${device}`]) || settings[key];
+      const animation = pick('_animation') || pick('animation');
+      if (!animation || animation === 'none' || reducedMotion) { element.classList.remove('elementor-invisible'); return; }
+      const delay = Number(settings._animation_delay || settings.animation_delay || 0);
+      whenVisible(element, () => setTimeout(() => {
+        element.classList.remove('elementor-invisible');
+        element.classList.add('animated', animation);
+      }, delay));
+    });
+  }
+
+  // jQuery slideDown / slideUp / fadeIn / fadeOut equivalents ("swing" easing, 400 ms default).
+  const swing = 'cubic-bezier(0.25, 0.1, 0.25, 1)';
+  function slide(element, open, duration = 400) {
+    if (open) {
+      element.style.display = 'block';
+      const height = element.scrollHeight;
+      element.animate([{ height: '0px', overflow: 'hidden' }, { height: `${height}px`, overflow: 'hidden' }], { duration, easing: swing });
+    } else {
+      const height = element.offsetHeight;
+      const animation = element.animate([{ height: `${height}px`, overflow: 'hidden' }, { height: '0px', overflow: 'hidden' }], { duration, easing: swing });
+      animation.onfinish = () => { element.style.display = 'none'; };
+    }
+  }
+  function fade(element, show, duration = 400) {
+    if (show) element.style.display = 'block';
+    const animation = element.animate([{ opacity: show ? 0 : 1 }, { opacity: show ? 1 : 0 }], { duration, easing: swing });
+    if (!show) animation.onfinish = () => { element.style.display = 'none'; };
+  }
+
+  // Qwery mobile menu (full-screen panel) and vertical menus: arrow toggles for sub-menus.
+  function initMobileMenu() {
+    const menu = document.querySelector('.menu_mobile');
+    if (!menu) return;
+    const overlay = menu.previousElementSibling?.classList.contains('menu_mobile_overlay') ? menu.previousElementSibling : null;
+    let opener = null;
+    const open = (button) => {
+      opener = button;
+      menu.classList.add('opened');
+      if (overlay) fade(overlay, true);
+      document.body.classList.add('menu_mobile_opened');
+      setTimeout(() => menu.querySelector('a')?.focus(), 100);
+    };
+    const close = (skipFocus) => {
+      menu.classList.remove('opened');
+      if (overlay) fade(overlay, false);
+      document.body.classList.remove('menu_mobile_opened');
+      if (!skipFocus) opener?.focus();
+    };
+    document.querySelectorAll('.sc_layouts_menu_mobile_button > a, .menu_mobile_button').forEach((button) => {
+      button.addEventListener('click', (event) => { event.preventDefault(); open(button); });
+    });
+    overlay?.addEventListener('click', (event) => { event.preventDefault(); close(); });
+    const closeButton = menu.querySelector('.menu_mobile_close');
+    closeButton?.addEventListener('click', (event) => { event.preventDefault(); close(); });
+    closeButton?.addEventListener('keyup', (event) => { if (event.key === 'Enter' && menu.classList.contains('opened')) close(); });
+    document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && menu.classList.contains('opened')) close(); });
+
+    document.querySelectorAll('.menu_mobile, .sc_layouts_menu_dir_vertical').forEach((container) => {
+      container.querySelectorAll('.menu-item-has-children > a').forEach((link) => {
+        if (!link.querySelector('.open_child_menu')) link.insertAdjacentHTML('beforeend', '<span class="open_child_menu"></span>');
+      });
+      container.addEventListener('click', (event) => {
+        const link = event.target.closest('li a');
+        if (!link || !container.contains(link)) return;
+        const arrow = event.target.classList.contains('open_child_menu');
+        const item = link.parentElement;
+        if (item.classList.contains('menu-item-has-children') && (arrow || link.getAttribute('href') === '#')) {
+          event.preventDefault();
+          const subMenu = item.querySelector(':scope > ul');
+          if (!subMenu) return;
+          if (getComputedStyle(subMenu).display !== 'none') { slide(subMenu, false); item.classList.remove('opened'); return; }
+          [...item.parentElement.children].filter((sibling) => sibling !== item).forEach((sibling) => {
+            sibling.querySelectorAll('ul.sub-menu, ul.sc_layouts_submenu').forEach((other) => {
+              if (getComputedStyle(other).display !== 'none') { slide(other, false); other.parentElement.classList.remove('opened'); }
+            });
+          });
+          slide(subMenu, true);
+          item.classList.add('opened');
+          return;
+        }
+        if (container === menu && !arrow) close(true);
+      });
+    });
+  }
+
+  // Elementor accordion / toggle / tabs (frontend handler "base-tabs"): accordion opens its first
+  // item at load and closes the previous one; toggle starts closed and items are independent;
+  // both slide 400 ms and close an open item when its title is clicked again. Tabs switch instantly.
+  function initElementorTabs() {
+    const kinds = [
+      { selector: '.elementor-accordion', autoExpand: true, hidePrevious: true, toggleSelf: true, animate: true },
+      { selector: '.elementor-toggle', autoExpand: false, hidePrevious: false, toggleSelf: true, animate: true },
+      { selector: '.elementor-tabs', autoExpand: true, hidePrevious: true, toggleSelf: false, animate: false },
+    ];
+    kinds.forEach((kind) => document.querySelectorAll(kind.selector).forEach((widget) => {
+      const titles = [...widget.querySelectorAll('.elementor-tab-title')];
+      const contentFor = (tab) => widget.querySelectorAll(`.elementor-tab-content[data-tab="${tab}"]`);
+      const titlesFor = (tab) => titles.filter((title) => title.dataset.tab === tab);
+      const setOpen = (tab, open, animate) => {
+        titlesFor(tab).forEach((title) => { title.classList.toggle('elementor-active', open); title.setAttribute('aria-expanded', String(open)); title.setAttribute('aria-selected', String(open)); });
+        contentFor(tab).forEach((content) => {
+          content.classList.toggle('elementor-active', open);
+          if (animate && kind.animate) slide(content, open);
+          else content.style.display = open ? 'block' : 'none';
+        });
+      };
+      const isOpen = (tab) => titlesFor(tab).some((title) => title.classList.contains('elementor-active'));
+      const activate = (tab, animate = true) => {
+        if (isOpen(tab)) { if (kind.toggleSelf) setOpen(tab, false, animate); return; }
+        if (kind.hidePrevious) titles.forEach((title) => { if (title.dataset.tab !== tab && isOpen(title.dataset.tab)) setOpen(title.dataset.tab, false, animate); });
+        setOpen(tab, true, animate);
+      };
+      titles.forEach((title) => {
+        title.addEventListener('click', (event) => { event.preventDefault(); activate(title.dataset.tab); });
+        title.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); activate(title.dataset.tab); } });
+      });
+      if (kind.autoExpand && titles.length) activate(titles[0].dataset.tab, false);
+    }));
+  }
+
   document.querySelectorAll('.ql-hero').forEach(initHero);
+  initElementorTabs();
+  initMobileMenu();
+  initEntranceAnimations();
   initMenus();
   initSchemeWatchers();
+  initSkills();
+  initSliders();
 })();
