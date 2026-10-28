@@ -518,7 +518,51 @@
     });
   }
 
+  // trx_addons "typed" titles (jQuery Typed.js 1.x): types each string, waits backDelay, deletes
+  // it and types the next one (looped). Delay per character = typeSpeed + random 0-70 ms, as in
+  // Typed.js. typeSpeed = (11 - data-speed) * 10, backDelay = data-delay s. Starts when the bottom
+  // of the element is in the window.
+  function initTyped() {
+    document.querySelectorAll('.sc_typed_entry[data-strings]').forEach((element) => {
+      let strings;
+      try { strings = JSON.parse(element.dataset.strings); } catch { return; }
+      if (!strings.length || reducedMotion) return;
+      const speed = Number(element.dataset.speed);
+      const typeSpeed = speed > 0 ? (11 - Math.max(1, Math.min(10, speed))) * 10 : 50;
+      const delay = Number(element.dataset.delay);
+      const backDelay = delay > 0 ? Math.max(0, Math.min(10, delay)) * 1000 : 1000;
+      const loop = element.dataset.loop === '1';
+      const humanize = (base) => Math.round(Math.random() * 70) + base;
+      if (element.dataset.cursor === '1') element.insertAdjacentHTML('afterend', `<span class="typed-cursor">${element.dataset.cursorChar ?? '|'}</span>`);
+      let index = 0;
+      const type = (text, position) => {
+        setTimeout(() => {
+          element.textContent = text.slice(0, position);
+          if (position < text.length) { type(text, position + 1); return; }
+          if (index === strings.length - 1 && !loop) return;
+          setTimeout(() => erase(text, text.length), backDelay);
+        }, humanize(typeSpeed));
+      };
+      const erase = (text, position) => {
+        setTimeout(() => {
+          element.textContent = text.slice(0, position);
+          if (position > 0) { erase(text, position - 1); return; }
+          index = (index + 1) % strings.length;
+          type(strings[index], 0);
+        }, humanize(0));
+      };
+      const start = () => { element.classList.add('sc_typed_inited'); element.textContent = ''; type(strings[0], 0); };
+      const check = () => {
+        const box = element.getBoundingClientRect();
+        if (box.bottom >= 0 && box.bottom <= window.innerHeight) { window.removeEventListener('scroll', check); start(); }
+      };
+      window.addEventListener('scroll', check, { passive: true });
+      check();
+    });
+  }
+
   document.querySelectorAll('.ql-hero').forEach(initHero);
+  initTyped();
   initSessionRegistration();
   initPopups();
   initElementorPosts();
