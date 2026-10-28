@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Tri des contenus · Q-Leap</title>
+<style>
+:root { --ink: #16181d; --muted: #6b7079; --line: #e3e5e9; --bg: #f6f7f9; --card: #fff; --keep: #1a7f4b; --keep-bg: #e5f5ec; --off: #9a6400; --off-bg: #fff3dc; --del: #b42318; --del-bg: #fde8e6; --accent: #0063dc; }
+* { box-sizing: border-box; }
+body { margin: 0; font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: var(--ink); background: var(--bg); }
+header { padding: 28px 32px 18px; background: var(--card); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 2; }
+h1 { margin: 0 0 4px; font-size: 22px; }
+.sub { margin: 0 0 16px; color: var(--muted); max-width: 900px; }
+.stats { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+.stat { padding: 8px 14px; border-radius: 10px; font-weight: 600; cursor: pointer; border: 2px solid transparent; }
+.stat[aria-pressed="true"] { border-color: currentColor; }
+.stat b { font-size: 18px; margin-right: 6px; }
+.Garder { color: var(--keep); background: var(--keep-bg); }
+.Désactiver { color: var(--off); background: var(--off-bg); }
+.Supprimer { color: var(--del); background: var(--del-bg); }
+.all { color: var(--ink); background: #eceef1; }
+.tools { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+input[type=search], select { font: inherit; padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+input[type=search] { width: 280px; }
+button { font: inherit; padding: 7px 12px; border-radius: 8px; border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; }
+button.ghost { background: #fff; color: var(--accent); }
+main { padding: 20px 32px 60px; }
+table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+th, td { padding: 9px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+th { background: #fafbfc; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); position: sticky; top: 0; }
+tr.changed td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+td.title a { color: var(--ink); font-weight: 600; text-decoration: none; }
+td.title a:hover { color: var(--accent); text-decoration: underline; }
+td.title small { display: block; color: var(--muted); font-weight: 400; word-break: break-all; }
+.lang { font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: #eceef1; text-transform: uppercase; }
+.signal { color: var(--muted); font-size: 12px; white-space: nowrap; }
+td select { font-weight: 600; }
+.reason { color: #3a3f47; }
+.redirect { font-size: 12px; color: var(--muted); }
+.empty { padding: 40px; text-align: center; color: var(--muted); }
+#copied { color: var(--keep); font-weight: 600; display: none; }
+@media (max-width: 800px) { header, main { padding-left: 16px; padding-right: 16px; } .hide-sm { display: none; } input[type=search] { width: 100%; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Tri des contenus de q-leap.eu</h1>
+  <p class="sub">Proposition pour la migration vers GitHub Pages, relevée le 28/10/2026. <b>Garder</b> = reproduit à l’identique. <b>Désactiver</b> = pas reproduit, l’ancienne adresse redirige vers la page indiquée. <b>Supprimer</b> = démo, doublon ou page technique. Rien n’est touché sur WordPress. Change une décision dans la colonne de droite, puis « Copier mes changements ».</p>
+  <div class="stats" id="stats"></div>
+  <div class="tools">
+    <input type="search" id="search" placeholder="Rechercher un titre ou une adresse…">
+    <select id="kind"><option value="">Tous les types</option></select>
+    <select id="lang"><option value="">Toutes les langues</option><option value="fr">FR</option><option value="en">EN</option></select>
+    <button id="copy">Copier mes changements</button>
+    <button class="ghost" id="reset">Réinitialiser</button>
+    <span id="copied">Copié ✓</span>
+  </div>
+</header>
+<main>
+  <table>
+    <thead><tr><th>Contenu</th><th class="hide-sm">Type</th><th class="hide-sm">Signaux</th><th>Raison</th><th>Décision</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <p class="empty" id="empty" hidden>Aucun contenu ne correspond.</p>
+</main>
+<script>
+(async () => {
+  const decisions = ['Garder', 'Désactiver', 'Supprimer'];
+  const items = await (await fetch('inventory.json')).json();
+  const storageKey = 'qleap-inventory-overrides';
+  let overrides = {};
+  try { overrides = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch {}
+  const keyOf = (item) => item.url || item.title;
+  const decisionOf = (item) => overrides[keyOf(item)] || item.decision;
+  const state = { decision: '', search: '', kind: '', lang: '' };
+  const kinds = [...new Set(items.map((item) => item.kind))];
+  document.getElementById('kind').insertAdjacentHTML('beforeend', kinds.map((kind) => `<option>${kind}</option>`).join(''));
+  const escape = (text) => String(text ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  function save() { try { localStorage.setItem(storageKey, JSON.stringify(overrides)); } catch {} }
+
+  function renderStats() {
+    const count = (decision) => items.filter((item) => decisionOf(item) === decision).length;
+    document.getElementById('stats').innerHTML = [['', 'Tout', items.length, 'all'], ...decisions.map((d) => [d, d, count(d), d])]
+      .map(([value, label, total, cls]) => `<span class="stat ${cls}" role="button" tabindex="0" data-decision="${value}" aria-pressed="${state.decision === value}"><b>${total}</b>${label}</span>`).join('');
+  }
+
+  function render() {
+    renderStats();
+    const query = state.search.toLowerCase();
+    const visible = items.filter((item) => (!state.decision || decisionOf(item) === state.decision)
+      && (!state.kind || item.kind === state.kind)
+      && (!state.lang || item.lang.includes(state.lang))
+      && (!query || (item.title + ' ' + item.url).toLowerCase().includes(query)));
+    document.getElementById('empty').hidden = visible.length > 0;
+    document.getElementById('rows').innerHTML = visible.map((item) => {
+      const current = decisionOf(item);
+      const path = item.url.replace('https://q-leap.eu', '') || '';
+      const signals = [item.nav ? 'menu' : '', item.inbound ? `${item.inbound} lien${item.inbound > 1 ? 's' : ''} entrant${item.inbound > 1 ? 's' : ''}` : '', item.words ? `${item.words} mots` : '', item.date || ''].filter(Boolean).join(' · ');
+      return `<tr class="${current !== item.decision ? 'changed' : ''}">
+        <td class="title"><span class="lang">${escape(item.lang)}</span> ${item.url ? `<a href="${escape(item.url)}" target="_blank" rel="noopener">${escape(item.title)}</a>` : `<b>${escape(item.title)}</b>`}<small>${escape(path)}</small></td>
+        <td class="hide-sm">${escape(item.kind)}</td>
+        <td class="hide-sm signal">${escape(signals)}</td>
+        <td class="reason">${escape(item.reason)}${item.redirect && current === 'Désactiver' ? `<div class="redirect">→ redirige vers /${escape(item.redirect)}</div>` : ''}</td>
+        <td><select class="${current}" data-key="${escape(keyOf(item))}">${decisions.map((d) => `<option ${d === current ? 'selected' : ''}>${d}</option>`).join('')}</select></td>
+      </tr>`;
+    }).join('');
+  }
+
+  document.getElementById('stats').addEventListener('click', (event) => {
+    const stat = event.target.closest('.stat'); if (!stat) return;
+    state.decision = stat.dataset.decision; render();
+  });
+  document.getElementById('search').addEventListener('input', (event) => { state.search = event.target.value; render(); });
+  document.getElementById('kind').addEventListener('change', (event) => { state.kind = event.target.value; render(); });
+  document.getElementById('lang').addEventListener('change', (event) => { state.lang = event.target.value; render(); });
+  document.getElementById('rows').addEventListener('change', (event) => {
+    const select = event.target.closest('select'); if (!select) return;
+    const item = items.find((candidate) => keyOf(candidate) === select.dataset.key);
+    if (select.value === item.decision) delete overrides[keyOf(item)]; else overrides[keyOf(item)] = select.value;
+    save(); render();
+  });
+  document.getElementById('copy').addEventListener('click', async () => {
+    const changes = items.filter((item) => overrides[keyOf(item)]).map((item) => `- ${item.title} (${item.url.replace('https://q-leap.eu', '') || item.kind}) : ${item.decision} → ${overrides[keyOf(item)]}`);
+    const text = changes.length ? 'Changements sur le tri :\n' + changes.join('\n') : 'Aucun changement : le tri proposé me convient.';
+    try { await navigator.clipboard.writeText(text); } catch { prompt('Copie ce texte :', text); }
+    const done = document.getElementById('copied'); done.style.display = 'inline'; setTimeout(() => (done.style.display = 'none'), 2000);
+  });
+  document.getElementById('reset').addEventListener('click', () => { overrides = {}; save(); render(); });
+  render();
+})();
+</script>
+</body>
+</html>

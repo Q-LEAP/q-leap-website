@@ -14,4 +14,4 @@ python3 -m http.server 8766
 
 ## Docs
 
-- [docs/page-inventory.md](docs/page-inventory.md): the WordPress pages and what we keep, disable or delete
+- [docs/page-inventory.md](docs/page-inventory.md): the WordPress pages and what we keep, disable or delete (review page: http://localhost:8766/tools/inventory/)
