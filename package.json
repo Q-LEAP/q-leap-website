@@ -1,0 +1,10 @@
+{
+  "name": "q-leap-website",
+  "private": true,
+  "description": "Site statique q-leap.eu (GitHub Pages). Outils de développement uniquement : le site n'a pas de build.",
+  "type": "module",
+  "scripts": {
+    "formations": "node tools/trainings/editor/server.mjs",
+    "build:formations": "node tools/trainings/build.mjs"
+  }
+}

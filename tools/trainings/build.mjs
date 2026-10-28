@@ -73,11 +73,30 @@ function render(template, values) {
     .replace(/\{\{(\w+)\}\}/g, (_, key) => escapeAttribute(values[key] ?? ''));
 }
 
-export function loadContent() {
-  const content = JSON.parse(fs.readFileSync(CONTENT_FILE, 'utf8'));
-  for (const lang of ['fr', 'en']) content.labels = { ...content.labels, [lang]: { ...DEFAULT_LABELS[lang], ...(content.labels?.[lang] || {}) } };
-  return content;
+export function withLabels(content) {
+  const labels = {};
+  for (const lang of ['fr', 'en']) labels[lang] = { ...DEFAULT_LABELS[lang], ...(content.labels?.[lang] || {}) };
+  return { ...content, labels };
 }
+
+export function loadContent() {
+  return withLabels(JSON.parse(fs.readFileSync(CONTENT_FILE, 'utf8')));
+}
+
+export function saveContent(content) {
+  const { labels, ...rest } = content;
+  // Only labels that differ from the defaults are stored.
+  const changed = {};
+  for (const lang of ['fr', 'en']) {
+    for (const [key, value] of Object.entries(labels?.[lang] || {})) {
+      if (JSON.stringify(value) !== JSON.stringify(DEFAULT_LABELS[lang][key])) (changed[lang] ||= {})[key] = value;
+    }
+  }
+  const output = Object.keys(changed).length ? { ...rest, labels: changed } : rest;
+  fs.writeFileSync(CONTENT_FILE, JSON.stringify(output, null, 2) + '\n');
+}
+
+export const paths = { ROOT, CONTENT_FILE };
 
 const day = (iso) => Number(iso.slice(8, 10));
 const monthIndex = (iso) => Number(iso.slice(5, 7)) - 1;
@@ -292,7 +311,7 @@ function jsonLd(training, lang) {
   return JSON.stringify(graph).replace(/\//g, '\\/');
 }
 
-function trainingPage(content, training, lang, today) {
+export function trainingPage(content, training, lang, today = new Date().toISOString().slice(0, 10)) {
   const version = training[lang];
   const other = lang === 'fr' ? 'en' : 'fr';
   const prefix = lang === 'en' ? '../../../' : '../../';
@@ -381,8 +400,55 @@ function updateCatalogue(content, lang) {
   fs.writeFileSync(file, markup);
 }
 
-export function build({ today = new Date().toISOString().slice(0, 10) } = {}) {
-  const content = loadContent();
+function redirectPage(target) {
+  return `<!doctype html>
+<html lang="fr" data-training-redirect>
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, follow">
+<title>Redirection</title>
+<link rel="canonical" href="${SITE}/${target}">
+<meta http-equiv="refresh" content="0; url=../../${target}">
+<script>location.replace('../../${target}' + location.hash)</script>
+</head>
+<body><p><a href="../../${target}">${SITE}/${target}</a></p></body>
+</html>
+`;
+}
+
+// Pages this generator wrote earlier but that no longer match a training are removed; former
+// addresses (previousSlugs, kept by the editor when a slug changes) redirect to the new page.
+function tidyFolders(content) {
+  for (const lang of ['fr', 'en']) {
+    const base = path.join(ROOT, lang === 'en' ? 'en' : '', 'trainings');
+    if (!fs.existsSync(base)) continue;
+    const prefix = lang === 'en' ? 'en/' : '';
+    const live = new Set(content.trainings.filter((item) => item.status !== 'draft').map((item) => item[lang]?.slug).filter(Boolean));
+    const redirects = new Map();
+    for (const item of content.trainings) {
+      if (item.status === 'draft') continue;
+      for (const old of item[lang]?.previousSlugs || []) if (old && !live.has(old)) redirects.set(old, item[lang].slug);
+    }
+    for (const entry of fs.readdirSync(base, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      const file = path.join(base, entry.name, 'index.html');
+      if (!fs.existsSync(file)) continue;
+      const markup = fs.readFileSync(file, 'utf8');
+      const generated = markup.includes('data-training="') || markup.includes('data-training-redirect');
+      if (!generated || live.has(entry.name)) continue;
+      if (redirects.has(entry.name)) continue;
+      fs.rmSync(path.join(base, entry.name), { recursive: true, force: true });
+    }
+    for (const [old, target] of redirects) {
+      fs.mkdirSync(path.join(base, old), { recursive: true });
+      fs.writeFileSync(path.join(base, old, 'index.html'), redirectPage(`${prefix}trainings/${target}/`));
+    }
+  }
+}
+
+export function build({ today = new Date().toISOString().slice(0, 10), content = loadContent() } = {}) {
+  content = withLabels(content);
+  tidyFolders(content);
   const written = [];
   for (const training of content.trainings) {
     for (const lang of ['fr', 'en']) {

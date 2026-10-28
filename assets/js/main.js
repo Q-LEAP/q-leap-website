@@ -452,7 +452,75 @@
     });
   }
 
+  // Popup Maker: settings come from each popup's data-popmake attribute. "click_open" triggers are
+  // .popmake-<id>, links to #popmake-<id> and the popup's extra selectors. Fade in / out at the
+  // popup's animation speed; "center" popups are centred in the window, "top" ones sit
+  // position_top px from the top.
+  function initPopups() {
+    const popups = [...document.querySelectorAll('.pum[data-popmake]')];
+    popups.forEach((popup) => {
+      let settings;
+      try { settings = JSON.parse(popup.dataset.popmake); } catch { return; }
+      const container = popup.querySelector('.pum-container');
+      const display = settings.meta?.display || {};
+      const speed = reducedMotion ? 0 : Number(display.animation_speed) || 350;
+      const position = () => {
+        container.style.left = `${popup.clientWidth / 2}px`;
+        if (/top/.test(display.location)) container.style.top = `${Number(display.position_top) || 0}px`;
+        else if (/bottom/.test(display.location)) container.style.top = `${Math.max(0, popup.clientHeight - container.offsetHeight - (Number(display.position_bottom) || 0))}px`;
+        else container.style.top = `${Math.max(0, (popup.clientHeight - container.offsetHeight) / 2)}px`;
+      };
+      const open = () => {
+        document.documentElement.classList.add('pum-open', 'pum-open-overlay', 'pum-open-scrollable');
+        popup.classList.add('pum-active');
+        popup.style.display = 'block';
+        Object.assign(container.style, { minWidth: display.responsive_min_width || '0%', maxWidth: display.responsive_max_width || '100%', display: 'block' });
+        position();
+        popup.animate([{ opacity: 0 }, { opacity: 1 }], { duration: speed, fill: 'forwards' });
+        container.animate([{ opacity: 0 }, { opacity: 1 }], { duration: speed, fill: 'forwards' });
+        setTimeout(() => (container.querySelector('input:not([type=hidden]), button, a[href]'))?.focus({ preventScroll: true }), speed);
+      };
+      const close = () => {
+        const fadeOut = popup.animate([{ opacity: 1 }, { opacity: 0 }], { duration: speed, fill: 'forwards' });
+        fadeOut.onfinish = () => {
+          popup.style.display = 'none';
+          popup.classList.remove('pum-active');
+          if (!document.querySelector('.pum.pum-active')) document.documentElement.classList.remove('pum-open', 'pum-open-overlay', 'pum-open-scrollable');
+        };
+      };
+      const selectors = [`.popmake-${settings.id}`, `a[href$="#popmake-${settings.id}"]`];
+      (settings.triggers || []).filter((trigger) => trigger.type === 'click_open').forEach((trigger) => {
+        String(trigger.settings?.extra_selectors || '').split(',').map((selector) => selector.trim()).filter(Boolean).forEach((selector) => selectors.push(selector));
+      });
+      document.addEventListener('click', (event) => {
+        const trigger = selectors.map((selector) => { try { return event.target.closest(selector); } catch { return null; } }).find(Boolean);
+        if (!trigger || popup.contains(trigger)) return;
+        event.preventDefault();
+        open();
+      });
+      popup.querySelectorAll('.pum-close, .popmake-close').forEach((button) => button.addEventListener('click', (event) => { event.preventDefault(); close(); }));
+      if (settings.meta?.close?.overlay_click) popup.addEventListener('click', (event) => { if (event.target === popup) close(); });
+      if (settings.meta?.close?.esc_press) document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && popup.classList.contains('pum-active')) close(); });
+      window.addEventListener('resize', () => { if (popup.classList.contains('pum-active')) position(); });
+    });
+  }
+
+  // Training sessions (child theme custom-script.js): « S'inscrire » fills the registration form's
+  // hidden fields with the session id, the training name and the start date.
+  function initSessionRegistration() {
+    document.querySelectorAll('.trainings_page_sessions .form-ninja-popup').forEach((button) => {
+      button.addEventListener('click', () => {
+        const values = { 'nf-field-16': button.dataset.postId, 'nf-field-19': button.dataset.nameSs, 'nf-field-76': button.dataset.startDate };
+        for (const [name, value] of Object.entries(values)) {
+          document.querySelectorAll(`input[name="${name}"]`).forEach((input) => { input.value = value ?? ''; input.dispatchEvent(new Event('change', { bubbles: true })); });
+        }
+      });
+    });
+  }
+
   document.querySelectorAll('.ql-hero').forEach(initHero);
+  initSessionRegistration();
+  initPopups();
   initElementorPosts();
   initTrainingCatalogue();
   initElementorTabs();

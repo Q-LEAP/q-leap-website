@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Formations · Q-Leap</title>
+<link rel="stylesheet" href="/app/editor.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="brand-mark">Q</span><div><strong>Formations</strong><small>Éditeur du site q-leap.eu</small></div></div>
+  <div class="topbar-status" id="status" role="status" aria-live="polite"></div>
+  <div class="topbar-actions">
+    <button class="button ghost" id="labels-button" type="button">Libellés des pages</button>
+    <button class="button" id="save-button" type="button" disabled>Enregistrer</button>
+    <button class="button primary" id="publish-button" type="button">Publier</button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-head">
+      <input type="search" id="filter" placeholder="Rechercher une formation…" aria-label="Rechercher une formation">
+      <button class="button small" id="add-button" type="button">+ Nouvelle formation</button>
+    </div>
+    <ol class="training-list" id="training-list" aria-label="Formations, dans l’ordre du catalogue"></ol>
+    <p class="hint">Glisser-déposer pour changer l’ordre du catalogue.</p>
+  </aside>
+
+  <main class="editor" id="editor">
+    <div class="empty" id="empty">Choisis une formation à gauche, ou crée-en une nouvelle.</div>
+    <form id="form" hidden autocomplete="off">
+      <div class="editor-head">
+        <div>
+          <h1 id="form-title">Formation</h1>
+          <p class="subtitle" id="form-subtitle"></p>
+        </div>
+        <div class="editor-head-actions">
+          <label class="switch"><input type="checkbox" id="status-published"><span>Publiée</span></label>
+          <button class="button small ghost" id="duplicate-button" type="button">Dupliquer</button>
+          <button class="button small danger" id="delete-button" type="button">Supprimer</button>
+        </div>
+      </div>
+
+      <nav class="tabs" role="tablist">
+        <button type="button" role="tab" data-tab="fr" aria-selected="true">Contenu FR</button>
+        <button type="button" role="tab" data-tab="en" aria-selected="false">Contenu EN</button>
+        <button type="button" role="tab" data-tab="sessions" aria-selected="false">Sessions</button>
+        <button type="button" role="tab" data-tab="catalogue" aria-selected="false">Catalogue &amp; filtres</button>
+      </nav>
+
+      <section class="tab-panel" data-panel="fr"></section>
+      <section class="tab-panel" data-panel="en" hidden></section>
+      <section class="tab-panel" data-panel="sessions" hidden></section>
+      <section class="tab-panel" data-panel="catalogue" hidden></section>
+    </form>
+  </main>
+
+  <section class="preview" aria-label="Aperçu">
+    <div class="preview-bar">
+      <div class="segmented" id="preview-lang" role="group" aria-label="Langue de l’aperçu">
+        <button type="button" data-lang="fr" aria-pressed="true">FR</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <div class="segmented" id="preview-device" role="group" aria-label="Taille de l’aperçu">
+        <button type="button" data-width="1440" aria-pressed="true">PC</button>
+        <button type="button" data-width="820" aria-pressed="false">Tablette</button>
+        <button type="button" data-width="390" aria-pressed="false">Mobile</button>
+      </div>
+      <a class="preview-open" id="preview-open" href="#" target="_blank" rel="noopener">Ouvrir ↗</a>
+    </div>
+    <div class="preview-frame" id="preview-frame"><iframe id="preview" title="Aperçu de la page formation"></iframe></div>
+  </section>
+</div>
+
+<dialog id="publish-dialog">
+  <form method="dialog" class="dialog">
+    <h2>Publier les changements</h2>
+    <p>Les pages des formations et le catalogue sont envoyés sur GitHub (branche <b id="publish-branch">dev</b>).</p>
+    <ul class="changes" id="publish-changes"></ul>
+    <label class="field"><span>Résumé du changement</span><input id="publish-message" placeholder="ex. nouvelles sessions ISTQB Foundation" required></label>
+    <div class="dialog-actions"><button class="button ghost" value="cancel">Annuler</button><button class="button primary" id="publish-confirm" value="confirm">Publier</button></div>
+  </form>
+</dialog>
+
+<dialog id="labels-dialog">
+  <form method="dialog" class="dialog wide">
+    <h2>Libellés des pages formation</h2>
+    <p>Textes fixes affichés sur toutes les fiches (intitulés des blocs, boutons, mois…).</p>
+    <div class="labels-grid" id="labels-grid"></div>
+    <div class="dialog-actions"><button class="button ghost" value="cancel">Fermer</button></div>
+  </form>
+</dialog>
+
+<script src="/app/editor.js" type="module"></script>
+</body>
+</html>
