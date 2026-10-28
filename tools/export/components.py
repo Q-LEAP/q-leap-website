@@ -67,6 +67,8 @@ def process(path):
         if 'assets/css/hero.css' not in markup:
             markup = markup.replace('assets/css/main.css">', 'assets/css/main.css">\n<link rel="stylesheet" href="' + prefix + 'assets/css/hero.css">', 1)
         print(path, 'hero rebuilt')
+    if re.search(r'elementor-posts-container|elementor-gallery__container|e-gallery', markup) and 'assets/css/elementor-pro.css' not in markup:
+        markup = markup.replace('assets/css/main.css">', 'assets/css/main.css">\n<link rel="stylesheet" href="' + prefix + 'assets/css/elementor-pro.css">', 1)
     if 'elementor-invisible' in markup and 'assets/css/animations.css' not in markup:
         markup = markup.replace('assets/css/main.css">', 'assets/css/main.css">\n<link rel="stylesheet" href="' + prefix + 'assets/css/animations.css">', 1)
     swiper = f'<script src="{prefix}assets/js/vendor/swiper-5.4.5.min.js" defer></script>\n'

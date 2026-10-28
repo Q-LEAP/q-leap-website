@@ -45,6 +45,7 @@ def fetch(url, binary=False, tries=3):
 
 
 def _fetch(url, binary=False, tries=3):
+    url = urllib.parse.quote(url, safe=':/?&=%#+,;@!~*()\'$[]')  # non-ASCII file names (e.g. « ® »)
     for attempt in range(tries):
         try:
             with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=90) as response:

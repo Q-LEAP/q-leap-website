@@ -1,0 +1,91 @@
+{
+ "trainings/tmmi-certified-professional/index.html": [],
+ "trainings/istqb-certified-technical-test-analyst-advanced-level/index.html": [],
+ "trainings/istqb-certified-test-analyst-advanced-level/index.html": [],
+ "trainings/istqb-certified-tester-foundation-level/index.html": [
+  {
+   "month": "décembre 2026",
+   "range": "8 décembre - 10 décembre 2026",
+   "title": "ISTQB Testeur Certifié – Niveau Fondation",
+   "meta": [
+    {
+     "label": "Format:",
+     "value": "Live Virtual Classroom, Onsite"
+    }
+   ],
+   "start": "2026-12-08 00:00:00",
+   "event_id": "43153",
+   "button": "S'inscrire"
+  }
+ ],
+ "trainings/iqbba-analyste-metier-certifie-niveau-fondation/index.html": [],
+ "trainings/istqb-test-manager-certifie-niveau-avance/index.html": [],
+ "trainings/tester-avec-lia-generative-formation-certifiante-istqb/index.html": [],
+ "trainings/istqb-certifie-ia/index.html": [],
+ "trainings/istqb-agile-extension-level/index.html": [],
+ "trainings/istqb-advanced-level-test-automation-engineer/index.html": [],
+ "trainings/ireb-foundation-ingenierie-des-exigences-certification/index.html": [],
+ "en/trainings/iqbba-certified-business-analyst-foundation-level/index.html": [],
+ "en/trainings/istqb-certified-test-manager-advanced-level/index.html": [],
+ "en/trainings/istqb-certified-technical-test-analyst-advanced-level/index.html": [],
+ "en/trainings/istqb-certified-test-analyst-advanced-level/index.html": [],
+ "en/trainings/istqb-certified-tester-foundation-level/index.html": [
+  {
+   "month": "December 2026",
+   "range": "8 December - 10 December 2026",
+   "title": "ISTQB Certified Tester – Foundation Level",
+   "meta": [
+    {
+     "label": "Format:",
+     "value": "Live Virtual Classroom, Onsite"
+    }
+   ],
+   "start": "2026-12-08 00:00:00",
+   "event_id": "43155",
+   "button": "S'inscrire"
+  }
+ ],
+ "en/trainings/istqb-certified-test-automation-engineer-advanced-level/index.html": [],
+ "en/trainings/istqb-certified-agile-tester-foundation-level-extension/index.html": [],
+ "en/trainings/cftl-istqb-certified-tester-artificial-intelligence/index.html": [],
+ "en/trainings/ireb-certified-in-requirements-engineering-foundation-level/index.html": [],
+ "en/trainings/testing-with-generative-ai-istqb-certification-course/index.html": [
+  {
+   "month": "November 2026",
+   "range": "19 November - 20 November 2026",
+   "title": "Testing with generative AI – ISTQB® certification course",
+   "meta": [
+    {
+     "label": "Langue:",
+     "value": "FRANÇAIS"
+    },
+    {
+     "label": "Format:",
+     "value": "Live Virtual Classroom, Onsite"
+    }
+   ],
+   "start": "2026-11-19 00:00:00",
+   "event_id": "40442",
+   "button": "S'inscrire"
+  },
+  {
+   "month": "December 2026",
+   "range": "7 December - 8 December 2026",
+   "title": "Testing with generative AI – ISTQB® certification course",
+   "meta": [
+    {
+     "label": "Langue:",
+     "value": "FRANÇAIS"
+    },
+    {
+     "label": "Format:",
+     "value": "Live Virtual Classroom, Onsite"
+    }
+   ],
+   "start": "2026-12-07 00:00:00",
+   "event_id": "40442",
+   "button": "S'inscrire"
+  }
+ ],
+ "en/trainings/tmmi-certified-test-maturity-model-integration/index.html": []
+}
