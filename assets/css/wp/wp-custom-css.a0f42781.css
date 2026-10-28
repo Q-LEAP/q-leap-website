@@ -1,0 +1,156 @@
+.single-trainings .nf-form-cont input:focus {
+    background: transparent !important;
+}
+
+
+
+.single .post_meta.post_meta_categories a:not(:hover) {
+    background: #000;
+}
+
+
+.nf-form-title h2{font-family: sofia-pro,sans-serif;
+    font-size: 2.625px em;
+    font-weight: 500;
+    font-style: normal;
+    line-height: 1.021em;
+    text-decoration: none;
+    text-transform: none;
+    letter-spacing: -0.1px;align-content}
+
+
+
+.ays-fs-title{
+	font-family:sofia-pro, sans-serif;
+}
+.nf-fu-button-cancel {
+    float: right;
+    display: none !important;
+}
+
+.nf-fu-fileinput-button {
+    background: transparent !important;
+    padding: 0 !important;
+    color: var(--theme-color-text) !important;
+}
+.submit-wrap .nf-field-element input {
+    color: #fff !important;
+    padding-left: 65px;
+}
+
+.ays_next start_button action-button{
+	font-family:sofia-pro, sans-serif;
+}
+
+h2 {font-size: 2.25em; line-height:1.3 !important;}
+
+/* @media screen and (max-width: 64em) {
+h2 {
+    font-size: 1.5em;
+  }
+}
+
+@media screen and (max-width: 50em) {
+h2 {
+    font-size: 1em;
+  }
+}
+
+@media screen and (max-width: 30em){
+h1 {
+    font-size: 1.5em;
+		hyphens:none;
+  }
+	
+	
+} */
+.related_wrap, .jp-relatedposts{
+	display: none !important;
+}
+
+.avatar {
+	display: none !important;
+}
+
+.elementor-posts .elementor-post__card .elementor-post__read-more{
+	display: none !important;
+}
+
+.sc_blogger_portestate .sc_blogger_item .sc_blogger_item_content .portfolio_page_details .portfolio_page_details_item {
+    font-size: 16px;
+    display: block;
+}
+
+.sc_blogger_item.full_post_read .entry-title, .full_post_read .post_title, .full_post_read .sc_layouts_blog_item_title {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.sc_item_filters_align_left .sc_item_filters_tabs, .sc_item_filters_align_right .sc_item_filters_tabs {
+    max-width: 100%;
+}
+
+.single-tribe_events .tribe-events-c-subscribe-dropdown__container, .tribe-events .tribe-events-c-subscribe-dropdown__container {
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-end;
+    display: none;
+}
+
+.post_header_wrap_style_style-6 .post_header .post_meta_other {
+    margin-top: 2em;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: flex-end;
+    -ms-flex-align: end;
+    align-items: flex-end;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: space-between;
+    justify-content: space-between;
+    -webkit-flex-wrap: nowrap;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    display: none;
+}
+
+input[type="email"],.select_container, select, .select_container select {
+    width: 60%;
+}
+
+#ays-quiz-container-1.ays-quiz-container .ays-questions-container .ays-start-page *:not(input), #ays-quiz-container-1.ays-quiz-container .ays-questions-container label[for^="ays-answer-"], #ays-quiz-container-1.ays-quiz-container .ays-questions-container .ays-matching-field-choice, #ays-quiz-container-1.ays-quiz-container .ays-questions-container p, #ays-quiz-container-1.ays-quiz-container .ays-questions-container form .step:not(.ays_thank_you_fs) p, #ays-quiz-container-1.ays-quiz-container .ays-questions-container .ays-fs-title, #ays-quiz-container-1.ays-quiz-container .ays-questions-container .ays-fs-subtitle, #ays-quiz-container-1.ays-quiz-container .ays-questions-container .logged_in_message, #ays-quiz-container-1.ays-quiz-container .ays-questions-container .ays-quiz-limitation-count-of-takers, #ays-quiz-container-1.ays-quiz-container .ays-questions-container .ays-quiz-limitation-count-of-takers *, #ays-quiz-container-1.ays-quiz-container .ays-questions-container .ays_score_message, #ays-quiz-container-1.ays-quiz-container .ays-questions-container .ays_message {
+    color: #0a0a0a;
+    outline: none;
+    font-family: 'sofia-pro';
+}
+
+
+.download-button {
+  background-color: #0065DD; /* Couleur de fond bleue initiale */
+  color: white; /* Texte blanc */
+  padding: 15px 40px; /* Espacement autour du texte */
+  text-align: center; /* Centrer le texte */
+  text-decoration: none; /* Supprimer le soulignement */
+  border-radius: 50px; /* Bords très arrondis */
+  display: inline-block; /* Affichage en ligne */
+  font-size: 16px; /* Taille du texte */
+  font-weight: bold; /* Texte en gras */
+  transition: background-color 0.3s, color 0.3s; /* Transition douce pour les couleurs */
+}
+
+.download-button:hover {
+  background-color: #004fa3; /* Couleur de fond au survol (bleu plus foncé) */
+  color: white !important; /* Texte blanc au survol */
+}
+
+.mon-bloc-personnalise {
+    background-color: #cccccc; /* Gris clair */
+    padding: 20px; /* Facultatif */
+    border-radius: 10px; /* Facultatif */
+}
+.mon-bloc-personnalise {
+    background-color: rgba(128, 128, 128, 0.8); /* Gris avec 80% d'opacité */
+}

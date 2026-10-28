@@ -47,6 +47,16 @@
   // Sub-menus open on hover / focus, like superfish with the "none" animation set in the theme.
   function initMenus() {
     document.querySelectorAll('.sc_layouts_menu').forEach((menu) => menu.classList.add('inited'));
+    // When WordPress marked no current item in a menu, trx_addons marks the items that link to the
+    // current page (e.g. the language switcher on training pages). Superfish flags parent links.
+    const here = location.href.split('#')[0];
+    document.querySelectorAll('.sc_layouts_menu_nav').forEach((menu) => {
+      const hasCurrent = menu.querySelector('.current-menu-item, .current-menu-parent, .current-menu-ancestor');
+      menu.querySelectorAll('li > a[href]').forEach((link) => {
+        if (!hasCurrent && link.href.split('#')[0] === here) link.parentElement.classList.add('current-menu-item');
+        if (link.nextElementSibling?.matches('ul')) link.classList.add('sf-with-ul');
+      });
+    });
     document.querySelectorAll('.sc_layouts_menu_nav li.menu-item-has-children').forEach((item) => {
       const subMenu = item.querySelector(':scope > ul');
       if (!subMenu) return;
@@ -352,7 +362,99 @@
     }));
   }
 
+  // Training catalogue: Ajax Search Pro filters + Elementor posts grid, done in the browser.
+  // A training matches when, for every filter group with ticked boxes, it has at least one of
+  // them (OR inside a group, AND between groups) and its title contains every searched word
+  // (2 characters minimum, accents ignored). 6 cards per page, Elementor's Previous / Next.
+  function initTrainingCatalogue() {
+    const grid = document.querySelector('.elementor-posts-container[data-cards-per-page]');
+    if (!grid) return;
+    const cards = [...grid.querySelectorAll('article.elementor-post')];
+    const perPage = Number(grid.dataset.cardsPerPage) || 6;
+    const settings = document.getElementById('ajaxsearchprobsettings1_1');
+    const search = document.querySelector('.asp_m input.orig');
+    const navigation = grid.parentElement.querySelector('.elementor-pagination');
+    const fold = (text) => text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+    let page = 1;
+    let timer;
+
+    const selected = () => {
+      const groups = {};
+      settings?.querySelectorAll('fieldset[class*="asp_filter_cf_"]').forEach((fieldset) => {
+        const name = (fieldset.className.match(/asp_filter_cf_([a-z]+)/) || [])[1];
+        const values = [...fieldset.querySelectorAll('input[type=checkbox]:checked')].map((input) => input.value.replace(/&amp;/g, '&'));
+        if (name && values.length) groups[name] = values;
+      });
+      return groups;
+    };
+    const matches = (card, groups, words) => {
+      for (const [name, values] of Object.entries(groups)) {
+        let own = [];
+        try { own = JSON.parse(card.getAttribute(`data-filter-${name}`) || '[]'); } catch {}
+        if (!values.some((value) => own.includes(value))) return false;
+      }
+      const title = fold(card.dataset.title || card.textContent);
+      return words.every((word) => title.includes(word));
+    };
+    const renderNavigation = (pages) => {
+      if (!navigation) return;
+      navigation.hidden = pages <= 1;
+      const previous = grid.dataset.labelPrevious || 'Précédent';
+      const next = grid.dataset.labelNext || 'Suivant';
+      navigation.innerHTML = `\n\t\t\t${page > 1 ? `<a class="page-numbers prev" href="#">${previous}</a>` : `<span class="page-numbers prev">${previous}</span>`}\n${page < pages ? `<a class="page-numbers next" href="#">${next}</a>` : `<span class="page-numbers next">${next}</span>`}\t\t`;
+    };
+    const apply = () => {
+      const groups = selected();
+      const words = fold(search?.value || '').split(/\s+/).filter((word) => word.length >= 2);
+      const visible = cards.filter((card) => matches(card, groups, words));
+      const pages = Math.max(1, Math.ceil(visible.length / perPage));
+      page = Math.min(page, pages);
+      cards.forEach((card) => { card.hidden = true; });
+      visible.slice((page - 1) * perPage, page * perPage).forEach((card) => { card.hidden = false; });
+      renderNavigation(pages);
+    };
+    const schedule = () => { clearTimeout(timer); timer = setTimeout(() => { page = 1; apply(); }, 300); };
+
+    settings?.querySelectorAll('.asp_option').forEach((option) => {
+      const input = option.querySelector('input[type=checkbox]');
+      if (!input) return;
+      const toggle = () => { input.checked = !input.checked; option.setAttribute('aria-checked', String(input.checked)); schedule(); };
+      option.addEventListener('click', (event) => { event.preventDefault(); toggle(); });
+      option.addEventListener('keydown', (event) => { if (event.key === ' ' || event.key === 'Enter') { event.preventDefault(); toggle(); } });
+    });
+    search?.addEventListener('input', schedule);
+    search?.closest('form')?.addEventListener('submit', (event) => { event.preventDefault(); page = 1; apply(); });
+    navigation?.addEventListener('click', (event) => {
+      const link = event.target.closest('a.page-numbers');
+      if (!link) return;
+      event.preventDefault();
+      page += link.classList.contains('next') ? 1 : -1;
+      apply();
+      grid.scrollIntoView({ block: 'start' });
+    });
+    apply();
+  }
+
+  // Elementor Pro posts widget (cards / classic skins): the container gets elementor-has-item-ratio
+  // (images become absolutely positioned inside a fixed-ratio box) and each thumbnail whose image
+  // is flatter than the box gets elementor-fit-height (the image fills the height instead).
+  function initElementorPosts() {
+    document.querySelectorAll('.elementor-posts-container.elementor-posts--skin-cards, .elementor-posts-container.elementor-posts--skin-classic').forEach((container) => {
+      container.classList.add('elementor-has-item-ratio');
+      const fit = () => container.querySelectorAll('.elementor-post__thumbnail').forEach((thumbnail) => {
+        const image = thumbnail.querySelector('img');
+        if (!image || !image.naturalWidth || !thumbnail.offsetWidth) return;
+        thumbnail.classList.toggle('elementor-fit-height', image.naturalHeight / image.naturalWidth < thumbnail.offsetHeight / thumbnail.offsetWidth);
+      });
+      container.querySelectorAll('.elementor-post__thumbnail img').forEach((image) => { if (!image.complete) image.addEventListener('load', fit, { once: true }); });
+      window.addEventListener('resize', fit);
+      fit();
+    });
+  }
+
   document.querySelectorAll('.ql-hero').forEach(initHero);
+  initElementorPosts();
+  initTrainingCatalogue();
   initElementorTabs();
   initMobileMenu();
   initEntranceAnimations();

@@ -53,14 +53,42 @@
       "order": 0,
       "status": "published",
       "image": {
-        "card": "assets/images/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled-900x1200.jpg",
-        "cardSmall": "assets/images/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled-370x493.jpg",
+        "card": {
+          "src": "assets/images/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled-900x1200.jpg",
+          "srcset": [
+            [
+              "assets/images/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled-370x493.jpg",
+              "370w"
+            ],
+            [
+              "assets/images/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled-900x1200@2x.jpg",
+              "1800w"
+            ]
+          ],
+          "sizes": "(max-width: 900px) 100vw, 900px",
+          "width": 900,
+          "height": 1200
+        },
         "social": "assets/images/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled.jpg",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled.jpg?fit=850%2C600&ssl=1"
       },
       "imageEn": {
-        "card": "assets/images/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled-900x1200.jpg",
-        "cardSmall": "assets/images/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled-370x493.jpg",
+        "card": {
+          "src": "assets/images/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled-900x1200.jpg",
+          "srcset": [
+            [
+              "assets/images/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled-370x493.jpg",
+              "370w"
+            ],
+            [
+              "assets/images/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled-900x1200@2x.jpg",
+              "1800w"
+            ]
+          ],
+          "sizes": "(max-width: 900px) 100vw, 900px",
+          "width": 900,
+          "height": 1200
+        },
         "social": "assets/images/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled.jpg",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled.jpg?fit=850%2C600&ssl=1"
       },
@@ -169,14 +197,24 @@
       "order": 1,
       "status": "published",
       "image": {
-        "card": "assets/images/2025/01/DALL·E-2025-01-24-11.44.06-A-visually-appealing-image-representing-an-advanced-training-program-on-AI-and-machine-learning-testing.-The-scene-includes-futuristic-digital-element-900x1200.webp",
-        "cardSmall": "assets/images/2025/01/DALL·E-2025-01-24-11.44.06-A-visually-appealing-image-representing-an-advanced-training-program-on-AI-and-machine-learning-testing.-The-scene-includes-futuristic-digital-element-370x493.webp",
+        "card": {
+          "src": "assets/images/2025/01/DALL·E-2025-01-24-11.44.06-A-visually-appealing-image-representing-an-advanced-training-program-on-AI-and-machine-learning-testing.-The-scene-includes-futuristic-digital-element-900x1024.webp",
+          "srcset": [],
+          "sizes": null,
+          "width": 900,
+          "height": 1024
+        },
         "social": "assets/images/2025/01/DALL·E-2025-01-24-11.44.06-A-visually-appealing-image-representing-an-advanced-training-program-on-AI-and-machine-learning-testing.-The-scene-includes-futuristic-digital-element.webp",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2025/01/DALL·E-2025-01-24-11.44.06-A-visually-appealing-image-representing-an-advanced-training-program-on-AI-and-machine-learning-testing.-The-scene-includes-futuristic-digital-element.webp?fit=850%2C600&ssl=1"
       },
       "imageEn": {
-        "card": "assets/images/2025/01/DALL·E-2025-01-24-11.44.06-A-visually-appealing-image-representing-an-advanced-training-program-on-AI-and-machine-learning-testing.-The-scene-includes-futuristic-digital-element-900x1200.webp",
-        "cardSmall": "assets/images/2025/01/DALL·E-2025-01-24-11.44.06-A-visually-appealing-image-representing-an-advanced-training-program-on-AI-and-machine-learning-testing.-The-scene-includes-futuristic-digital-element-370x493.webp",
+        "card": {
+          "src": "assets/images/2025/01/DALL·E-2025-01-24-11.44.06-A-visually-appealing-image-representing-an-advanced-training-program-on-AI-and-machine-learning-testing.-The-scene-includes-futuristic-digital-element-900x1024.webp",
+          "srcset": [],
+          "sizes": null,
+          "width": 900,
+          "height": 1024
+        },
         "social": "assets/images/2025/01/DALL·E-2025-01-24-11.44.06-A-visually-appealing-image-representing-an-advanced-training-program-on-AI-and-machine-learning-testing.-The-scene-includes-futuristic-digital-element.webp",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2025/01/DALL·E-2025-01-24-11.44.06-A-visually-appealing-image-representing-an-advanced-training-program-on-AI-and-machine-learning-testing.-The-scene-includes-futuristic-digital-element.webp?fit=850%2C600&ssl=1"
       },
@@ -264,14 +302,74 @@
       "order": 2,
       "status": "published",
       "image": {
-        "card": "assets/images/2023/12/ISTQB-Foundation-Level3-900x1200.png",
-        "cardSmall": "assets/images/2023/12/ISTQB-Foundation-Level3-370x493.png",
+        "card": {
+          "src": "assets/images/2023/12/ISTQB-Foundation-Level3-850x600.png",
+          "srcset": [
+            [
+              "assets/images/2023/12/ISTQB-Foundation-Level3.png",
+              "850w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Foundation-Level3-300x212.png",
+              "300w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Foundation-Level3-768x542.png",
+              "768w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Foundation-Level3-370x261.png",
+              "370w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Foundation-Level3-840x593.png",
+              "840w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Foundation-Level3-410x289.png",
+              "410w"
+            ]
+          ],
+          "sizes": "(max-width: 850px) 100vw, 850px",
+          "width": 850,
+          "height": 600
+        },
         "social": "assets/images/2023/12/ISTQB-Foundation-Level3.png",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/ISTQB-Foundation-Level3.png?fit=850%2C600&ssl=1"
       },
       "imageEn": {
-        "card": "assets/images/2023/12/ISTQB-Foundation-Level3-900x1200.png",
-        "cardSmall": "assets/images/2023/12/ISTQB-Foundation-Level3-370x493.png",
+        "card": {
+          "src": "assets/images/2023/12/ISTQB-Foundation-Level3-850x600.png",
+          "srcset": [
+            [
+              "assets/images/2023/12/ISTQB-Foundation-Level3.png",
+              "850w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Foundation-Level3-300x212.png",
+              "300w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Foundation-Level3-768x542.png",
+              "768w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Foundation-Level3-370x261.png",
+              "370w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Foundation-Level3-840x593.png",
+              "840w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Foundation-Level3-410x289.png",
+              "410w"
+            ]
+          ],
+          "sizes": "(max-width: 850px) 100vw, 850px",
+          "width": 850,
+          "height": 600
+        },
         "social": "assets/images/2023/12/ISTQB-Foundation-Level3.png",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/ISTQB-Foundation-Level3.png?fit=850%2C600&ssl=1"
       },
@@ -375,14 +473,74 @@
       "order": 3,
       "status": "published",
       "image": {
-        "card": "assets/images/2023/12/IQBBA3-900x1200.png",
-        "cardSmall": "assets/images/2023/12/IQBBA3-370x493.png",
+        "card": {
+          "src": "assets/images/2023/12/IQBBA3-850x600.png",
+          "srcset": [
+            [
+              "assets/images/2023/12/IQBBA3.png",
+              "850w"
+            ],
+            [
+              "assets/images/2023/12/IQBBA3-300x212.png",
+              "300w"
+            ],
+            [
+              "assets/images/2023/12/IQBBA3-768x542.png",
+              "768w"
+            ],
+            [
+              "assets/images/2023/12/IQBBA3-370x261.png",
+              "370w"
+            ],
+            [
+              "assets/images/2023/12/IQBBA3-840x593.png",
+              "840w"
+            ],
+            [
+              "assets/images/2023/12/IQBBA3-410x289.png",
+              "410w"
+            ]
+          ],
+          "sizes": "(max-width: 850px) 100vw, 850px",
+          "width": 850,
+          "height": 600
+        },
         "social": "assets/images/2023/12/IQBBA3.png",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/IQBBA3.png?fit=850%2C600&ssl=1"
       },
       "imageEn": {
-        "card": "assets/images/2023/12/IQBBA3-900x1200.png",
-        "cardSmall": "assets/images/2023/12/IQBBA3-370x493.png",
+        "card": {
+          "src": "assets/images/2023/12/IQBBA3-850x600.png",
+          "srcset": [
+            [
+              "assets/images/2023/12/IQBBA3.png",
+              "850w"
+            ],
+            [
+              "assets/images/2023/12/IQBBA3-300x212.png",
+              "300w"
+            ],
+            [
+              "assets/images/2023/12/IQBBA3-768x542.png",
+              "768w"
+            ],
+            [
+              "assets/images/2023/12/IQBBA3-370x261.png",
+              "370w"
+            ],
+            [
+              "assets/images/2023/12/IQBBA3-840x593.png",
+              "840w"
+            ],
+            [
+              "assets/images/2023/12/IQBBA3-410x289.png",
+              "410w"
+            ]
+          ],
+          "sizes": "(max-width: 850px) 100vw, 850px",
+          "width": 850,
+          "height": 600
+        },
         "social": "assets/images/2023/12/IQBBA3.png",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/IQBBA3.png?fit=850%2C600&ssl=1"
       },
@@ -473,14 +631,42 @@
       "order": 4,
       "status": "published",
       "image": {
-        "card": "assets/images/2024/01/Design-sans-titre-2-900x1200.png",
-        "cardSmall": "assets/images/2024/01/Design-sans-titre-2-370x493.png",
+        "card": {
+          "src": "assets/images/2024/01/Design-sans-titre-2-371x262.png",
+          "srcset": [
+            [
+              "assets/images/2024/01/Design-sans-titre-2.png",
+              "371w"
+            ],
+            [
+              "assets/images/2024/01/Design-sans-titre-2-300x212.png",
+              "300w"
+            ]
+          ],
+          "sizes": "(max-width: 600px) 100vw, 371px",
+          "width": 371,
+          "height": 262
+        },
         "social": "assets/images/2024/01/Design-sans-titre-2.png",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2024/01/Design-sans-titre-2.png?fit=850%2C600&ssl=1"
       },
       "imageEn": {
-        "card": "assets/images/2024/01/Design-sans-titre-2-900x1200.png",
-        "cardSmall": "assets/images/2024/01/Design-sans-titre-2-370x493.png",
+        "card": {
+          "src": "assets/images/2024/01/Design-sans-titre-2-371x262.png",
+          "srcset": [
+            [
+              "assets/images/2024/01/Design-sans-titre-2.png",
+              "371w"
+            ],
+            [
+              "assets/images/2024/01/Design-sans-titre-2-300x212.png",
+              "300w"
+            ]
+          ],
+          "sizes": "(max-width: 600px) 100vw, 371px",
+          "width": 371,
+          "height": 262
+        },
         "social": "assets/images/2024/01/Design-sans-titre-2.png",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2024/01/Design-sans-titre-2.png?fit=850%2C600&ssl=1"
       },
@@ -571,14 +757,74 @@
       "order": 5,
       "status": "published",
       "image": {
-        "card": "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-900x1200.png",
-        "cardSmall": "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-370x493.png",
+        "card": {
+          "src": "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-850x600.png",
+          "srcset": [
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1.png",
+              "850w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-300x212.png",
+              "300w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-768x542.png",
+              "768w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-370x261.png",
+              "370w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-840x593.png",
+              "840w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-410x289.png",
+              "410w"
+            ]
+          ],
+          "sizes": "(max-width: 850px) 100vw, 850px",
+          "width": 850,
+          "height": 600
+        },
         "social": "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1.png",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1.png?fit=850%2C600&ssl=1"
       },
       "imageEn": {
-        "card": "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-900x1200.png",
-        "cardSmall": "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-370x493.png",
+        "card": {
+          "src": "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-850x600.png",
+          "srcset": [
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1.png",
+              "850w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-300x212.png",
+              "300w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-768x542.png",
+              "768w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-370x261.png",
+              "370w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-840x593.png",
+              "840w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-410x289.png",
+              "410w"
+            ]
+          ],
+          "sizes": "(max-width: 850px) 100vw, 850px",
+          "width": 850,
+          "height": 600
+        },
         "social": "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1.png",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1.png?fit=850%2C600&ssl=1"
       },
@@ -671,14 +917,74 @@
       "order": 6,
       "status": "published",
       "image": {
-        "card": "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-900x1200.png",
-        "cardSmall": "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-370x493.png",
+        "card": {
+          "src": "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-850x600.png",
+          "srcset": [
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3.png",
+              "850w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-300x212.png",
+              "300w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-768x542.png",
+              "768w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-370x261.png",
+              "370w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-840x593.png",
+              "840w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-410x289.png",
+              "410w"
+            ]
+          ],
+          "sizes": "(max-width: 850px) 100vw, 850px",
+          "width": 850,
+          "height": 600
+        },
         "social": "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3.png",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3.png?fit=850%2C600&ssl=1"
       },
       "imageEn": {
-        "card": "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-900x1200.png",
-        "cardSmall": "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-370x493.png",
+        "card": {
+          "src": "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-850x600.png",
+          "srcset": [
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3.png",
+              "850w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-300x212.png",
+              "300w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-768x542.png",
+              "768w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-370x261.png",
+              "370w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-840x593.png",
+              "840w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-410x289.png",
+              "410w"
+            ]
+          ],
+          "sizes": "(max-width: 850px) 100vw, 850px",
+          "width": 850,
+          "height": 600
+        },
         "social": "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3.png",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3.png?fit=850%2C600&ssl=1"
       },
@@ -768,14 +1074,74 @@
       "order": 7,
       "status": "published",
       "image": {
-        "card": "assets/images/2023/12/formation-non-certifiante18-900x1200.png",
-        "cardSmall": "assets/images/2023/12/formation-non-certifiante18-370x493.png",
+        "card": {
+          "src": "assets/images/2023/12/formation-non-certifiante18-850x600.png",
+          "srcset": [
+            [
+              "assets/images/2023/12/formation-non-certifiante18.png",
+              "850w"
+            ],
+            [
+              "assets/images/2023/12/formation-non-certifiante18-300x212.png",
+              "300w"
+            ],
+            [
+              "assets/images/2023/12/formation-non-certifiante18-768x542.png",
+              "768w"
+            ],
+            [
+              "assets/images/2023/12/formation-non-certifiante18-370x261.png",
+              "370w"
+            ],
+            [
+              "assets/images/2023/12/formation-non-certifiante18-840x593.png",
+              "840w"
+            ],
+            [
+              "assets/images/2023/12/formation-non-certifiante18-410x289.png",
+              "410w"
+            ]
+          ],
+          "sizes": "(max-width: 850px) 100vw, 850px",
+          "width": 850,
+          "height": 600
+        },
         "social": "assets/images/2023/12/formation-non-certifiante18.png",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/formation-non-certifiante18.png?fit=850%2C600&ssl=1"
       },
       "imageEn": {
-        "card": "assets/images/2023/12/formation-non-certifiante18-900x1200.png",
-        "cardSmall": "assets/images/2023/12/formation-non-certifiante18-370x493.png",
+        "card": {
+          "src": "assets/images/2023/12/formation-non-certifiante18-850x600.png",
+          "srcset": [
+            [
+              "assets/images/2023/12/formation-non-certifiante18.png",
+              "850w"
+            ],
+            [
+              "assets/images/2023/12/formation-non-certifiante18-300x212.png",
+              "300w"
+            ],
+            [
+              "assets/images/2023/12/formation-non-certifiante18-768x542.png",
+              "768w"
+            ],
+            [
+              "assets/images/2023/12/formation-non-certifiante18-370x261.png",
+              "370w"
+            ],
+            [
+              "assets/images/2023/12/formation-non-certifiante18-840x593.png",
+              "840w"
+            ],
+            [
+              "assets/images/2023/12/formation-non-certifiante18-410x289.png",
+              "410w"
+            ]
+          ],
+          "sizes": "(max-width: 850px) 100vw, 850px",
+          "width": 850,
+          "height": 600
+        },
         "social": "assets/images/2023/12/formation-non-certifiante18.png",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/formation-non-certifiante18.png?fit=850%2C600&ssl=1"
       },
@@ -864,14 +1230,74 @@
       "order": 8,
       "status": "published",
       "image": {
-        "card": "assets/images/2023/12/formation-non-certifiante32-900x1200.png",
-        "cardSmall": "assets/images/2023/12/formation-non-certifiante32-370x493.png",
+        "card": {
+          "src": "assets/images/2023/12/formation-non-certifiante32-850x600.png",
+          "srcset": [
+            [
+              "assets/images/2023/12/formation-non-certifiante32.png",
+              "850w"
+            ],
+            [
+              "assets/images/2023/12/formation-non-certifiante32-300x212.png",
+              "300w"
+            ],
+            [
+              "assets/images/2023/12/formation-non-certifiante32-768x542.png",
+              "768w"
+            ],
+            [
+              "assets/images/2023/12/formation-non-certifiante32-370x261.png",
+              "370w"
+            ],
+            [
+              "assets/images/2023/12/formation-non-certifiante32-840x593.png",
+              "840w"
+            ],
+            [
+              "assets/images/2023/12/formation-non-certifiante32-410x289.png",
+              "410w"
+            ]
+          ],
+          "sizes": "(max-width: 850px) 100vw, 850px",
+          "width": 850,
+          "height": 600
+        },
         "social": "assets/images/2023/12/formation-non-certifiante32.png",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/formation-non-certifiante32.png?fit=850%2C600&ssl=1"
       },
       "imageEn": {
-        "card": "assets/images/2023/12/formation-non-certifiante32-900x1200.png",
-        "cardSmall": "assets/images/2023/12/formation-non-certifiante32-370x493.png",
+        "card": {
+          "src": "assets/images/2023/12/formation-non-certifiante32-850x600.png",
+          "srcset": [
+            [
+              "assets/images/2023/12/formation-non-certifiante32.png",
+              "850w"
+            ],
+            [
+              "assets/images/2023/12/formation-non-certifiante32-300x212.png",
+              "300w"
+            ],
+            [
+              "assets/images/2023/12/formation-non-certifiante32-768x542.png",
+              "768w"
+            ],
+            [
+              "assets/images/2023/12/formation-non-certifiante32-370x261.png",
+              "370w"
+            ],
+            [
+              "assets/images/2023/12/formation-non-certifiante32-840x593.png",
+              "840w"
+            ],
+            [
+              "assets/images/2023/12/formation-non-certifiante32-410x289.png",
+              "410w"
+            ]
+          ],
+          "sizes": "(max-width: 850px) 100vw, 850px",
+          "width": 850,
+          "height": 600
+        },
         "social": "assets/images/2023/12/formation-non-certifiante32.png",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/formation-non-certifiante32.png?fit=850%2C600&ssl=1"
       },
@@ -961,14 +1387,74 @@
       "order": 9,
       "status": "published",
       "image": {
-        "card": "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-900x1200.png",
-        "cardSmall": "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-370x493.png",
+        "card": {
+          "src": "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-850x600.png",
+          "srcset": [
+            [
+              "assets/images/2023/12/ISTQB-Advanced-Test-Manager1.png",
+              "850w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-300x212.png",
+              "300w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-768x542.png",
+              "768w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-370x261.png",
+              "370w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-840x593.png",
+              "840w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-410x289.png",
+              "410w"
+            ]
+          ],
+          "sizes": "(max-width: 850px) 100vw, 850px",
+          "width": 850,
+          "height": 600
+        },
         "social": "assets/images/2023/12/ISTQB-Advanced-Test-Manager1.png",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/ISTQB-Advanced-Test-Manager1.png?fit=850%2C600&ssl=1"
       },
       "imageEn": {
-        "card": "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-900x1200.png",
-        "cardSmall": "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-370x493.png",
+        "card": {
+          "src": "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-850x600.png",
+          "srcset": [
+            [
+              "assets/images/2023/12/ISTQB-Advanced-Test-Manager1.png",
+              "850w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-300x212.png",
+              "300w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-768x542.png",
+              "768w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-370x261.png",
+              "370w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-840x593.png",
+              "840w"
+            ],
+            [
+              "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-410x289.png",
+              "410w"
+            ]
+          ],
+          "sizes": "(max-width: 850px) 100vw, 850px",
+          "width": 850,
+          "height": 600
+        },
         "social": "assets/images/2023/12/ISTQB-Advanced-Test-Manager1.png",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/ISTQB-Advanced-Test-Manager1.png?fit=850%2C600&ssl=1"
       },
@@ -1058,14 +1544,82 @@
       "order": 10,
       "status": "published",
       "image": {
-        "card": "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-900x1200.jpeg",
-        "cardSmall": "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-370x493.jpeg",
+        "card": {
+          "src": "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-900x1200.jpeg",
+          "srcset": [
+            [
+              "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-900x1200.jpeg",
+              "900w"
+            ],
+            [
+              "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-600x800.jpeg",
+              "600w"
+            ],
+            [
+              "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-450x600.jpeg",
+              "450w"
+            ],
+            [
+              "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-300x400.jpeg",
+              "300w"
+            ],
+            [
+              "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-150x200.jpeg",
+              "150w"
+            ],
+            [
+              "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-370x493.jpeg",
+              "370w"
+            ],
+            [
+              "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-900x1200@2x.jpeg",
+              "1800w"
+            ]
+          ],
+          "sizes": "(max-width: 900px) 100vw, 900px",
+          "width": 900,
+          "height": 1200
+        },
         "social": "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled.jpeg",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled.jpeg?fit=850%2C600&ssl=1"
       },
       "imageEn": {
-        "card": "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-900x1200.jpeg",
-        "cardSmall": "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-370x493.jpeg",
+        "card": {
+          "src": "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-900x1200.jpeg",
+          "srcset": [
+            [
+              "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-900x1200.jpeg",
+              "900w"
+            ],
+            [
+              "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-600x800.jpeg",
+              "600w"
+            ],
+            [
+              "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-450x600.jpeg",
+              "450w"
+            ],
+            [
+              "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-300x400.jpeg",
+              "300w"
+            ],
+            [
+              "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-150x200.jpeg",
+              "150w"
+            ],
+            [
+              "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-370x493.jpeg",
+              "370w"
+            ],
+            [
+              "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-900x1200@2x.jpeg",
+              "1800w"
+            ]
+          ],
+          "sizes": "(max-width: 900px) 100vw, 900px",
+          "width": 900,
+          "height": 1200
+        },
         "social": "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled.jpeg",
         "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled.jpeg?fit=850%2C600&ssl=1"
       },

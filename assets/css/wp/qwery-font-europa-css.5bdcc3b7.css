@@ -1,0 +1,172 @@
+/*
+ * The Typekit service used to deliver this font or fonts for use on websites
+ * is provided by Adobe and is subject to these Terms of Use
+ * http://www.adobe.com/products/eulas/tou_typekit. For font license
+ * information, see the list below.
+ *
+ * europa:
+ *   - http://typekit.com/eulas/00000000000000007735a081
+ *   - http://typekit.com/eulas/00000000000000007735a082
+ *   - http://typekit.com/eulas/00000000000000007735a08e
+ *   - http://typekit.com/eulas/00000000000000007735a08a
+ *   - http://typekit.com/eulas/00000000000000007735a08f
+ *   - http://typekit.com/eulas/00000000000000007735a09e
+ * sofia-pro:
+ *   - http://typekit.com/eulas/00000000000000007735f996
+ *   - http://typekit.com/eulas/00000000000000007735f991
+ *   - http://typekit.com/eulas/00000000000000007735f999
+ *   - http://typekit.com/eulas/00000000000000007735f993
+ *   - http://typekit.com/eulas/00000000000000007735f995
+ *   - http://typekit.com/eulas/00000000000000007735f98f
+ *   - http://typekit.com/eulas/00000000000000007735f990
+ *   - http://typekit.com/eulas/00000000000000007735f998
+ *   - http://typekit.com/eulas/00000000000000007735f992
+ *   - http://typekit.com/eulas/00000000000000007735f99b
+ *   - http://typekit.com/eulas/00000000000000007735f98d
+ *   - http://typekit.com/eulas/00000000000000007735f98c
+ *   - http://typekit.com/eulas/00000000000000007735f99a
+ *   - http://typekit.com/eulas/00000000000000007735f997
+ *   - http://typekit.com/eulas/00000000000000007735f98e
+ *   - http://typekit.com/eulas/00000000000000007735f994
+ *
+ * © 2009-2026 Adobe Systems Incorporated. All Rights Reserved.
+ */
+/*{"last_published":"2023-03-23 10:24:37 UTC"}*/
+
+/**/
+
+
+@font-face {
+font-family:"europa";
+src:url("../../images/ext/75a3646c-l") format("woff2"),url("../../images/ext/f1f13317-d") format("woff"),url("../../images/ext/71bb167c-a") format("opentype");
+font-display:auto;font-style:normal;font-weight:700;font-stretch:normal;
+}
+
+@font-face {
+font-family:"europa";
+src:url("../../images/ext/0b3aa581-l") format("woff2"),url("../../images/ext/4cbe394f-d") format("woff"),url("../../images/ext/484306d0-a") format("opentype");
+font-display:auto;font-style:normal;font-weight:300;font-stretch:normal;
+}
+
+@font-face {
+font-family:"europa";
+src:url("../../images/ext/06a6e8ab-l") format("woff2"),url("../../images/ext/b589de3c-d") format("woff"),url("../../images/ext/74eec363-a") format("opentype");
+font-display:auto;font-style:normal;font-weight:400;font-stretch:normal;
+}
+
+@font-face {
+font-family:"europa";
+src:url("../../images/ext/19a50666-l") format("woff2"),url("../../images/ext/ff8be0f9-d") format("woff"),url("../../images/ext/34f76d27-a") format("opentype");
+font-display:auto;font-style:italic;font-weight:300;font-stretch:normal;
+}
+
+@font-face {
+font-family:"europa";
+src:url("../../images/ext/bcbb2b23-l") format("woff2"),url("../../images/ext/30152e60-d") format("woff"),url("../../images/ext/21463538-a") format("opentype");
+font-display:auto;font-style:italic;font-weight:400;font-stretch:normal;
+}
+
+@font-face {
+font-family:"europa";
+src:url("../../images/ext/61e93ae7-l") format("woff2"),url("../../images/ext/16ea8be5-d") format("woff"),url("../../images/ext/badd5a60-a") format("opentype");
+font-display:auto;font-style:italic;font-weight:700;font-stretch:normal;
+}
+
+@font-face {
+font-family:"sofia-pro";
+src:url("../../images/ext/31c74d21-l") format("woff2"),url("../../images/ext/89b9d072-d") format("woff"),url("../../images/ext/47e25334-a") format("opentype");
+font-display:auto;font-style:normal;font-weight:900;font-stretch:normal;
+}
+
+@font-face {
+font-family:"sofia-pro";
+src:url("../../images/ext/aadbcc4a-l") format("woff2"),url("../../images/ext/43fae017-d") format("woff"),url("../../images/ext/d4544853-a") format("opentype");
+font-display:auto;font-style:italic;font-weight:900;font-stretch:normal;
+}
+
+@font-face {
+font-family:"sofia-pro";
+src:url("../../images/ext/b3883076-l") format("woff2"),url("../../images/ext/53b826aa-d") format("woff"),url("../../images/ext/9c3402d9-a") format("opentype");
+font-display:auto;font-style:normal;font-weight:700;font-stretch:normal;
+}
+
+@font-face {
+font-family:"sofia-pro";
+src:url("../../images/ext/0e5ecd8b-l") format("woff2"),url("../../images/ext/dd8c27c9-d") format("woff"),url("../../images/ext/5dd0aea4-a") format("opentype");
+font-display:auto;font-style:italic;font-weight:700;font-stretch:normal;
+}
+
+@font-face {
+font-family:"sofia-pro";
+src:url("../../images/ext/8bdd0b61-l") format("woff2"),url("../../images/ext/9acd8d4f-d") format("woff"),url("../../images/ext/df0c9e1e-a") format("opentype");
+font-display:auto;font-style:normal;font-weight:200;font-stretch:normal;
+}
+
+@font-face {
+font-family:"sofia-pro";
+src:url("../../images/ext/6259d643-l") format("woff2"),url("../../images/ext/7d335992-d") format("woff"),url("../../images/ext/43f8fd90-a") format("opentype");
+font-display:auto;font-style:italic;font-weight:200;font-stretch:normal;
+}
+
+@font-face {
+font-family:"sofia-pro";
+src:url("../../images/ext/7937f0e3-l") format("woff2"),url("../../images/ext/d5ecdd84-d") format("woff"),url("../../images/ext/1ba8a690-a") format("opentype");
+font-display:auto;font-style:normal;font-weight:300;font-stretch:normal;
+}
+
+@font-face {
+font-family:"sofia-pro";
+src:url("../../images/ext/4c814a39-l") format("woff2"),url("../../images/ext/b3b5d43f-d") format("woff"),url("../../images/ext/1f293379-a") format("opentype");
+font-display:auto;font-style:italic;font-weight:300;font-stretch:normal;
+}
+
+@font-face {
+font-family:"sofia-pro";
+src:url("../../images/ext/f03cb3db-l") format("woff2"),url("../../images/ext/b49f7fb4-d") format("woff"),url("../../images/ext/23361e26-a") format("opentype");
+font-display:auto;font-style:normal;font-weight:500;font-stretch:normal;
+}
+
+@font-face {
+font-family:"sofia-pro";
+src:url("../../images/ext/1e2c0611-l") format("woff2"),url("../../images/ext/a0b86761-d") format("woff"),url("../../images/ext/6bdeed02-a") format("opentype");
+font-display:auto;font-style:italic;font-weight:500;font-stretch:normal;
+}
+
+@font-face {
+font-family:"sofia-pro";
+src:url("../../images/ext/7fbd4944-l") format("woff2"),url("../../images/ext/e7eefb32-d") format("woff"),url("../../images/ext/2e44e4d0-a") format("opentype");
+font-display:auto;font-style:normal;font-weight:400;font-stretch:normal;
+}
+
+@font-face {
+font-family:"sofia-pro";
+src:url("../../images/ext/2abb9c7c-l") format("woff2"),url("../../images/ext/9532d924-d") format("woff"),url("../../images/ext/6a6ef48d-a") format("opentype");
+font-display:auto;font-style:italic;font-weight:400;font-stretch:normal;
+}
+
+@font-face {
+font-family:"sofia-pro";
+src:url("../../images/ext/43f79f96-l") format("woff2"),url("../../images/ext/366daf88-d") format("woff"),url("../../images/ext/c28ebbfd-a") format("opentype");
+font-display:auto;font-style:normal;font-weight:600;font-stretch:normal;
+}
+
+@font-face {
+font-family:"sofia-pro";
+src:url("../../images/ext/a2e37ebe-l") format("woff2"),url("../../images/ext/44e203aa-d") format("woff"),url("../../images/ext/ae909216-a") format("opentype");
+font-display:auto;font-style:normal;font-weight:100;font-stretch:normal;
+}
+
+@font-face {
+font-family:"sofia-pro";
+src:url("../../images/ext/cfa5e3c2-l") format("woff2"),url("../../images/ext/49a5a6a9-d") format("woff"),url("../../images/ext/143716c4-a") format("opentype");
+font-display:auto;font-style:italic;font-weight:100;font-stretch:normal;
+}
+
+@font-face {
+font-family:"sofia-pro";
+src:url("../../images/ext/196459a5-l") format("woff2"),url("../../images/ext/0a675ca4-d") format("woff"),url("../../images/ext/b6bdafa7-a") format("opentype");
+font-display:auto;font-style:italic;font-weight:600;font-stretch:normal;
+}
+
+.tk-europa { font-family: "europa",sans-serif; }
+.tk-sofia-pro { font-family: "sofia-pro",sans-serif; }

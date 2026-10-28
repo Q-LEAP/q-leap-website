@@ -51,14 +51,30 @@ def read_page(lang, slug):
             'taxonomyClasses': taxonomy.group(1).split() if taxonomy else [], 'modified': modified}
 
 
+CARDS = {}
+for name in ('training_', 'training_2_', 'en_training_', 'en_training_2_'):
+    for card in json.load(open(os.path.join(IMPORT, f'cards-{name}.json'))):
+        CARDS[card['post']] = card
+
+
+def card_image(post_id):
+    """The catalogue card image exactly as WordPress served it (size chosen from the attachment)."""
+    card = CARDS[str(post_id)]
+    srcset = []
+    for candidate in html.unescape(card['srcset'] or '').split(','):
+        bits = candidate.strip().split()
+        if len(bits) == 2:
+            srcset.append([export.local_asset(bits[0], 'images'), bits[1]])
+    return {'src': export.local_asset(html.unescape(card['src']), 'images'), 'srcset': srcset,
+            'sizes': card['sizes'], 'width': int(card['width']), 'height': int(card['height'])}
+
+
 def image_for(post_id):
     featured = str(acf[post_id]['__featured'])
     source = media.get(featured, {}).get('url') or CARD_IMAGE_FALLBACK[featured]
     path = source.split('/wp-content/uploads/')[1]
-    card = export.local_asset(f'https://i0.wp.com/q-leap.eu/wp-content/uploads/{path}?resize=900%2C1200&ssl=1', 'images')
-    card_small = export.local_asset(f'https://i0.wp.com/q-leap.eu/wp-content/uploads/{path}?resize=370%2C493&ssl=1', 'images')
     social = export.local_asset(f'https://i0.wp.com/q-leap.eu/wp-content/uploads/{path}', 'images')
-    return {'card': card, 'cardSmall': card_small, 'social': social, 'socialUrl': f'https://i0.wp.com/q-leap.eu/wp-content/uploads/{path}?fit=850%2C600&ssl=1'}
+    return {'card': card_image(post_id), 'social': social, 'socialUrl': f'https://i0.wp.com/q-leap.eu/wp-content/uploads/{path}?fit=850%2C600&ssl=1'}
 
 
 MONTHS = {name: index + 1 for names in (

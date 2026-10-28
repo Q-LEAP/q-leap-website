@@ -1,0 +1,5 @@
+/* Rules needed by the static runtime (assets/js/main.js), not part of the WordPress styles. */
+
+/* Training catalogue filtering / pagination hides cards with the hidden attribute. */
+.elementor-posts-container > article[hidden],
+.elementor-pagination[hidden] { display: none !important; }

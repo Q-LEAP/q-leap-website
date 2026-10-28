@@ -5,7 +5,9 @@ par des composants statiques (voir assets/css/hero.css et assets/js/main.js).
 
 Usage : python3 tools/export/components.py index.html en/index.html ...
 """
+import hashlib
 import html
+import json
 import os
 import re
 import sys
@@ -56,21 +58,83 @@ def hero(module, prefix):
     return ''.join(parts)
 
 
+CSS_BUILD = os.path.join(ROOT, 'tools', 'export', 'build', 'css')
+# Generated pages use the stylesheets of the page their template was made from.
+TEMPLATE_SOURCE = {'trainings/': 'trainings__istqb-certified-tester-foundation-level', 'en/trainings/': 'en__trainings__istqb-certified-tester-foundation-level'}
+
+
+def page_styles(path, prefix):
+    """The page's stylesheets exactly as WordPress printed them: shared files linked in their
+    original order (assets/css/wp/), page-specific inline styles back in the page. A single merged
+    stylesheet changed the cascade (rules from other pages' plugins applied everywhere)."""
+    slug = path[:-len('/index.html')].replace('/', '__') if path != 'index.html' else 'home'
+    source = os.path.join(CSS_BUILD, slug + '.json')
+    for folder, template in TEMPLATE_SOURCE.items():
+        if path.startswith(folder) and path.count('/') == folder.count('/') + 1:
+            source = os.path.join(CSS_BUILD, template + '.json')
+    if not os.path.exists(source):
+        return None
+    tags = []
+    for chunk in json.load(open(source)):
+        css = chunk['css'].strip()
+        if not css:
+            continue
+        ident = re.sub(r'[^a-z0-9_-]+', '-', chunk['id'].lower()).strip('-') or 'inline'
+        if ident == 'inline' or ident.endswith('-inline-css') or ident.endswith('-inline'):
+            inline_css = css.replace('url("/assets/', 'url("' + prefix + 'assets/')
+            tags.append(f'<style id="{ident}">{inline_css}</style>')
+            continue
+        css = css.replace('url("/assets/', 'url("../../')  # files live in assets/css/wp/
+        digest = hashlib.sha1(css.encode()).hexdigest()[:8]
+        name = f'{ident}.{digest}.css'
+        target = os.path.join(ROOT, 'assets', 'css', 'wp', name)
+        if not os.path.exists(target):
+            os.makedirs(os.path.dirname(target), exist_ok=True)
+            open(target, 'w').write(css)
+        tags.append(f'<link rel="stylesheet" id="{ident}" href="{prefix}assets/css/wp/{name}">')
+    return '\n'.join(tags)
+
+
+FORMS = os.path.join(ROOT, 'content', 'forms')
+
+
+def fill_ninja_forms(markup, lang):
+    """Ninja Forms renders its forms in JavaScript from data the static site does not have:
+    insert the rendered markup captured from the live site (content/forms/ninja-<id>.<lang>.<n>.html)."""
+    def fill(match):
+        form_id, instance = match.group(1), match.group(2) or '0'
+        snippet = os.path.join(FORMS, f'ninja-{form_id}.{lang}.{instance}.html')
+        if not os.path.exists(snippet):
+            return match.group(0)
+        return match.group(0).replace('<div class="nf-loading-spinner"></div>', open(snippet).read(), 1)
+    return re.sub(r'<div id="nf-form-(\d+)(?:_(\d+))?-cont"[^>]*>\s*<div class="nf-loading-spinner"></div>\s*</div>', fill, markup)
+
+
 def process(path):
     full = os.path.join(ROOT, path)
     markup = open(full).read()
     prefix = '../' * path.count('/')
     markup = markup.replace('?export=1&amp;', '?').replace('?export=1&', '?').replace('&amp;export=1', '').replace('&export=1', '').replace('?export=1', '')
+    lang = 'en' if path.startswith('en/') else 'fr'
+    markup = fill_ninja_forms(markup, lang)
+    styles = page_styles(path, prefix)
+    main_link = f'<link rel="stylesheet" href="{prefix}assets/css/main.css">'
+    if styles and main_link in markup:
+        markup = markup.replace(main_link, '<!-- wp-styles -->\n' + styles + '\n<!-- /wp-styles -->', 1)
+    elif styles and '<!-- wp-styles -->' in markup:
+        markup = re.sub(r'<!-- wp-styles -->.*?<!-- /wp-styles -->', lambda _: '<!-- wp-styles -->\n' + styles + '\n<!-- /wp-styles -->', markup, flags=re.S)
     match = re.search(r'<rs-module-wrap.*?</rs-module-wrap>', markup, re.S)
     if match:
         markup = markup[:match.start()] + hero(match.group(0), prefix) + markup[match.end():]
         if 'assets/css/hero.css' not in markup:
-            markup = markup.replace('assets/css/main.css">', 'assets/css/main.css">\n<link rel="stylesheet" href="' + prefix + 'assets/css/hero.css">', 1)
+            markup = markup.replace('<!-- /wp-styles -->', '<!-- /wp-styles -->\n<link rel="stylesheet" href="' + prefix + 'assets/css/hero.css">', 1)
         print(path, 'hero rebuilt')
     if re.search(r'elementor-posts-container|elementor-gallery__container|e-gallery', markup) and 'assets/css/elementor-pro.css' not in markup:
-        markup = markup.replace('assets/css/main.css">', 'assets/css/main.css">\n<link rel="stylesheet" href="' + prefix + 'assets/css/elementor-pro.css">', 1)
+        markup = markup.replace('<!-- /wp-styles -->', '<!-- /wp-styles -->\n<link rel="stylesheet" href="' + prefix + 'assets/css/elementor-pro.css">', 1)
     if 'elementor-invisible' in markup and 'assets/css/animations.css' not in markup:
-        markup = markup.replace('assets/css/main.css">', 'assets/css/main.css">\n<link rel="stylesheet" href="' + prefix + 'assets/css/animations.css">', 1)
+        markup = markup.replace('<!-- /wp-styles -->', '<!-- /wp-styles -->\n<link rel="stylesheet" href="' + prefix + 'assets/css/animations.css">', 1)
+    if 'assets/css/static.css' not in markup and '<!-- /wp-styles -->' in markup:
+        markup = markup.replace('<!-- /wp-styles -->', '<!-- /wp-styles -->\n<link rel="stylesheet" href="' + prefix + 'assets/css/static.css">', 1)
     swiper = f'<script src="{prefix}assets/js/vendor/swiper-5.4.5.min.js" defer></script>\n'
     if 'swiper-5.4.5.min.js' not in markup and 'slider_swiper' in markup:
         markup = markup.replace(f'<script src="{prefix}assets/js/main.js"', swiper + f'<script src="{prefix}assets/js/main.js"', 1)

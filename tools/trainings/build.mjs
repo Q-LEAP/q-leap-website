@@ -3,6 +3,7 @@
 // Le balisage reproduit celui du thème WordPress (single-trainings du thème enfant Qwery,
 // widget Elementor « Publications » en cartes, filtres Ajax Search Pro) : même CSS, même rendu.
 // Usage : node tools/trainings/build.mjs   (aussi appelé par l'éditeur à chaque enregistrement)
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -324,7 +325,7 @@ function cardHtml(training, lang, labels, eager) {
   return `
 				<article class="elementor-post elementor-grid-item post-${version.postId} trainings type-trainings status-publish format-standard has-post-thumbnail hentry ${(version.taxonomyClasses || []).join(' ')}" data-title="${escapeAttribute(version.title)}"${filters}>
 			<div class="elementor-post__card">
-				<a class="elementor-post__thumbnail__link" href="${href}" tabindex="-1" ><div class="elementor-post__thumbnail"><img ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" width="900" height="1200" src="${prefix}${image.card}" class="attachment-newspack-article-block-portrait-large size-newspack-article-block-portrait-large" alt="" srcset="${prefix}${image.cardSmall} 370w, ${prefix}${image.card} 1800w" sizes="(max-width: 900px) 100vw, 900px" /></div></a>
+				<a class="elementor-post__thumbnail__link" href="${href}" tabindex="-1" ><div class="elementor-post__thumbnail"><img ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" width="${image.card.width}" height="${image.card.height}" src="${prefix}${image.card.src}" class="attachment-newspack-article-block-portrait-large size-newspack-article-block-portrait-large" alt=""${image.card.srcset.length ? ` srcset="${image.card.srcset.map(([file, descriptor]) => `${prefix}${file} ${descriptor}`).join(', ')}"` : ''}${image.card.sizes ? ` sizes="${escapeAttribute(image.card.sizes)}"` : ''} /></div></a>
 				<div class="elementor-post__avatar">
 			<img alt='Marie Krust' src='${prefix}assets/images/ext/avatar-marie-krust-128.png' srcset='${prefix}assets/images/ext/avatar-marie-krust-256.png 2x' class='avatar avatar-128 photo' height='128' width='128' />		</div>
 				<div class="elementor-post__text">
@@ -395,6 +396,9 @@ export function build({ today = new Date().toISOString().slice(0, 10) } = {}) {
   }
   updateCatalogue(content, 'fr');
   updateCatalogue(content, 'en');
+  // Same post-processing as the exported pages: stylesheets in WordPress order, rendered forms, etc.
+  const pages = [...written.map((dir) => path.join(dir, 'index.html')), 'training/index.html', 'en/training/index.html'];
+  execFileSync('python3', [path.join(ROOT, 'tools', 'export', 'components.py'), ...pages], { cwd: ROOT, stdio: 'ignore' });
   return written;
 }
 

@@ -83,7 +83,11 @@ def photon_crop(url):
         return None
     path = urllib.parse.unquote('/' + match.group(1))
     stem, ext = os.path.splitext(path)
-    return f'https://i0.wp.com/q-leap.eu{urllib.parse.quote(path)}?resize={size.group(1)}%2C{size.group(2)}&ssl=1', f'{stem}-{size.group(1)}x{size.group(2)}{ext}'
+    zoom = re.search(r'(?:^|&)zoom=(\d+(?:\.\d+)?)', match.group(2))
+    zoom_query = f'zoom={zoom.group(1)}&' if zoom else ''
+    zoom_name = f'@{zoom.group(1)}x' if zoom else ''
+    return (f'https://i0.wp.com/q-leap.eu{urllib.parse.quote(path)}?{zoom_query}resize={size.group(1)}%2C{size.group(2)}&ssl=1',
+            f'{stem}-{size.group(1)}x{size.group(2)}{zoom_name}{ext}')
 
 
 def local_asset(url, kind):

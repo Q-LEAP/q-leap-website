@@ -1,0 +1,1798 @@
+/*
+ Theme Name:   Qwery Child Theme
+ Theme URI:    http://qwery.ancorathemes.com
+ Description:  Qwery Child Theme
+ Author:       AncoraThemes
+ Author URI:   http://ancorathemes.com
+ Template:     qwery
+ Version:      1.3
+ Tags:         flexible-header, custom-background, custom-colors, custom-header, custom-menu, featured-image-header, featured-images, full-width-template, microformats, post-formats, theme-options, threaded-comments, translation-ready
+ Text Domain:  qwery
+*/
+
+
+/* =Child-Theme customization starts here
+------------------------------------------------------------ */
+
+.div-meta-group span:not(.label-meta){
+	font-family: sofia-pro,sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+
+}
+
+.tribe-events .datepicker .datepicker-switch, .tribe-events th.prev, .tribe-events th.next,
+.tribe-events .dow {
+    background: transparent  !important;
+}
+
+
+
+
+/* form  */
+/* MailChimp for WP styles
+----------------------------------------------------------------- */
+/* Global */
+
+h1, h2, h3, h4, h5, h6 {
+    hyphens: none !important;
+}
+
+section.services_page_header {
+    padding: 0 15px;
+}
+
+.menu_mobile_content_wrap.content_wrap {
+    padding: 0 25px;
+}
+
+
+
+
+form .sib_signup_form input[type="checkbox"] + label:before {
+	letter-spacing: 0;
+  }
+  
+  form .sib_signup_form .mc4wp-alert {
+	margin: 10px 0 0 0;
+	padding: 0;
+	line-height: 1.5em;
+	font-size: 14px;
+  }
+  
+  form .sib_signup_form .mc4wp-alert a {
+	color: var(--theme-color-text_link) !important;
+  }
+  
+  form .sib_signup_form .mc4wp-alert a:hover {
+	color: var(--theme-color-text_hover) !important;
+  }
+  
+  form .sib_signup_form p {
+	margin: 0;
+  }
+  
+  form .sib_signup_form p + p,
+  form .sib_signup_form input + p {
+	margin-top: 1em;
+  }
+  
+   .sib_signup_form .sib-form-fields input[type="email"] {
+	-webkit-box-shadow: none;
+	-ms-box-shadow: none;
+	box-shadow: none;
+  }
+  
+  .mc4wp_error_field {
+	-webkit-box-shadow: none !important;
+	-ms-box-shadow: none !important;
+	box-shadow: none !important;
+  }
+  
+   .sib_signup_form label {
+	cursor: pointer;
+  }
+  .nf-fu-fileinput-button {
+    background: transparent !important;
+    /* padding: 0 !important; */
+
+    font-weight: 300 !important;
+    font-size: 16px;
+    font-weight: 300;
+    font-style: normal;
+    color: #a5a6aa !important;
+}
+
+
+  /* Style 1 */
+  .style-1 .sib_signup_form .sib-form-fields {
+	position: relative;
+  }
+  .style-1 .sib_signup_form .sib-form-fields input[type="email"] {
+	padding: 0.75em 4em 0.75em 0;
+	font-size: 17px;
+	line-height: 22px;
+	width: 100%;
+	height: 55px;
+	border-color: var(--theme-color-text_dark);
+  }
+  .style-1 .sib_signup_form .sib-form-fields input[type="email"]::-webkit-input-placeholder {
+	color: var(--theme-color-text_dark);
+	opacity: 0.8;
+  }
+  .style-1 .sib_signup_form .sib-form-fields input[type="email"]::-moz-placeholder {
+	color: var(--theme-color-text_dark);
+	opacity: 0.8;
+  }
+  .style-1 .sib_signup_form .sib-form-fields input[type="email"]:-moz-placeholder {
+	color: var(--theme-color-text_dark);
+	opacity: 0.8;
+  }
+  .style-1 .sib_signup_form .sib-form-fields input[type="email"]:-ms-input-placeholder {
+	color: var(--theme-color-text_dark);
+	opacity: 0.8;
+  }
+  .style-1 .sib_signup_form .sib-form-fields input[type="email"]:hover, .style-1 .sib_signup_form .sib-form-fields input[type="email"]:active, .style-1 .sib_signup_form .sib-form-fields input[type="email"]:focus {
+	color: var(--theme-color-text_dark);
+	opacity: 1;
+  }
+  .style-1 .sib_signup_form .sib-form-fields button,
+  .style-1 .sib_signup_form .sib-form-fields input[type="submit"] {
+	width: 30px;
+	color: transparent !important;
+	background: none !important;
+	overflow: hidden;
+	padding: 0 !important;
+	height: 55px;
+	line-height: 55px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	font-size: 18px;
+	display: inline-block;
+  }
+  .style-1 .sib_signup_form .sib-form-fields button:before,
+  .style-1 .sib_signup_form .sib-form-fields input[type="submit"]:before {
+	color: var(--theme-color-text_dark);
+	content: '\e9e3';
+	font-family: "fontello";
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	line-height: inherit;
+	text-align: right;
+	font-weight: 400;
+	-webkit-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+  }
+  .style-1 .sib_signup_form .sib-form-fields button:hover:before,
+  .style-1 .sib_signup_form .sib-form-fields input[type="submit"]:hover:before {
+	color: var(--theme-color-text_hover);
+  }
+  .style-1 .sib_signup_form .sib-form-fields button[disabled]:hover:before,
+  .style-1 .sib_signup_form .sib-form-fields input[type="submit"][disabled]:hover:before {
+	color: var(--theme-color-text_dark);
+  }
+  .style-1 .sib_signup_form label {
+	display: table;
+	margin: 22px 0 0;
+	color: var(--theme-color-text_light);
+  }
+  .style-1 .sib_signup_form input[type="checkbox"] + label:before {
+	border-color: var(--theme-color-text_light) !important;
+  }
+  
+  /* Style 2 */
+  .style-2 .sib_signup_form .sib-form-fields {
+	position: relative;
+  }
+  .style-2 .sib_signup_form .sib-form-fields input[type="email"] {
+	padding: 0.7em 6em 0.7em 0;
+	font-size: 18px;
+	line-height: 22px;
+	width: 100%;
+	height: 65px;
+	border-color: var(--theme-color-text_dark);
+  }
+  .style-2 .sib_signup_form .sib-form-fields input[type="email"]::-webkit-input-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-2 .sib_signup_form .sib-form-fields input[type="email"]::-moz-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-2 .sib_signup_form .sib-form-fields input[type="email"]:-moz-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-2 .sib_signup_form .sib-form-fields input[type="email"]:-ms-input-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-2 .sib_signup_form .sib-form-fields input[type="email"]:hover, .style-2 .sib_signup_form .sib-form-fields input[type="email"]:active, .style-2 .sib_signup_form .sib-form-fields input[type="email"]:focus {
+	color: var(--theme-color-text_dark);
+	opacity: 1;
+  }
+  .style-2 .sib_signup_form .sib-form-fields button,
+  .style-2 .sib_signup_form .sib-form-fields input[type="submit"] {
+	width: auto;
+	max-width: 150px;
+	color: var(--theme-color-text_dark) !important;
+	background: none !important;
+	overflow: hidden;
+	padding: 0 0 0 5px !important;
+	height: 65px;
+	line-height: 65px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	font-size: 17px;
+	font-weight: 500;
+	display: inline-block;
+  }
+  .style-2 .sib_signup_form .sib-form-fields button:hover, .style-2 .sib_signup_form .sib-form-fields button:active, .style-2 .sib_signup_form .sib-form-fields button:focus,
+  .style-2 .sib_signup_form .sib-form-fields input[type="submit"]:hover,
+  .style-2 .sib_signup_form .sib-form-fields input[type="submit"]:active,
+  .style-2 .sib_signup_form .sib-form-fields input[type="submit"]:focus {
+	color: var(--theme-color-text_hover) !important;
+  }
+  .style-2 .sib_signup_form .sib-form-fields button:before,
+  .style-2 .sib_signup_form .sib-form-fields input[type="submit"]:before {
+	color: var(--theme-color-text_dark);
+	content: '\e9a3';
+	font-family: "fontello";
+	position: relative;
+	right: 0;
+	top: 0;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	line-height: inherit;
+	text-align: right;
+	font-weight: 400;
+	-webkit-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+	margin: 0 8px 0 0;
+	font-size: 15px;
+  }
+  .style-2 .sib_signup_form .sib-form-fields button:focus:before, .style-2 .sib_signup_form .sib-form-fields button:active:before, .style-2 .sib_signup_form .sib-form-fields button:hover:before,
+  .style-2 .sib_signup_form .sib-form-fields input[type="submit"]:focus:before,
+  .style-2 .sib_signup_form .sib-form-fields input[type="submit"]:active:before,
+  .style-2 .sib_signup_form .sib-form-fields input[type="submit"]:hover:before {
+	color: var(--theme-color-text_hover);
+  }
+  .style-2 .sib_signup_form .sib-form-fields button[disabled]:hover, .style-2 .sib_signup_form .sib-form-fields button[disabled]:hover:before,
+  .style-2 .sib_signup_form .sib-form-fields input[type="submit"][disabled]:hover,
+  .style-2 .sib_signup_form .sib-form-fields input[type="submit"][disabled]:hover:before {
+	color: var(--theme-color-text_dark) !important;
+  }
+  .style-2 .sib_signup_form label {
+	display: table;
+	margin: 22px 0 0;
+  }
+  .style-2 .sib_signup_form input[type="checkbox"] + label:before {
+	border-color: var(--theme-color-bd_color) !important;
+  }
+  
+  /* Style 3 */
+  .style-3 .sib_signup_form .sib-form-fields {
+	position: relative;
+  }
+  .style-3 .sib_signup_form .sib-form-fields input[type="email"] {
+	padding: 0.7em 0 0.7em 0;
+	font-size: 17px;
+	line-height: 22px;
+	width: calc(100% - 215px);
+	height: 55px;
+	border-color: var(--theme-color-text_dark);
+  }
+  .style-3 .sib_signup_form .sib-form-fields input[type="email"]::-webkit-input-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-3 .sib_signup_form .sib-form-fields input[type="email"]::-moz-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-3 .sib_signup_form .sib-form-fields input[type="email"]:-moz-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-3 .sib_signup_form .sib-form-fields input[type="email"]:-ms-input-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-3 .sib_signup_form .sib-form-fields input[type="email"]:hover, .style-3 .sib_signup_form .sib-form-fields input[type="email"]:active, .style-3 .sib_signup_form .sib-form-fields input[type="email"]:focus {
+	color: var(--theme-color-text_dark);
+	opacity: 1;
+  }
+  .style-3 .sib_signup_form .sib-form-fields button,
+  .style-3 .sib_signup_form .sib-form-fields input[type="submit"] {
+	width: auto;
+	max-width: 180px;
+	color: var(--theme-color-text_dark) !important;
+	background: none !important;
+	overflow: hidden;
+	padding: 0 !important;
+	height: 55px;
+	line-height: 55px;
+	position: absolute;
+	top: 50%;
+	margin-top: -23px;
+	right: 0;
+	font-size: 18px;
+	font-weight: 500;
+	display: inline-block;
+  }
+  .style-3 .sib_signup_form .sib-form-fields button:hover, .style-3 .sib_signup_form .sib-form-fields button:active, .style-3 .sib_signup_form .sib-form-fields button:focus,
+  .style-3 .sib_signup_form .sib-form-fields input[type="submit"]:hover,
+  .style-3 .sib_signup_form .sib-form-fields input[type="submit"]:active,
+  .style-3 .sib_signup_form .sib-form-fields input[type="submit"]:focus {
+	color: var(--theme-color-text_hover) !important;
+  }
+  .style-3 .sib_signup_form .sib-form-fields button:before,
+  .style-3 .sib_signup_form .sib-form-fields input[type="submit"]:before {
+	color: var(--theme-color-text_dark);
+	content: '\e9da';
+	font-family: "fontello";
+	position: relative;
+	right: 0;
+	top: 0;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	line-height: inherit;
+	text-align: right;
+	font-weight: 400;
+	-webkit-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+	margin: 0 15px 0 0;
+	font-size: 17px;
+  }
+  .style-3 .sib_signup_form .sib-form-fields button:active:before, .style-3 .sib_signup_form .sib-form-fields button:focus:before, .style-3 .sib_signup_form .sib-form-fields button:hover:before,
+  .style-3 .sib_signup_form .sib-form-fields input[type="submit"]:active:before,
+  .style-3 .sib_signup_form .sib-form-fields input[type="submit"]:focus:before,
+  .style-3 .sib_signup_form .sib-form-fields input[type="submit"]:hover:before {
+	color: var(--theme-color-text_hover);
+  }
+  .style-3 .sib_signup_form .sib-form-fields button[disabled]:hover, .style-3 .sib_signup_form .sib-form-fields button[disabled]:hover:before,
+  .style-3 .sib_signup_form .sib-form-fields input[type="submit"][disabled]:hover,
+  .style-3 .sib_signup_form .sib-form-fields input[type="submit"][disabled]:hover:before {
+	color: var(--theme-color-text_dark) !important;
+  }
+  .style-3 .sib_signup_form label {
+	display: table;
+	margin: 20px 0 0;
+  }
+  .style-3 .sib_signup_form input[type="checkbox"] + label:before {
+	border-color: var(--theme-color-bd_color) !important;
+	background-color: var(--theme-color-alter_bg_color) !important;
+	line-height: 15px;
+  }
+  
+  /* Style 4 */
+  .style-4 .sib_signup_form .sib-form-fields {
+	position: relative;
+  }
+  .style-4 .sib_signup_form .sib-form-fields input[type="email"] {
+	padding: 0.7em 1.7em;
+	font-size: 16px;
+	line-height: 22px;
+	width: calc(100% - 200px);
+	margin: 0;
+	height: 55px;
+	border: none;
+	background-color: var(--theme-color-alter_bg_color) !important;
+	-webkit-border-radius: 30px;
+	-ms-border-radius: 30px;
+	border-radius: 30px;
+	-webkit-box-shadow: 0 3px 25px rgba(0, 0, 0, 0.05) !important;
+	-ms-box-shadow: 0 3px 25px rgba(0, 0, 0, 0.05) !important;
+	box-shadow: 0 3px 25px rgba(0, 0, 0, 0.05) !important;
+  }
+  .style-4 .sib_signup_form .sib-form-fields input[type="email"]::-webkit-input-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-4 .sib_signup_form .sib-form-fields input[type="email"]::-moz-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-4 .sib_signup_form .sib-form-fields input[type="email"]:-moz-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-4 .sib_signup_form .sib-form-fields input[type="email"]:-ms-input-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-4 .sib_signup_form .sib-form-fields input[type="email"]:hover, .style-4 .sib_signup_form .sib-form-fields input[type="email"]:active, .style-4 .sib_signup_form .sib-form-fields input[type="email"]:focus {
+	color: var(--theme-color-text_dark);
+	opacity: 1;
+  }
+  .style-4 .sib_signup_form .sib-form-fields button,
+  .style-4 .sib_signup_form .sib-form-fields input[type="submit"] {
+	width: 190px;
+	background: none !important;
+	overflow: hidden;
+	height: 55px;
+	line-height: 55px;
+	position: absolute;
+	margin: 0;
+	top: 0;
+	right: 0;
+	font-size: 16px;
+	font-weight: 500;
+	display: inline-block;
+	white-space: normal;
+	-webkit-border-radius: 30px;
+	-ms-border-radius: 30px;
+	border-radius: 30px;
+	-webkit-box-shadow: 0 7px 25px var(--theme-color-text_link_02) !important;
+	-ms-box-shadow: 0 7px 25px var(--theme-color-text_link_02) !important;
+	box-shadow: 0 7px 25px var(--theme-color-text_link_02) !important;
+	color: var(--theme-color-inverse_link) !important;
+	border-color: var(--theme-color-text_link) !important;
+	background-color: var(--theme-color-text_link) !important;
+	padding: 0 5px !important;
+  }
+  .style-4 .sib_signup_form .sib-form-fields button:hover, .style-4 .sib_signup_form .sib-form-fields button:active, .style-4 .sib_signup_form .sib-form-fields button:focus,
+  .style-4 .sib_signup_form .sib-form-fields input[type="submit"]:hover,
+  .style-4 .sib_signup_form .sib-form-fields input[type="submit"]:active,
+  .style-4 .sib_signup_form .sib-form-fields input[type="submit"]:focus {
+	color: var(--theme-color-inverse_link) !important;
+	border-color: var(--theme-color-text_hover) !important;
+	background-color: var(--theme-color-text_hover) !important;
+  }
+  .style-4 .sib_signup_form .sib-form-fields button:before,
+  .style-4 .sib_signup_form .sib-form-fields input[type="submit"]:before {
+	content: '\e9a5';
+	font-family: "fontello";
+	position: relative;
+	right: 0;
+	top: 0;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	line-height: inherit;
+	text-align: right;
+	font-weight: 400;
+	-webkit-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+	margin: 0 12px 0 0;
+	font-size: 17px;
+  }
+  .style-4 .sib_signup_form .sib-form-fields button[disabled]:hover,
+  .style-4 .sib_signup_form .sib-form-fields input[type="submit"][disabled]:hover {
+	color: var(--theme-color-inverse_link) !important;
+	border-color: var(--theme-color-text_hover) !important;
+	background-color: var(--theme-color-text_hover) !important;
+  }
+  .style-4 .sib_signup_form label {
+	display: table;
+	margin: 16px 0 0;
+  }
+  .style-4 .sib_signup_form input[type="checkbox"] + label:before {
+	border-color: var(--theme-color-bd_color) !important;
+	background-color: var(--theme-color-alter_bg_color) !important;
+  }
+  
+  /* Style 5 */
+  .style-5 .sib_signup_form .sib-form-fields {
+	position: relative;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	align-items: center;
+  }
+  .style-5 .sib_signup_form .sib-form-fields input[type="email"] {
+	border: none;
+	-webkit-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	box-sizing: border-box;
+	box-sizing: border-box;
+	display: inline-block;
+	vertical-align: top;
+	width: 100%;
+	font-size: 47px;
+	font-weight: 500;
+	padding: 0;
+	height: 1.5em;
+	line-height: normal;
+	margin-right: 20px;
+	position: relative;
+	z-index: 2;
+	margin-left: -10px;
+	text-indent: 7px;
+  }
+  .style-5 .sib_signup_form .sib-form-fields input[type="email"]::-webkit-input-placeholder {
+	color: var(--theme-color-text_dark);
+	opacity: 1;
+  }
+  .style-5 .sib_signup_form .sib-form-fields input[type="email"]::-moz-placeholder {
+	color: var(--theme-color-text_dark);
+	opacity: 1;
+  }
+  .style-5 .sib_signup_form .sib-form-fields input[type="email"]:-moz-placeholder {
+	color: var(--theme-color-text_dark);
+	opacity: 1;
+  }
+  .style-5 .sib_signup_form .sib-form-fields input[type="email"]:-ms-input-placeholder {
+	color: var(--theme-color-text_dark);
+	opacity: 1;
+  }
+  .style-5 .sib_signup_form .sib-form-fields input[type="email"]:hover, .style-5 .sib_signup_form .sib-form-fields input[type="email"]:active, .style-5 .sib_signup_form .sib-form-fields input[type="email"]:focus {
+	color: var(--theme-color-text_dark);
+	opacity: 1;
+  }
+  .style-5 .sib_signup_form .sib-form-fields button,
+  .style-5 .sib_signup_form .sib-form-fields input[type="submit"] {
+	color: transparent !important;
+	background: none !important;
+	overflow: hidden;
+	padding: 0 !important;
+	font-size: 16px;
+	display: inline-block;
+	font-weight: 400;
+	width: 100px;
+	height: 2.2em;
+	line-height: 2.2em;
+	order: 3;
+	position: relative;
+  }
+  .style-5 .sib_signup_form .sib-form-fields button:before,
+  .style-5 .sib_signup_form .sib-form-fields input[type="submit"]:before {
+	color: var(--theme-color-text_hover);
+	content: '\e9e2';
+	font-family: "fontello";
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	line-height: inherit;
+	text-align: right;
+	font-weight: 400;
+	-webkit-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+  }
+  .style-5 .sib_signup_form .sib-form-fields button:hover:before,
+  .style-5 .sib_signup_form .sib-form-fields input[type="submit"]:hover:before {
+	color: var(--theme-color-text_hover);
+  }
+  .style-5 .sib_signup_form .sib-form-fields button[disabled]:before, .style-5 .sib_signup_form .sib-form-fields button[disabled]:hover:before,
+  .style-5 .sib_signup_form .sib-form-fields input[type="submit"][disabled]:before,
+  .style-5 .sib_signup_form .sib-form-fields input[type="submit"][disabled]:hover:before {
+	color: var(--theme-color-text_dark);
+  }
+  .style-5 .sib_signup_form input[type="checkbox"] {
+	display: none;
+  }
+  .style-5 .sib_signup_form label {
+	padding: 0 0 0 73px;
+	font-size: 15px;
+	display: inline-block;
+	width: 55%;
+	line-height: 18px;
+	margin: 0;
+	color: var(--theme-color-text_dark);
+	border-color: var(--theme-color-text_dark);
+  }
+  .style-5 .sib_signup_form label a:hover {
+	color: var(--theme-color-text);
+	border-color: var(--theme-color-text);
+  }
+  .style-5 .sib_signup_form input[type="checkbox"]:checked + label:before {
+	content: '\e814';
+  }
+  .style-5 .sib_signup_form input[type="checkbox"] + label:before {
+	border-color: var(--theme-color-bd_color) !important;
+	width: 53px;
+	height: 53px;
+	line-height: 52px;
+	font-size: 13px;
+	-webkit-border-radius: 50%;
+	-ms-border-radius: 50%;
+	border-radius: 50%;
+	position: absolute;
+	z-index: 1;
+	top: 50%;
+	left: 0;
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+  }
+  
+  /* Style 6 */
+  .style-6 .sib_signup_form .sib-form-fields {
+	position: relative;
+  }
+  .style-6 .sib_signup_form .sib-form-fields input[type="email"] {
+	padding: 0.7em 4em 0.7em 1.7em;
+	font-size: 16px;
+	line-height: 22px;
+	width: 100%;
+	margin: 0;
+	height: 57px;
+	border: none;
+	background-color: var(--theme-color-text_dark) !important;
+	color: var(--theme-color-inverse_hover);
+	-webkit-border-radius: 30px;
+	-ms-border-radius: 30px;
+	border-radius: 30px;
+	-webkit-box-shadow: 0 3px 25px rgba(0, 0, 0, 0.05) !important;
+	-ms-box-shadow: 0 3px 25px rgba(0, 0, 0, 0.05) !important;
+	box-shadow: 0 3px 25px rgba(0, 0, 0, 0.05) !important;
+  }
+  .style-6 .sib_signup_form .sib-form-fields input[type="email"]::-webkit-input-placeholder {
+	color: #797C7F;
+	opacity: 1;
+  }
+  .style-6 .sib_signup_form .sib-form-fields input[type="email"]::-moz-placeholder {
+	color: #797C7F;
+	opacity: 1;
+  }
+  .style-6 .sib_signup_form .sib-form-fields input[type="email"]:-moz-placeholder {
+	color: #797C7F;
+	opacity: 1;
+  }
+  .style-6 .sib_signup_form .sib-form-fields input[type="email"]:-ms-input-placeholder {
+	color: #797C7F;
+	opacity: 1;
+  }
+  .style-6 .sib_signup_form .sib-form-fields input[type="email"]:hover, .style-6 .sib_signup_form .sib-form-fields input[type="email"]:active, .style-6 .sib_signup_form .sib-form-fields input[type="email"]:focus {
+	color: var(--theme-color-inverse_hover);
+	opacity: 1;
+  }
+  .style-6 .sib_signup_form .sib-form-fields button,
+  .style-6 .sib_signup_form .sib-form-fields input[type="submit"] {
+	width: 51px;
+	overflow: hidden;
+	height: 51px;
+	line-height: 51px;
+	position: absolute;
+	margin: 0;
+	top: 3px;
+	right: 3px;
+	font-size: 16px;
+	font-weight: 500;
+	display: inline-block;
+	white-space: normal;
+	-webkit-border-radius: 50%;
+	-ms-border-radius: 50%;
+	border-radius: 50%;
+	color: var(--theme-color-inverse_link) !important;
+	border-color: var(--theme-color-text_link) !important;
+	background-color: var(--theme-color-text_link) !important;
+	color: transparent !important;
+	padding: 0 !important;
+  }
+  .style-6 .sib_signup_form .sib-form-fields button:hover, .style-6 .sib_signup_form .sib-form-fields button:active, .style-6 .sib_signup_form .sib-form-fields button:focus,
+  .style-6 .sib_signup_form .sib-form-fields input[type="submit"]:hover,
+  .style-6 .sib_signup_form .sib-form-fields input[type="submit"]:active,
+  .style-6 .sib_signup_form .sib-form-fields input[type="submit"]:focus {
+	/* color: var(--theme-color-inverse_link) !important;
+	border-color: var(--theme-color-text_hover) !important;
+	background-color: var(--theme-color-text_hover) !important;
+	color: transparent !important; */
+  }
+  .style-6 .sib_signup_form .sib-form-fields button:hover:before, .style-6 .sib_signup_form .sib-form-fields button:active:before, .style-6 .sib_signup_form .sib-form-fields button:focus:before,
+  .style-6 .sib_signup_form .sib-form-fields input[type="submit"]:hover:before,
+  .style-6 .sib_signup_form .sib-form-fields input[type="submit"]:active:before,
+  .style-6 .sib_signup_form .sib-form-fields input[type="submit"]:focus:before {
+	color: var(--theme-color-inverse_link) !important;
+  }
+  .style-6 .sib_signup_form .sib-form-fields button:before,
+  .style-6 .sib_signup_form .sib-form-fields input[type="submit"]:before {
+	content: '\e9e3';
+	font-family: "fontello";
+	position: absolute;
+	right: -2px;
+	top: 0;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	line-height: inherit;
+	font-weight: 400;
+	-webkit-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+	margin: 0;
+	text-align: center;
+	font-size: 18px;
+	color: var(--theme-color-inverse_link) !important;
+  }
+  .style-6 .sib_signup_form .sib-form-fields button[disabled]:hover,
+  .style-6 .sib_signup_form .sib-form-fields input[type="submit"][disabled]:hover {
+	color: var(--theme-color-inverse_link) !important;
+	border-color: var(--theme-color-text_hover) !important;
+	background-color: var(--theme-color-text_hover) !important;
+	color: transparent !important;
+  }
+  .style-6 .sib_signup_form .sib-form-fields button[disabled]:hover:before,
+  .style-6 .sib_signup_form .sib-form-fields input[type="submit"][disabled]:hover:before {
+	color: var(--theme-color-inverse_link) !important;
+  }
+  .style-6 .sib_signup_form label {
+	display: table;
+	margin: 26px auto 0;
+	color: var(--theme-color-alter_light);
+  }
+  .style-6 .sib_signup_form input[type="checkbox"] + label:before {
+	color: var(--theme-color-text_dark) !important;
+	border-color: var(--theme-color-text_light) !important;
+	background-color: transparent !important;
+  }
+  
+  /* Style 7 */
+  .style-7 .sib_signup_form .sib-form-fields {
+	position: relative;
+  }
+  .style-7 .sib_signup_form .sib-form-fields input[type="email"] {
+	padding: 0.7em 9.8em 0.7em 1.7em;
+	font-size: 16px;
+	line-height: 22px;
+	width: 100%;
+	margin: 0;
+	height: 55px;
+	border: none;
+	background-color: var(--theme-color-alter_bg_color) !important;
+	-webkit-border-radius: 30px;
+	-ms-border-radius: 30px;
+	border-radius: 30px;
+	-webkit-box-shadow: 0 3px 25px rgba(0, 0, 0, 0.05) !important;
+	-ms-box-shadow: 0 3px 25px rgba(0, 0, 0, 0.05) !important;
+	box-shadow: 0 3px 25px rgba(0, 0, 0, 0.05) !important;
+  }
+  .style-7 .sib_signup_form .sib-form-fields input[type="email"]::-webkit-input-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-7 .sib_signup_form .sib-form-fields input[type="email"]::-moz-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-7 .sib_signup_form .sib-form-fields input[type="email"]:-moz-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-7 .sib_signup_form .sib-form-fields input[type="email"]:-ms-input-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-7 .sib_signup_form .sib-form-fields input[type="email"]:hover, .style-7 .sib_signup_form .sib-form-fields input[type="email"]:active, .style-7 .sib_signup_form .sib-form-fields input[type="email"]:focus {
+	color: var(--theme-color-text_dark);
+	opacity: 1;
+  }
+  .style-7 .sib_signup_form .sib-form-fields button,
+  .style-7 .sib_signup_form .sib-form-fields input[type="submit"] {
+	width: auto;
+	background: none !important;
+	overflow: hidden;
+	height: 55px;
+	line-height: 55px;
+	position: absolute;
+	margin: 0;
+	top: 0;
+	right: 0;
+	font-size: 14px;
+	text-transform: uppercase;
+	font-weight: 500;
+	display: inline-block;
+	white-space: normal;
+	padding: 0 30px 0 20px !important;
+	letter-spacing: 0.8px;
+	-webkit-border-radius: 0;
+	-ms-border-radius: 0;
+	border-radius: 0;
+	color: var(--theme-color-text_dark) !important;
+  }
+  .style-7 .sib_signup_form .sib-form-fields button:hover, .style-7 .sib_signup_form .sib-form-fields button:active, .style-7 .sib_signup_form .sib-form-fields button:focus,
+  .style-7 .sib_signup_form .sib-form-fields input[type="submit"]:hover,
+  .style-7 .sib_signup_form .sib-form-fields input[type="submit"]:active,
+  .style-7 .sib_signup_form .sib-form-fields input[type="submit"]:focus {
+	color: var(--theme-color-text_hover) !important;
+  }
+  .style-7 .sib_signup_form .sib-form-fields button:after,
+  .style-7 .sib_signup_form .sib-form-fields input[type="submit"]:after {
+	content: '';
+	display: block;
+	width: 1px;
+	height: 29px;
+	background-color: var(--theme-color-bd_color);
+	position: absolute;
+	z-index: 1;
+	top: 50%;
+	left: 0;
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+  }
+  .style-7 .sib_signup_form .sib-form-fields button:before,
+  .style-7 .sib_signup_form .sib-form-fields input[type="submit"]:before {
+	content: '\e9da';
+	font-family: "fontello";
+	position: relative;
+	right: 0;
+	top: -1px;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	line-height: inherit;
+	text-align: right;
+	font-weight: 400;
+	margin: 0 11px 0 0;
+	font-size: 12px;
+  }
+  .style-7 .sib_signup_form .sib-form-fields button[disabled]:hover,
+  .style-7 .sib_signup_form .sib-form-fields input[type="submit"][disabled]:hover {
+	color: var(--theme-color-text_dark) !important;
+  }
+  .style-7 .sib_signup_form label {
+	display: table;
+	margin: 32px auto 0;
+  }
+  .style-7 .sib_signup_form input[type="checkbox"] + label:before {
+	border-color: var(--theme-color-bd_color) !important;
+	background-color: var(--theme-color-alter_bg_color) !important;
+  }
+  
+  /* Style 8 */
+  .style-8 .sib_signup_form .sib-form-fields {
+	position: relative;
+  }
+  .style-8 .sib_signup_form .sib-form-fields:before {
+	display: block;
+	color: var(--theme-color-text);
+	content: '\e9a3';
+	font-family: "fontello";
+	width: 1.5em;
+	height: 2em;
+	line-height: 2em;
+	font-size: 14px;
+	position: absolute;
+	top: 21px;
+	left: 0;
+  }
+  .style-8 .sib_signup_form .sib-form-fields input[type="email"] {
+	padding: 10px 35px 10px 27px;
+	font-size: 16px;
+	line-height: 22px;
+	width: 100%;
+	height: 70px;
+	border-bottom: 2px solid var(--theme-color-text_dark);
+  }
+  .style-8 .sib_signup_form .sib-form-fields input[type="email"]::-webkit-input-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-8 .sib_signup_form .sib-form-fields input[type="email"]::-moz-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-8 .sib_signup_form .sib-form-fields input[type="email"]:-moz-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-8 .sib_signup_form .sib-form-fields input[type="email"]:-ms-input-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-8 .sib_signup_form .sib-form-fields input[type="email"]:hover, .style-8 .sib_signup_form .sib-form-fields input[type="email"]:active, .style-8 .sib_signup_form .sib-form-fields input[type="email"]:focus {
+	color: var(--theme-color-text_dark);
+	opacity: 1;
+  }
+  .style-8 .sib_signup_form .sib-form-fields button,
+  .style-8 .sib_signup_form .sib-form-fields input[type="submit"] {
+	width: 30px;
+	color: transparent !important;
+	background: none !important;
+	overflow: hidden;
+	padding: 0 !important;
+	height: 70px;
+	line-height: 70px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	font-size: 13px;
+	display: inline-block;
+  }
+  .style-8 .sib_signup_form .sib-form-fields button:before,
+  .style-8 .sib_signup_form .sib-form-fields input[type="submit"]:before {
+	color: var(--theme-color-text_dark);
+	content: '\e9df';
+	font-family: "fontello";
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	line-height: inherit;
+	text-align: right;
+	font-weight: 400;
+	-webkit-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+  }
+  .style-8 .sib_signup_form .sib-form-fields button:hover:before,
+  .style-8 .sib_signup_form .sib-form-fields input[type="submit"]:hover:before {
+	color: var(--theme-color-text_hover);
+  }
+  .style-8 .sib_signup_form .sib-form-fields button[disabled]:hover:before,
+  .style-8 .sib_signup_form .sib-form-fields input[type="submit"][disabled]:hover:before {
+	color: var(--theme-color-text_dark);
+  }
+  .style-8 .sib_signup_form label {
+	display: table;
+	margin: 22px 0 0;
+  }
+  .style-8 .sib_signup_form input[type="checkbox"] + label:before {
+	border-color: var(--theme-color-bd_color) !important;
+	background-color: var(--theme-color-alter_bg_color) !important;
+  }
+  
+  /* Style 9 */
+  .style-9 .sib_signup_form .sib-form-fields {
+	position: relative;
+  }
+  .style-9 .sib_signup_form .sib-form-fields:before {
+	display: block;
+	color: var(--theme-color-text);
+	content: '\e9a3';
+	font-family: "fontello";
+	width: 1.5em;
+	height: 2em;
+	line-height: 2em;
+	font-size: 14px;
+	position: absolute;
+	top: 21px;
+	left: 0;
+  }
+  .style-9 .sib_signup_form .sib-form-fields input[type="email"] {
+	padding: 10px 35px 10px 27px;
+	font-size: 16px;
+	line-height: 22px;
+	width: 100%;
+	height: 70px;
+	border-bottom: 2px solid var(--theme-color-alter_bd_hover);
+  }
+  .style-9 .sib_signup_form .sib-form-fields input[type="email"]::-webkit-input-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-9 .sib_signup_form .sib-form-fields input[type="email"]::-moz-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-9 .sib_signup_form .sib-form-fields input[type="email"]:-moz-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-9 .sib_signup_form .sib-form-fields input[type="email"]:-ms-input-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-9 .sib_signup_form .sib-form-fields input[type="email"]:hover, .style-9 .sib_signup_form .sib-form-fields input[type="email"]:active, .style-9 .sib_signup_form .sib-form-fields input[type="email"]:focus {
+	color: var(--theme-color-text_dark);
+	opacity: 1;
+  }
+  .style-9 .sib_signup_form .sib-form-fields button,
+  .style-9 .sib_signup_form .sib-form-fields input[type="submit"] {
+	width: 30px;
+	color: transparent !important;
+	background: none !important;
+	overflow: hidden;
+	padding: 0 !important;
+	height: 70px;
+	line-height: 70px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	font-size: 13px;
+	display: inline-block;
+  }
+  .style-9 .sib_signup_form .sib-form-fields button:before,
+  .style-9 .sib_signup_form .sib-form-fields input[type="submit"]:before {
+	color: var(--theme-color-text_dark);
+	content: '\e9df';
+	font-family: "fontello";
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	line-height: inherit;
+	text-align: right;
+	font-weight: 400;
+	-webkit-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+  }
+  .style-9 .sib_signup_form .sib-form-fields button:hover:before,
+  .style-9 .sib_signup_form .sib-form-fields input[type="submit"]:hover:before {
+	color: var(--theme-color-text_hover);
+  }
+  .style-9 .sib_signup_form .sib-form-fields button[disabled]:hover:before,
+  .style-9 .sib_signup_form .sib-form-fields input[type="submit"][disabled]:hover:before {
+	color: var(--theme-color-text_dark);
+  }
+  .style-9 .sib_signup_form label {
+	display: table;
+	margin: 22px 0 0;
+	color: var(--theme-color-text_light);
+  }
+  .style-9 .sib_signup_form input[type="checkbox"] + label:before {
+	text-indent: -1px;
+	border-color: var(--theme-color-text_light) !important;
+	background-color: var(--theme-color-alter_bg_color) !important;
+  }
+  
+  .sc_layouts_row_type_compact.scheme_dark .style-9 .sib_signup_form .sib-form-fields:before {
+	color: var(--theme-color-text_light);
+  }
+  .sc_layouts_row_type_compact.scheme_dark .style-9 .sib_signup_form .sib-form-fields input[type="email"]::-webkit-input-placeholder {
+	color: var(--theme-color-text_light);
+	opacity: 1;
+  }
+  .sc_layouts_row_type_compact.scheme_dark .style-9 .sib_signup_form .sib-form-fields input[type="email"]::-moz-placeholder {
+	color: var(--theme-color-text_light);
+	opacity: 1;
+  }
+  .sc_layouts_row_type_compact.scheme_dark .style-9 .sib_signup_form .sib-form-fields input[type="email"]:-moz-placeholder {
+	color: var(--theme-color-text_light);
+	opacity: 1;
+  }
+  .sc_layouts_row_type_compact.scheme_dark .style-9 .sib_signup_form .sib-form-fields input[type="email"]:-ms-input-placeholder {
+	color: var(--theme-color-text_light);
+	opacity: 1;
+  }
+  .sc_layouts_row_type_compact.scheme_dark .style-9 .sib_signup_form .sib-form-fields input[type="email"]:hover, .sc_layouts_row_type_compact.scheme_dark .style-9 .sib_signup_form .sib-form-fields input[type="email"]:active, .sc_layouts_row_type_compact.scheme_dark .style-9 .sib_signup_form .sib-form-fields input[type="email"]:focus {
+	color: var(--theme-color-text_light);
+  }
+  
+  .sc_layouts_row_type_compact.scheme_default .style-9 .sib_signup_form .sib-form-fields:before {
+	color: var(--theme-color-text);
+  }
+  .sc_layouts_row_type_compact.scheme_default .style-9 .sib_signup_form .sib-form-fields input[type="email"] {
+	border-color: var(--theme-color-text_dark);
+  }
+  .sc_layouts_row_type_compact.scheme_default .style-9 .sib_signup_form .sib-form-fields input[type="email"]::-webkit-input-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .sc_layouts_row_type_compact.scheme_default .style-9 .sib_signup_form .sib-form-fields input[type="email"]::-moz-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .sc_layouts_row_type_compact.scheme_default .style-9 .sib_signup_form .sib-form-fields input[type="email"]:-moz-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .sc_layouts_row_type_compact.scheme_default .style-9 .sib_signup_form .sib-form-fields input[type="email"]:-ms-input-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .sc_layouts_row_type_compact.scheme_default .style-9 .sib_signup_form .sib-form-fields input[type="email"]:hover, .sc_layouts_row_type_compact.scheme_default .style-9 .sib_signup_form .sib-form-fields input[type="email"]:active, .sc_layouts_row_type_compact.scheme_default .style-9 .sib_signup_form .sib-form-fields input[type="email"]:focus {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  
+  /* Style 10 */
+  .style-10 .sib_signup_form .sib-form-fields {
+	position: relative;
+  }
+  .style-10 .sib_signup_form .sib-form-fields:before {
+	display: block;
+	color: var(--theme-color-text);
+	content: '\e9a3';
+	font-family: "fontello";
+	width: 1.5em;
+	height: 2em;
+	line-height: 2em;
+	font-size: 14px;
+	position: absolute;
+	top: 11px;
+	left: 18px;
+  }
+  .style-10 .sib_signup_form .sib-form-fields input[type="email"] {
+	padding: 0.7em 0.7em 0.7em 3.4em;
+	font-size: 14px;
+	line-height: 18px;
+	width: calc(100% - 54px);
+	margin: 0;
+	height: 50px;
+	border: none;
+	background-color: var(--theme-color-alter_bg_color) !important;
+	-webkit-border-radius: 30px;
+	-ms-border-radius: 30px;
+	border-radius: 30px;
+	-webkit-box-shadow: 0 3px 25px rgba(0, 0, 0, 0.05) !important;
+	-ms-box-shadow: 0 3px 25px rgba(0, 0, 0, 0.05) !important;
+	box-shadow: 0 3px 25px rgba(0, 0, 0, 0.05) !important;
+  }
+  .style-10 .sib_signup_form .sib-form-fields input[type="email"]::-webkit-input-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-10 .sib_signup_form .sib-form-fields input[type="email"]::-moz-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-10 .sib_signup_form .sib-form-fields input[type="email"]:-moz-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-10 .sib_signup_form .sib-form-fields input[type="email"]:-ms-input-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-10 .sib_signup_form .sib-form-fields input[type="email"]:hover, .style-10 .sib_signup_form .sib-form-fields input[type="email"]:active, .style-10 .sib_signup_form .sib-form-fields input[type="email"]:focus {
+	color: var(--theme-color-text_dark);
+	opacity: 1;
+  }
+  .style-10 .sib_signup_form .sib-form-fields button,
+  .style-10 .sib_signup_form .sib-form-fields input[type="submit"] {
+	width: 50px;
+	overflow: hidden;
+	height: 50px;
+	line-height: 50px;
+	position: absolute;
+	margin: 0;
+	top: 0;
+	right: 0;
+	font-size: 11px;
+	font-weight: 500;
+	display: inline-block;
+	white-space: normal;
+	-webkit-border-radius: 50%;
+	-ms-border-radius: 50%;
+	border-radius: 50%;
+	color: var(--theme-color-inverse_link) !important;
+	border-color: var(--theme-color-text_link) !important;
+	background-color: var(--theme-color-text_link) !important;
+	color: transparent !important;
+	padding: 0 !important;
+  }
+  .style-10 .sib_signup_form .sib-form-fields button:hover, .style-10 .sib_signup_form .sib-form-fields button:active, .style-10 .sib_signup_form .sib-form-fields button:focus,
+  .style-10 .sib_signup_form .sib-form-fields input[type="submit"]:hover,
+  .style-10 .sib_signup_form .sib-form-fields input[type="submit"]:active,
+  .style-10 .sib_signup_form .sib-form-fields input[type="submit"]:focus {
+	/* color: var(--theme-color-inverse_link) !important;
+	border-color: var(--theme-color-text_hover) !important;
+	background-color: var(--theme-color-text_hover) !important;
+	color: transparent !important; */
+  }
+  .style-10 .sib_signup_form .sib-form-fields button:hover:before, .style-10 .sib_signup_form .sib-form-fields button:active:before, .style-10 .sib_signup_form .sib-form-fields button:focus:before,
+  .style-10 .sib_signup_form .sib-form-fields input[type="submit"]:hover:before,
+  .style-10 .sib_signup_form .sib-form-fields input[type="submit"]:active:before,
+  .style-10 .sib_signup_form .sib-form-fields input[type="submit"]:focus:before {
+	color: var(--theme-color-inverse_link) !important;
+  }
+  .style-10 .sib_signup_form .sib-form-fields button:before,
+  .style-10 .sib_signup_form .sib-form-fields input[type="submit"]:before {
+	content: '\e9df';
+	font-family: "fontello";
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	line-height: inherit;
+	font-weight: 400;
+	-webkit-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+	margin: 0;
+	text-align: center;
+	color: var(--theme-color-inverse_link) !important;
+  }
+  .style-10 .sib_signup_form .sib-form-fields button[disabled]:hover,
+  .style-10 .sib_signup_form .sib-form-fields input[type="submit"][disabled]:hover {
+	/* color: var(--theme-color-inverse_link) !important;
+	border-color: var(--theme-color-text_link) !important;
+	background-color: var(--theme-color-text_link) !important;
+	color: transparent !important; */
+  }
+  .style-10 .sib_signup_form .sib-form-fields button[disabled]:hover:before,
+  .style-10 .sib_signup_form .sib-form-fields input[type="submit"][disabled]:hover:before {
+	color: var(--theme-color-inverse_link) !important;
+  }
+  .style-10 .sib_signup_form label {
+	display: table;
+	margin: 18px 0 0;
+	color: var(--theme-color-text_light);
+  }
+  .style-10 .sib_signup_form input[type="checkbox"] + label:before {
+	text-indent: -1px;
+	border-color: var(--theme-color-text_light) !important;
+	background-color: var(--theme-color-alter_bg_color) !important;
+  }
+  
+  /* Style 11 */
+  .ua_safari .style-11 .sib_signup_form .sib-form-fields:before {
+	top: 12px;
+  }
+  
+  .style-11 .sib_signup_form .sib-form-fields {
+	position: relative;
+	padding-bottom: 80px;
+  }
+  .style-11 .sib_signup_form .sib-form-fields:before {
+	display: block;
+	color: var(--theme-color-text);
+	content: '\e9a3';
+	font-family: "fontello";
+	width: 1.5em;
+	height: 2em;
+	line-height: 2em;
+	font-size: 14px;
+	position: absolute;
+	top: 11px;
+	left: 0;
+  }
+  .style-11 .sib_signup_form .sib-form-fields input[type="email"] {
+	padding: 10px 35px 10px 27px;
+	font-size: 16px;
+	line-height: 22px;
+	width: 100%;
+	height: 50px;
+	border-bottom: 1px solid var(--theme-color-text_dark);
+  }
+  .style-11 .sib_signup_form .sib-form-fields input[type="email"]::-webkit-input-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-11 .sib_signup_form .sib-form-fields input[type="email"]::-moz-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-11 .sib_signup_form .sib-form-fields input[type="email"]:-moz-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-11 .sib_signup_form .sib-form-fields input[type="email"]:-ms-input-placeholder {
+	color: var(--theme-color-text);
+	opacity: 1;
+  }
+  .style-11 .sib_signup_form .sib-form-fields input[type="email"]:hover, .style-11 .sib_signup_form .sib-form-fields input[type="email"]:active, .style-11 .sib_signup_form .sib-form-fields input[type="email"]:focus {
+	color: var(--theme-color-text_dark);
+	opacity: 1;
+  }
+  .style-11 .sib_signup_form .sib-form-fields button,
+  .style-11 .sib_signup_form .sib-form-fields input[type="submit"] {
+	width: 100%;
+	overflow: hidden;
+	padding: 0 20px 1px !important;
+	height: 55px;
+	line-height: 54px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	display: inline-block;
+	text-align: center;
+  }
+  .style-11 .sib_signup_form label {
+	display: table;
+	margin: 22px 0 0;
+  }
+  .style-11 .sib_signup_form input[type="checkbox"] + label:before {
+	border-color: var(--theme-color-bd_color) !important;
+	background-color: var(--theme-color-alter_bg_color) !important;
+  }
+  
+  /*# sourceMappingURL=mailchimp-for-wp.css.map */
+  
+/* end form  */
+
+html.pum-open.pum-open-overlay, html.pum-open.pum-open-overlay.pum-open-fixed .pum-overlay {
+    overflow: hidden !important;
+}
+span.meta-date-range {
+    font-size: 14px;
+    text-transform: capitalize;
+    font-family: 'sofia-pro';
+    font-weight: 600;
+    color: #88919F;
+}
+
+.nf-form-title h2
+{font-family: sofia-pro,sans-serif;
+    font-size: 2.625px em;
+    font-weight: 500;
+    font-style: normal;
+    line-height: 1.021em;
+    text-decoration: none;
+    text-transform: none;
+    letter-spacing: -0.1px;
+}
+
+
+    .field-wrap:hover .nf-field-element:after {
+        width: 100%;
+    }
+
+ .nf-field-element:after {
+        content: "";
+        display: block;
+        width: 0;
+        height: 1px;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        z-index: 1;
+        background-color: var(--theme-color-text_dark);
+        -webkit-transition: all 0.4s ease;
+        -ms-transition: all 0.4s ease;
+        transition: all 0.4s ease;
+    }
+    .submit-wrap .nf-field-element{
+        display: block;
+    }
+
+    .icon .nf-field-element:before,
+    .submit-wrap .nf-field-element:before  {
+        color: var(--theme-color-input_text);
+        display: block;
+        font-family: "fontello";
+        font-size: 20px;
+        font-weight: 400;
+        position: absolute;
+        z-index: 1;
+        top: 10px;
+        left: 0;
+     
+        width: 20px;
+        height: 20px;
+        width: 20px;
+        height: 20px;
+    }
+    .submit-wrap .nf-field-element:before {
+        content: " ";
+        /* background: red; */
+        width: 20px;
+        height: 20px;
+        color: var(--theme-color-input_text);
+        display: block;
+        font-family: "fontello";
+        font-size: 20px;
+        font-weight: 400;
+        position: absolute;
+        z-index: 1;
+        top: 10px;
+        left: 0;
+        width: 20px;
+        height: 20px;
+        width: 20px;
+        height: 20px;
+        content: '\e9a5';
+        font-family: "fontello";
+        font-weight: 400;
+        display: inline-block;
+        position: absolute;
+        z-index: 1;
+        left: 36px;
+        top: 50%;
+        width: 1em;
+        height: 1em;
+        line-height: 1em;
+        margin-top: -0.5em;
+    }
+    .icon .submit-wrap .nf-field-element input {
+        padding-left: 70px;
+    }
+     .submit-wrap .nf-field-element input:hover{
+        color: #fff !important
+    }
+
+    .submit-wrap .nf-field-element input{
+        color: #fff !important
+    }
+    .submit-wrap .nf-field-element:before {
+        color: #fff;
+    }
+
+
+    .name .nf-field-element:before {
+       
+        content: '\e9ae';
+        
+    }
+    .icon .nf-field-element input,
+    .icon .nf-field-element textarea,
+    .icon .nf-field-element input{
+        padding-left: 36px;
+    }
+
+.email .nf-field-element:before{ 
+    content: '\e9a3';
+    font-size: 15px;
+    margin-top: 1px;
+
+}
+
+
+.phone .nf-field-element:before{ 
+    content: '\e9b8';
+    
+
+}
+.mess .nf-field-element:before{
+    content: '\e9e7';
+}
+  
+   .nf-error .ninja-forms-field {
+    border-top:none;
+    border-left: none;
+    border-right: none;
+        border-bottom: 1px solid #e80000 !important
+    }
+
+
+
+
+
+    .nf-field-container.submit-container .nf-field-element:after {
+        display: none !important;
+        
+    }
+    .nf-form-title h3 {
+        font-size: 40px;
+		line-height: 1.2;
+    }
+    .nf-form-fields-required {
+        display: none;
+    }
+
+    .nf-field-element {
+        display: flex;
+        flex-wrap: wrap;
+        /* height: 1px; */
+        width: 100%;
+        position: relative;
+        /* background-color: var(--theme-color-input_bd_color); */
+        /* -webkit-transition: all 0.4s ease; */
+        -ms-transition: all 0.4s ease;
+        transition: all 0.4s ease;
+        z-index: 1;
+        /* margin-top: -1px; */
+    }
+
+.d.info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: space-between;
+
+}
+.d.info p{
+margin-bottom: 20px;
+}
+
+.d-info.col {
+    width: calc(100% / 3 - 30px);
+}
+.d-info.col p{
+    font-size: 16px;
+}
+.d-info.col.text-info p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.traning-meta h4 {
+    border-bottom: solid 1px #dddddd;
+    padding-bottom: 10px;
+    margin-bottom: 5px;
+    font-size: 20px;
+}
+.traning-meta {
+    padding-bottom: 16px;
+}
+.single-trainings .content_wrap{
+    width: 100%;
+
+} 
+.single-trainings .content_container {
+    width: var(--theme-var-page);
+    max-width: 100%;
+    margin: 0 auto;
+}
+.single-trainings .page_content_wrap{
+    padding:0 !important;
+}
+.trainings_page_info{
+    padding: 30px 0;
+    background-color: #fff;
+}
+.traning-meta.pdf a {
+    display: block;
+}
+section#trainings_page_tab_contacts {
+    background: #fff;
+    padding: 40px 0;
+}
+
+section#trainings_page_tab_contacts .content_container .d-contact {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+}
+section#trainings_page_tab_contacts .content_container .d-contact  h4{
+    width: 33.333%
+}
+
+.d-contact .wpcf7 {
+    width: 66.666%;
+}
+
+section.trainings_page_sessions {
+    padding: 30px 0;
+}
+
+h4.ss_month-separator-text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-transform: capitalize;
+}
+
+h4.ss_month-separator-text:after {
+    content: "";
+    display: block;
+    flex: auto;
+    height: 1px;
+    margin-left: 20px;
+    width: 80%;
+    background:#ddd;
+}
+.session-column a.d-btn {
+    color: #0063dc;
+    font-weight: bold;
+}
+span.label-meta {
+    text-transform: uppercase;
+    font-family: 'sofia-pro';
+  
+    color: #040405;
+}
+
+.div-meta-group {
+   
+    font-family: 'sofia-pro';
+    font-weight: 400;
+    color: #88919F;
+}
+
+.session-column {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 15px 0;
+    padding-left: 50px;
+}
+span.meta-date-range:before {
+    font-size: 16px !important;
+    font-family: "fontello";
+    content: '\E9B7';
+    margin: 0;
+    color: #0063dc;
+}
+.d-shortcode-sc span.sc_button_title {
+    color:#0063dc;
+}
+
+
+.col-three.session-item {
+    width: 30%;
+}
+.col-two.session-item {
+    width: 55%;
+}
+
+.col-one.session-item {
+    width: 100px;
+}
+.sessions-container {
+    padding-top: 10px;
+}
+a#load-more:hover *,
+a#load-more.loading * {
+    color: #fff !important;
+}
+
+.col-one.session-item span {
+    display: block;
+    font-size: 16px;
+    line-height: 17px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: var(--theme-color-text_dark);
+    text-transform: uppercase;
+}
+
+a#load-more .sc_button_text:before {
+    content:"";
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 4px solid #3498db;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+    left: 0;
+    right: 0;
+
+}
+a#load-more.loading {
+    color: #fff !important;
+    border-color: var(--theme-color-text_dark_blend);
+    background-color: var(--theme-color-text_dark_blend) !important;
+}
+
+a#load-more.loading .sc_button_text:before {
+    visibility: visible;
+    opacity: 1;
+    z-index: 99;;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+span.meta-date-range {
+    font-size: 14px;
+    text-transform: capitalize;
+}
+/* .col-two.session-item h4 {
+    font-size: 25px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    color: #454A53;
+    display: flex;
+    flex-wrap: wrap;
+  
+    text-transform: capitalize;
+    font-family: 'sofia-pro';
+    font-weight: 600;
+    color: #040405;
+} */
+
+.session-meta {
+    font-weight: 500;
+    color: var(--theme-color-text_dark);
+    margin-bottom: 15px;
+}
+
+.col-one.session-item {
+    text-align: center;
+
+}
+.col-one.session-item strong {
+    font-weight: bold;
+    font-size: 25px;
+    color: var(--theme-color-text_dark);
+}
+section.trainings_page_sessions h2 {
+    padding-bottom: 20px;
+}
+.paginate-container a:not(.prev,.next),
+.paginate-container span.page-numbers.current{
+    display: none;
+}
+
+a.next.page-numbers:after {
+    position: relative;
+    top: 2px;
+    content: '\E9DF';
+    font-family: fontello;
+    font-size: 12px;
+    line-height: 1em;
+    font-weight: 400;
+    margin-left: 0.9em;
+    background-image: none!important;
+    width: auto;
+    height: auto;
+    padding-right: 1px;
+}
+a.prev.page-numbers:before {
+    position: relative;
+    top: 2px;
+    content: '\EA07';
+    font-family: fontello;
+    font-size: 12px;
+    line-height: 1em;
+    font-weight: 400;
+    margin-right: 0.9em;
+    background-image: none!important;
+    width: auto;
+    height: auto;
+    padding-left: 1px;
+}
+
+.paginate-container {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    justify-content: space-between;
+    margin-top: 30px;
+    border-top: solid 1px #ddd;
+    padding-top: 30px;
+}
+.d-shortcode-sc.loading {
+    opacity: 0.3;
+}
+.paginate-container a {
+    display: inline-flex;
+    align-items: center;
+}
+
+a.disable.page-numbers {
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+
+@media (max-width:900px){
+    .d-info.col {
+        width: calc(100% / 2 - 30px);
+    }
+    .traning-meta h4 {
+       
+        margin-top: 0;
+      
+    }
+        .traning-meta {
+        padding-bottom: 0;
+    }
+    .d.info p {
+        margin-bottom: 10px;
+    }
+
+
+}
+
+@media (max-width:768px){
+    .col-two.session-item {
+        width: calc(100%);
+        
+        /* order: 3; */
+    }
+    .col-one.session-item {
+        width: 100px;
+    }
+    h4.ss_month-separator-text:after{
+        width: calc(100% - 200px);
+    }
+    .col-three.session-item {
+        /* width: calc(100% - 70px); */
+        /* order: 2; */
+    }
+    .session-column{
+        padding-left: 25px;
+    }
+}
+
+@media (max-width:600px){
+    .d-info.col {
+        width: calc(100% );
+    }
+}
