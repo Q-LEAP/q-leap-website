@@ -1,16 +1,17 @@
 # Test site on GitHub Pages (https://q-leap.github.io/q-leap-website/), from the dev branch, until
-# the switch of q-leap.eu; the UXEnhance branch is published next to it, in /ux-enhance/. Every page gets <meta name="robots" content="noindex, nofollow"> so the
+# the switch of q-leap.eu; the UXEnhance branch is published next to it, in /ux-enhance/ (refreshed
+# with every dev deployment, or with « Run workflow » on dev). Every page gets <meta name="robots" content="noindex, nofollow"> so the
 # copy is not indexed instead of q-leap.eu (the WordPress robots tags are removed from the copy);
 # the repository files are not changed.
 name: Deploy test site
 
 on:
   push:
-    branches: [dev, UXEnhance]
+    branches: [dev]
   workflow_run:
     workflows: [Build content]
     types: [completed]
-    branches: [dev, UXEnhance]
+    branches: [dev]
   workflow_dispatch:
 
 permissions:
