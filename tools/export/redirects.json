@@ -3,14 +3,31 @@
   "pages": {
     "testing": "testing-service/",
     "references": "our-references/",
-    "en/about-us-2": "en/about-us/"
+    "en/about-us-2": "en/about-us/",
+    "nos-evenements": "our-events/",
+    "privacy-policy": "data-protection-notice/",
+    "about-personal": "about-us/",
+    "about-agency": "about-us/",
+    "about-business": "about-us/",
+    "about-creative": "about-us/",
+    "about-modern": "about-us/",
+    "shop": "",
+    "jobs/candidature-spontanee": "join-us/",
+    "trainings/preparation-a-lexamen-istqb-niveau-fondation": "training/",
+    "en/trainings/istqb-foundation-exam-preparation": "en/training/",
+    "en/jobs/internship-software-tester": "en/career/",
+    "2017/05/03/software-quality-management-is-essential-in-today-s-it-world": "en/software-quality-management-is-essential-in-todays-it-world/"
   },
   "prefixes": {
+    "en/sessions/": "en/training-calendar/",
+    "en/session/": "en/training-calendar/",
     "en/category/": "en/blog/",
     "en/tag/": "en/blog/",
     "en/portfolio_group/": "en/references/",
     "category/": "blog/",
     "tag/": "blog/",
-    "portfolio_group/": "our-references/"
+    "portfolio_group/": "our-references/",
+    "sessions/": "calendrier-formation/",
+    "session/": "calendrier-formation/"
   }
 }

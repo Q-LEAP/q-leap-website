@@ -114,6 +114,18 @@ def fill_ninja_forms(markup, lang):
     return re.sub(r'<div id="nf-form-(\d+)(?:_(\d+))?-cont"[^>]*>\s*<div class="nf-loading-spinner"></div>\s*</div>', fill, markup)
 
 
+# Links that are wrong in the WordPress content itself: e-mail addresses typed without "mailto:", and
+# root-absolute addresses (they break when the site is not served from the domain root).
+ROOT_LINKS = {'/privacy-policy/': {'fr': 'data-protection-notice/', 'en': 'en/privacy-policy/'}}
+
+
+def fix_links(markup, prefix, lang):
+    markup = re.sub(r'href="([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[a-z]{2,})"', r'href="mailto:\1"', markup)
+    for link, targets in ROOT_LINKS.items():
+        markup = markup.replace(f'href="{link}"', f'href="{prefix}{targets[lang]}"')
+    return markup
+
+
 def process(path):
     full = os.path.join(ROOT, path)
     # newline='': keep the pages' bytes (WordPress' inline styles contain CRLF line ends)
@@ -122,6 +134,7 @@ def process(path):
     markup = markup.replace('?export=1&amp;', '?').replace('?export=1&', '?').replace('&amp;export=1', '').replace('&export=1', '').replace('?export=1', '')
     lang = 'en' if path.startswith('en/') else 'fr'
     markup = fill_ninja_forms(markup, lang)
+    markup = fix_links(markup, prefix, lang)
     styles = page_styles(path, prefix)
     main_link = f'<link rel="stylesheet" href="{prefix}assets/css/main.css">'
     if styles and main_link in markup:

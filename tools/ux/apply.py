@@ -20,10 +20,10 @@ TEXT = {
 
 
 def pages():
-    files = subprocess.run(['git', 'ls-files', '-co', '--exclude-standard', '*.html'], cwd=ROOT, capture_output=True, text=True).stdout.split()
+    files = subprocess.run(['git', 'ls-files', '-z', '-co', '--exclude-standard', '*.html'], cwd=ROOT, capture_output=True, text=True).stdout.split('\0')
     templates = ['tools/blog/templates/post.fr.html', 'tools/blog/templates/post.en.html',
                  'tools/trainings/templates/training.fr.html', 'tools/trainings/templates/training.en.html']
-    return [file for file in files if not file.startswith(('tools/', 'docs/'))] + templates
+    return [file for file in files if file and not file.startswith(('tools/', 'docs/'))] + templates
 
 
 def prefix_for(file):
