@@ -10,3 +10,11 @@
 /* Home news block, items 2-4 (image left): the widths trx_addons printed as per-item inline classes. */
 .sc_blogger_news .sc_blogger_item_list_with_image .sc_blogger_item_featured { width: 33%; }
 .sc_blogger_news .sc_blogger_item_list_with_image .sc_blogger_item_content { width: calc(100% - 33%); }
+
+/* ISTQB practice test: start button disabled until the quiz is rebuilt (components.py disable_quiz). */
+.ays_next.start_button.ql-quiz-disabled,
+.ays_next.start_button.ql-quiz-disabled:hover { opacity: 0.55; cursor: not-allowed; }
+
+/* English Testing page: a dot-pattern background left from the theme demo covers the "All types of
+   activities" heading (the French page has none). Same on WordPress; removed here only. */
+.elementor-31861 .elementor-element.elementor-element-7a973fc:not(.elementor-motion-effects-element-type-background) { background-image: none; }
