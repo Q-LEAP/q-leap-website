@@ -134,7 +134,7 @@ def fix_links(markup, prefix, lang):
 # Testing pages: the "Activités de tests" timeline must show the four steps. Since November 2026
 # WordPress lists a duplicate "Exécution" (service 28350) after them in French (a fifth step alone on
 # a new line), and the English widget points to a group holding only its translation. The timeline
-# is rebuilt with the original steps, in the theme's markup (two steps per row).
+# is rebuilt with the original steps, in the theme's markup (two steps per row), in reading order.
 TIMELINE_STEPS = {
     'testing-service/index.html': [
         ('Analyse des besoins', 'Comprendre les exigences fonctionnelles et non fonctionnelles du logiciel à tester.'),
@@ -169,7 +169,9 @@ def fix_services_timeline(markup, path):
     item_start = markup.find('<div data-post-id=', start)
     item = markup[item_start:element_end(markup, item_start)]
     rows = []
-    for index in range(0, len(steps), 2):
+    # The theme swaps each pair of rows (.extra_row:nth-child(1){order:2}, (3){order:4}…) so that the
+    # zigzag reads left to right, and top to bottom on mobile: rows are written swapped by pairs.
+    for index in [i for pair in range(0, len(steps), 4) for i in (pair + 2, pair) if i < len(steps)]:
         cells = []
         for title, text in steps[index:index + 2]:
             cell = re.sub(r'(<h6 class="sc_services_item_title entry-title">).*?(</h6>)', lambda m: m.group(1) + html.escape(title, quote=False) + m.group(2), item, count=1, flags=re.S)
