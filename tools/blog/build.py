@@ -159,7 +159,8 @@ def categories_html(post, prefix, separator):
     links = []
     for name in post.get('categories') or []:
         slug = CATEGORY_SLUGS[post['lang']].get(name, slugify(name))
-        links.append(f'<a href="{prefix}category/{slug}/" rel="category tag">{html.escape(name, quote=False)}</a>')
+        folder = 'en/category' if post['lang'] == 'en' else 'category'
+        links.append(f'<a href="{prefix}{folder}/{slug}/" rel="category tag">{html.escape(name, quote=False)}</a>')
     return f'<span class="post_meta_item_cat_separator">{separator}</span>'.join(links)
 
 
@@ -317,7 +318,8 @@ def render_post(post, older, newer, tags, all_slugs):
     if now['tags'] != (post.get('tags') or []):
         changed.add('tags')
         names = post.get('tags') or []
-        links = ''.join(f'<a href="{prefix}tag/{tags.get(name, slugify(name))}/" rel="tag">{html.escape(name, quote=False)}</a>' for name in names)
+        tag_folder = 'en/tag' if lang == 'en' else 'tag'
+        links = ''.join(f'<a href="{prefix}{tag_folder}/{tags.get(name, slugify(name))}/" rel="tag">{html.escape(name, quote=False)}</a>' for name in names)
         block = f'<div class="post_tags_single"><span class="post_meta_label">{LABELS[lang]["tags"]}</span> {links}</div>' if names else ''
         page = TAGS.sub(lambda m: m.group(1) + block, page, count=1)
 

@@ -288,6 +288,8 @@ WORDPRESS_ONLY = [
 def export(url):
     print('page', url)
     source = fetch(url + ('&' if '?' in url else '?') + 'export=1')
+    if not source:  # some pages only answer from the WordPress.com cache (500 when rendered afresh)
+        source = fetch(url)
     if not source:
         return
     for pattern in WORDPRESS_ONLY:

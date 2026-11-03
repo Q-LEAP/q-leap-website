@@ -1,0 +1,16 @@
+{
+  "$comment": "pages: WordPress redirections and replaced addresses (exact path → target). prefixes: archives not migrated, for every linked address starting with the prefix (most specific first). Targets are paths from the site root.",
+  "pages": {
+    "testing": "testing-service/",
+    "references": "our-references/",
+    "en/about-us-2": "en/about-us/"
+  },
+  "prefixes": {
+    "en/category/": "en/blog/",
+    "en/tag/": "en/blog/",
+    "en/portfolio_group/": "en/references/",
+    "category/": "blog/",
+    "tag/": "blog/",
+    "portfolio_group/": "our-references/"
+  }
+}
