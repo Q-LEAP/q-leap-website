@@ -12,6 +12,7 @@ generated (export + components.py, trainings, blog, UX layer) and no generated C
    lazily.
    WebP copies are committed next to their originals (created once, reused by every deploy).
 Usage: python3 tools/perf/optimize.py [--root DIR] [page.html …]   (default: every page of DIR)"""
+import functools
 import hashlib
 import html
 import os
@@ -33,6 +34,7 @@ BLOCK = re.compile(r'<!-- wp-styles(?::bundle)? -->\n?(.*?)\n?<!-- /wp-styles --
 
 # ---------------------------------------------------------------- CSS
 
+@functools.lru_cache(maxsize=None)
 def split_rules(css):
     """Top-level items of a stylesheet: ('rule', selector, body) or ('at', prelude, body|None)."""
     items, i, n = [], 0, len(css)
@@ -98,12 +100,13 @@ def split_rules(css):
             i += 1
         else:
             break
-    return items
+    return tuple(items)
 
 
 FUNCTIONAL = re.compile(r':(?:not|is|where|has|matches|-webkit-any|-moz-any)\(')
 
 
+@functools.lru_cache(maxsize=None)
 def selector_tokens(selector):
     """Classes and ids a selector requires (those inside :not()/:is()… do not count)."""
     out, i = [], 0
@@ -122,6 +125,7 @@ def selector_tokens(selector):
     return re.findall(r'[.#](-?[_a-zA-Z -￿][\w -￿-]*)', plain)
 
 
+@functools.lru_cache(maxsize=None)
 def split_selectors(prelude):
     """Selector list split on the commas that are not inside (), [] or quotes."""
     parts, depth, quote, start = [], 0, None, 0
@@ -139,7 +143,7 @@ def split_selectors(prelude):
             parts.append(prelude[start:index])
             start = index + 1
     parts.append(prelude[start:])
-    return parts
+    return tuple(parts)
 
 
 def purge(css, tokens):
@@ -188,6 +192,7 @@ def prune_unused(css, tokens, outside=''):
     return '\n'.join(kept)
 
 
+@functools.lru_cache(maxsize=None)
 def minify_body(body):
     body = re.sub(r'/\*.*?\*/', '', body, flags=re.S)
     return re.sub(r'\s*([;:{},])\s*', r'\1', re.sub(r'\s+', ' ', body)).strip().rstrip(';')
