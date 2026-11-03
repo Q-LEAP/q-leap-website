@@ -28,13 +28,13 @@ PAGE = """<!doctype html>
 
 def linked_paths():
     """Internal addresses linked from the site's pages."""
-    files = subprocess.run(['git', 'ls-files', '-co', '--exclude-standard', '*.html'], cwd=ROOT, capture_output=True, text=True).stdout.split()
+    files = subprocess.run(['git', 'ls-files', '-z', '-co', '--exclude-standard', '*.html'], cwd=ROOT, capture_output=True, text=True).stdout.split('\0')
     found = set()
     for file in files:
-        if file.startswith(('tools/', 'docs/')):
+        if not file or file.startswith(('tools/', 'docs/')):
             continue
         markup = open(os.path.join(ROOT, file), errors='ignore').read()
-        for href in re.findall(r'<a [^>]*?href="([^"#?]+)', markup):
+        for href in re.findall(r'<a\s[^>]*?href="([^"#?]+)', markup):
             if not re.match(r'(https?:|mailto:|tel:|javascript:|/)', href):
                 path = os.path.normpath(os.path.join(os.path.dirname(file), href))
                 if not path.startswith('..'):
