@@ -24,6 +24,10 @@ npm run formations   # éditeur sur http://localhost:8790/
 
 Voir [docs/trainings.md](docs/trainings.md).
 
+## Vitesse
+
+Le site publié est optimisé au déploiement (`tools/perf/optimize.py --root _site`, workflow *Deploy test site*) : une seule feuille de style par page à la place des 70 à 100 de WordPress, sans les règles qui ne servent pas à la page, images lourdes en WebP, images hors écran chargées en différé. Le dépôt garde les pages telles que générées ; les copies WebP (`<image>.<ext>.webp`) y sont versionnées.
+
 ## Docs
 
 - [docs/editing.md](docs/editing.md): editing the blog and the trainings in Pages CMS, how pages are regenerated

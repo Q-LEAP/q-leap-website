@@ -31,6 +31,9 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - uses: actions/checkout@v4
         with:
           ref: dev
@@ -45,8 +48,13 @@ jobs:
             mkdir -p "$2"
             (cd "$1" && git ls-files -z | grep -zvE '^(tools|content|docs|\.github)/|^(\.pages\.yml|CLAUDE\.md|README\.md|package\.json|\.gitignore)$' | xargs -0 cp --parents -t "$2")
           }
+          pip install pillow
+          # Page speed on the published copy only (tools/perf/optimize.py): one stylesheet per page,
+          # WebP images, lazy loading. Each site is optimized with its own scripts and assets.
           copy_site dev "$PWD/_site"
+          python3 dev/tools/perf/optimize.py --root _site
           copy_site ux "$PWD/_site/ux-enhance"
+          python3 ux/tools/perf/optimize.py --root _site/ux-enhance || python3 dev/tools/perf/optimize.py --root _site/ux-enhance
           find _site -name '*.html' -print0 | xargs -0 perl -0pi -e 's/<meta name=["\x27]robots["\x27][^>]*>\s*//gi; s/<head([^>]*)>/<head$1>\n<meta name="robots" content="noindex, nofollow">/i'
           printf 'User-agent: *\nDisallow: /\n' > _site/robots.txt
           touch _site/.nojekyll

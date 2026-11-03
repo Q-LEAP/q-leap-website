@@ -354,14 +354,14 @@ def element_end(page, start):
     raise ValueError('balise <div> non fermée')
 
 
-def band_card(post, prefix):
+def band_card(post, prefix, hidden=False):
     page = open(os.path.join(page_dir(post), 'index.html')).read()
     link = href(post, prefix)
     categories = categories_html(post, prefix, ' ')
     image = f' style="background-image: url(&quot;{prefix}{post["image"]}&quot;);"' if post['image'] else ''
     classes = ' '.join(['post_item post_item_container post_layout_band post_format_standard', f'post-{post.get("postId") or 0}',
                         'post type-post status-publish format-standard', 'has-post-thumbnail' if post['image'] else '', 'hentry'])
-    return f'''<article id="post-{post.get("postId") or 0}" data-post-id="{post.get("postId") or 0}"
+    return f'''<article id="post-{post.get("postId") or 0}" data-post-id="{post.get("postId") or 0}"{" hidden" if hidden else ""}
 	class="{re.sub(' +', ' ', classes)}">
 	<div class="post_featured with_thumb hover_dots post_featured_bg" data-ratio="1:1"><span class="post_thumb post_thumb_bg bg_in"{image}></span>						<div class="mask"></div>
 									<a href="{link}"  aria-hidden="true" class="icons"><span></span><span></span><span></span></a>
@@ -400,7 +400,8 @@ def update_blog_page(lang, posts):
     file = os.path.join(ROOT, BLOG_PAGE[lang], 'index.html')
     page = open(file).read()
     prefix = '../../' if lang == 'en' else '../'
-    cards = ''.join(band_card(post, prefix) for post in posts)
+    # Posts after the first page are hidden in the HTML already, so their images are not downloaded
+    cards = ''.join(band_card(post, prefix, index >= CARDS_PER_PAGE) for index, post in enumerate(posts))
     start = re.search(r'<div class="sc_blogger_content sc_item_content sc_item_posts_container posts_container band_wrap"[^>]*>', page).start()
     end = element_end(page, start)
     navigation = re.match(r'\s*<nav class="sc_blogger_pagination.*?</nav>', page[end:], re.S)
