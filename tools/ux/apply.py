@@ -2,7 +2,6 @@
 
 - assets/css/ux.css and assets/js/ux.js on every page (after the other styles and scripts);
 - a "Contact" button in the desktop header, next to the search icon;
-- the two main paths (services, trainings) under the home hero titles;
 - the catalogue request on Formations as a real e-mail button.
 The look comes from the theme itself: its button classes (sc_button) and colour variables.
 Usage: python3 tools/ux/apply.py"""
@@ -12,10 +11,8 @@ import subprocess
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 TEXT = {
-    'fr': {'contact': 'Nous contacter', 'services': 'Nos services', 'trainings': 'Nos formations',
-           'services_href': 'testing-service/', 'trainings_href': 'training/', 'contact_href': 'contact/'},
-    'en': {'contact': 'Contact us', 'services': 'Our services', 'trainings': 'Our trainings',
-           'services_href': 'en/testing/', 'trainings_href': 'en/training/', 'contact_href': 'en/contact/'},
+    'fr': {'contact': 'Nous contacter', 'contact_href': 'contact/'},
+    'en': {'contact': 'Contact us', 'contact_href': 'en/contact/'},
 }
 
 
@@ -52,16 +49,6 @@ def header_cta(markup, prefix, text):
     return markup[:header.start()] + block + markup[header.end():]
 
 
-def hero_actions(markup, prefix, text):
-    if 'ql-hero__actions' in markup or 'ql-hero__title' not in markup:
-        return markup
-    actions = (f'<div class="ql-hero__actions">'
-               f'<a class="sc_button sc_button_default" href="{prefix}{text["services_href"]}"><span class="sc_button_text"><span class="sc_button_title">{text["services"]}</span></span></a>'
-               f'<a class="sc_button sc_button_bordered" href="{prefix}{text["trainings_href"]}"><span class="sc_button_text"><span class="sc_button_title">{text["trainings"]}</span></span></a>'
-               f'</div>')
-    return re.sub(r'(<h([12]) class="ql-hero__title">.*?</h\2>)', lambda m: m.group(1) + actions, markup, flags=re.S)
-
-
 def catalogue_request(markup):
     old = '<p>Demandez notre catalogue training@q-leap.eu</p>'
     new = ('<p>Demandez notre catalogue :</p><p class="ql-catalogue-request">'
@@ -81,8 +68,7 @@ if __name__ == '__main__':
         prefix = prefix_for(file)
         updated = add_assets(markup, prefix)
         updated = header_cta(updated, prefix, TEXT[lang])
-        if file in ('index.html', 'en/index.html'):
-            updated = hero_actions(updated, prefix, TEXT[lang])
+        updated = re.sub(r'<div class="ql-hero__actions">.*?</div>', '', updated)  # one button at the top: the header's
         if file == 'training/index.html':
             updated = catalogue_request(updated)
         if updated != markup:

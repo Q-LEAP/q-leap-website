@@ -21,8 +21,7 @@
     update();
     toTop.addEventListener('click', (event) => {
       event.preventDefault();
-      const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      window.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
+      window.scrollTo(0, 0);
     });
   }
 })();

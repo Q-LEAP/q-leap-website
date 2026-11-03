@@ -1,5 +1,8 @@
 /* UXEnhance: affordance and usability on top of the WordPress styles, with the theme's own
-   colours (--theme-color-*) and button styles. Loaded after every other stylesheet. */
+   colours (--theme-color-*) and button styles. Loaded after every other stylesheet.
+   Deliberately absent (the "vibe coding" tells): gradients, glass/blur, glows, added shadows,
+   emojis, "New" badges, counters, fake testimonials, scroll animations, Inter, card grids, and more
+   than one button at the top of a page (the header "Contact" button is the only one). */
 
 /* Keyboard focus that can be seen everywhere. */
 :focus-visible {
@@ -26,20 +29,6 @@ html { scroll-padding-top: 110px; }
   .ql-header-cta.sc_button { display: none; }
 }
 
-/* Home hero: the two main paths, under the title. */
-.ql-hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8em;
-  margin-top: 1.6em;
-  pointer-events: auto;
-}
-.ql-hero__actions .sc_button_bordered {
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.7);
-}
-.ql-hero__actions .sc_button_bordered:hover { background-color: #fff; color: var(--theme-color-text_dark, #222733); }
-
 /* Whole cards are links (ux.js): show it. */
 .ql-card-link { cursor: pointer; }
 .ql-card-link .post_title a,
@@ -48,8 +37,6 @@ html { scroll-padding-top: 110px; }
 .ql-card-link:hover .post_title a,
 .ql-card-link:hover .sc_blogger_item_title a,
 .ql-card-link:hover .elementor-post__title a { color: var(--theme-color-text_link, #0063dc); }
-.elementor-post__card.ql-card-link { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-.elementor-post__card.ql-card-link:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(34, 39, 51, 0.12); }
 
 /* Training cards: duration, price and next session under the title. */
 .ql-training-meta {
@@ -71,7 +58,3 @@ html { scroll-padding-top: 110px; }
   .sc_services_strong .sc_services_item:before { padding-top: 70%; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .elementor-post__card.ql-card-link { transition: none; }
-}
