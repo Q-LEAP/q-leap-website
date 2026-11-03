@@ -13,20 +13,54 @@
 /* Anchored sections are not hidden under the sticky header. */
 html { scroll-padding-top: 110px; }
 
+/* Buttons added by UXEnhance (after an Awwwards review of recent Sites of the Day: compact
+   rectangles, small capitals with tracking, a typographic arrow, colour-only hover, as on Spyker
+   or Obys, rather than the theme's large pills). Theme colours only. */
+.ql-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75em;
+  height: 44px;
+  padding: 0 1.4em;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.ql-btn::after { content: "\2192"; font-size: 1.15em; letter-spacing: 0; }
+.ql-btn--outline { color: inherit; background: transparent; }
+.ql-btn--solid {
+  color: #fff;
+  background: var(--theme-color-text_link, #0063dc);
+  border-color: var(--theme-color-text_link, #0063dc);
+}
+.ql-btn:hover,
+.ql-btn:focus-visible {
+  color: #fff;
+  background: var(--theme-color-text_link, #0063dc);
+  border-color: var(--theme-color-text_link, #0063dc);
+}
+.ql-btn--solid:hover,
+.ql-btn--solid:focus-visible {
+  background: var(--theme-color-text_dark, #222733);
+  border-color: var(--theme-color-text_dark, #222733);
+}
+
 /* Header call to action, next to the search icon (same row). */
 .elementor-widget-trx_sc_layouts_search > .elementor-widget-container:has(.ql-header-cta) {
   display: flex;
   align-items: center;
   justify-content: flex-end;
 }
-.ql-header-cta.sc_button {
-  margin-right: 1.4em;
-  padding: 0.75em 1.5em;
-  flex: none;
-}
-.ql-header-cta .sc_button_title { white-space: nowrap; }
+.ql-header-cta { margin-right: 1.6em; flex: none; }
 @media (max-width: 1279px) {
-  .ql-header-cta.sc_button { display: none; }
+  .ql-header-cta { display: none; }
 }
 
 /* Whole cards are links (ux.js): show it. */
@@ -51,7 +85,7 @@ html { scroll-padding-top: 110px; }
 .ql-training-meta .ql-training-next { color: var(--theme-color-text_link, #0063dc); font-weight: 500; }
 
 /* Catalogue request: a real button instead of plain text. */
-.ql-catalogue-request { margin-top: 1em; }
+.ql-catalogue-request { margin-top: 1.2em; }
 
 /* Mobile: the service tiles keep their image but stop taking a whole screen each. */
 @media (max-width: 767px) {

@@ -40,20 +40,21 @@ def add_assets(markup, prefix):
 
 
 def header_cta(markup, prefix, text):
+    markup = re.sub(r'<a class="[^"]*ql-header-cta"[^>]*>.*?</a>(?=<div class="sc_layouts_search">)', '', markup, flags=re.S)
     header = re.search(r'<header\b.*?</header>', markup, re.S)
-    if not header or 'ql-header-cta' in header.group(0):
+    if not header:
         return markup
-    button = (f'<a class="sc_button sc_button_default sc_button_size_small ql-header-cta" href="{prefix}{text["contact_href"]}">'
-              f'<span class="sc_button_text"><span class="sc_button_title">{text["contact"]}</span></span></a>')
+    button = f'<a class="ql-btn ql-btn--outline ql-header-cta" href="{prefix}{text["contact_href"]}">{text["contact"]}</a>'
     block = header.group(0).replace('<div class="sc_layouts_search">', button + '<div class="sc_layouts_search">')
     return markup[:header.start()] + block + markup[header.end():]
 
 
 def catalogue_request(markup):
+    markup = re.sub(r'<p>Demandez notre catalogue :</p><p class="ql-catalogue-request">.*?</p>',
+                    '<p>Demandez notre catalogue training@q-leap.eu</p>', markup, flags=re.S)
     old = '<p>Demandez notre catalogue training@q-leap.eu</p>'
-    new = ('<p>Demandez notre catalogue :</p><p class="ql-catalogue-request">'
-           '<a class="sc_button sc_button_default" href="mailto:training@q-leap.eu?subject=Catalogue%20des%20formations">'
-           '<span class="sc_button_text"><span class="sc_button_title">training@q-leap.eu</span></span></a></p>')
+    new = ('<p>Demandez notre catalogue par e-mail.</p><p class="ql-catalogue-request">'
+           '<a class="ql-btn ql-btn--solid" href="mailto:training@q-leap.eu?subject=Catalogue%20des%20formations">Recevoir le catalogue</a></p>')
     return markup.replace(old, new)
 
 
