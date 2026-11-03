@@ -1,6 +1,6 @@
 # Formations : éditeur et génération des pages
 
-Les formations (fiches `trainings/<slug>/`, `en/trainings/<slug>/` et la grille des catalogues `training/`, `en/training/`) ne se modifient plus dans WordPress : leur contenu est dans **`content/trainings.json`**, édité avec l'éditeur, et les pages sont générées à partir de ce fichier.
+Les formations (fiches `trainings/<slug>/`, `en/trainings/<slug>/` et la grille des catalogues `training/`, `en/training/`) ne se modifient plus dans WordPress : leur contenu est dans **`content/trainings/`** (une formation par fichier) et **`content/training-settings.json`** (filtres, libellés), édité dans Pages CMS (voir [editing.md](editing.md)) ou avec l'éditeur local, et les pages sont générées à partir de ces fichiers.
 
 ## Utiliser l'éditeur
 
@@ -16,7 +16,7 @@ npm run formations
 - **Publiée / brouillon** : un brouillon n'est ni généré ni visible dans le catalogue.
 - **Aperçu** (à droite) : la vraie fiche, mise à jour pendant la saisie, en FR ou EN, PC / tablette / mobile. « Ouvrir ↗ » l'ouvre en grand.
 - **Libellés des pages** : textes fixes communs à toutes les fiches (intitulés des blocs, bouton « S'inscrire », noms des mois…).
-- **Enregistrer** (⌘S) : écrit `content/trainings.json` et régénère toutes les fiches et les deux catalogues. Les erreurs bloquantes (titre manquant, adresse invalide ou en double, session qui finit avant de commencer) sont signalées.
+- **Enregistrer** (⌘S) : écrit `content/trainings/` et `content/training-settings.json` et régénère toutes les fiches et les deux catalogues. Les erreurs bloquantes (titre manquant, adresse invalide ou en double, session qui finit avant de commencer) sont signalées.
 - **Publier** : enregistre, puis `git commit` + `git push` des formations, des catalogues, des images et des PDF (branche courante, `dev`).
 
 Changer l'adresse d'une formation publiée garde l'ancienne adresse en redirection (`previousSlugs`). Supprimer une formation retire ses pages.
@@ -25,7 +25,8 @@ Changer l'adresse d'une formation publiée garde l'ancienne adresse en redirecti
 
 | Fichier | Rôle |
 |---|---|
-| `content/trainings.json` | Les 11 formations, chacune avec ses versions `fr` et `en`, ses filtres, ses images et ses sessions, plus les libellés modifiés |
+| `content/trainings/<id>.json` | Une formation par fichier (le nom du fichier est son identifiant) : versions `fr` et `en`, filtres, images, sessions |
+| `content/training-settings.json` | Choix des filtres du catalogue et libellés modifiés |
 | `tools/trainings/build.mjs` | Génère les fiches et la grille des catalogues ; fonctions réutilisées par l'éditeur (aperçu) |
 | `tools/trainings/templates/training.{fr,en}.html` | Gabarits : la fiche « ISTQB Foundation » exportée, avec des emplacements `{{…}}` |
 | `tools/trainings/templates/jsonld.{fr,en}.json` | Modèle des données structurées Yoast (SEO) |

@@ -1,0 +1,400 @@
+# Pages CMS (https://app.pagescms.org): what trainers and the team can edit without touching the
+# code. Every save is a commit; .github/workflows/build-content.yml then regenerates the pages.
+# Guide: docs/editing.md
+
+media:
+  - name: images
+    label: Images
+    input: assets/images/uploads
+    output: /assets/images/uploads
+    categories: [image]
+    rename: safe
+  - name: documents
+    label: Documents (PDF)
+    input: assets/documents/uploads
+    output: /assets/documents/uploads
+    extensions: [pdf]
+    rename: safe
+
+components:
+  session:
+    type: object
+    fields:
+      - name: start
+        label: Début
+        type: date
+        options:
+          format: yyyy-MM-dd
+      - name: end
+        label: Fin
+        type: date
+        options:
+          format: yyyy-MM-dd
+      - name: language
+        label: Langue (facultatif)
+        type: string
+      - name: format
+        label: Format
+        type: string
+      - name: eventId
+        type: string
+        hidden: true
+  trainingVersion:
+    type: object
+    fields:
+      - name: title
+        label: Titre
+        type: string
+        required: true
+      - name: slug
+        label: Adresse de la page (…/trainings/<adresse>/)
+        type: string
+        required: true
+      - name: seoTitle
+        label: Titre de l'onglet / Google
+        type: string
+      - name: description
+        label: Informations (texte de présentation)
+        type: rich-text
+        options:
+          format: html
+          media: images
+      - name: price
+        label: Prix
+        type: string
+      - name: duration
+        label: Durée
+        type: string
+      - name: languages
+        label: Langues
+        type: string
+      - name: format
+        label: Format / Lieu
+        type: string
+      - name: certificate
+        label: Certificat / Diplôme
+        type: string
+      - name: programPdf
+        label: Programme (PDF)
+        type: file
+        options:
+          media: documents
+      - name: syllabusPdf
+        label: Syllabus (PDF)
+        type: file
+        options:
+          media: documents
+      - name: sessions
+        label: Sessions (les sessions passées disparaissent toutes seules)
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{start} → {end}"
+        component: session
+      - name: filters
+        label: Filtres du catalogue
+        type: object
+        fields:
+          - name: theme
+            label: Thème
+            type: select
+            options:
+              multiple: true
+              values: ["Certifications en Testing (ISTQB)", "Fondamentaux", "Méthodologies", "Outil de gestion", "Automatisation", "Business Analysis & Ingénierie", "Intelligence Artificielle (IA)"]
+          - name: niveau
+            label: Niveau
+            type: select
+            options:
+              multiple: true
+              values: ["Débutant", "Intermédiaire", "Avancé"]
+          - name: format
+            label: Format
+            type: select
+            options:
+              multiple: true
+              values: ["Présentiel (Luxembourg)", "Live Virtual Class"]
+          - name: certification
+            label: Certification
+            type: select
+            options:
+              multiple: true
+              values: ["Avec certification"]
+          - name: language
+            label: Langue
+            type: select
+            options:
+              multiple: true
+              values: ["Français", "Anglais"]
+      - name: contactForm
+        type: string
+        hidden: true
+      - name: taxonomyClasses
+        type: string
+        list: true
+        hidden: true
+      - name: postId
+        type: number
+        hidden: true
+      - name: published
+        type: string
+        hidden: true
+      - name: modified
+        type: string
+        hidden: true
+      - name: previousSlugs
+        type: string
+        list: true
+        hidden: true
+  trainingImage:
+    type: object
+    fields:
+      - name: card
+        label: Image de la carte du catalogue (format portrait)
+        type: object
+        fields:
+          - name: src
+            label: Image
+            type: image
+            options:
+              media: images
+          - name: srcset
+            type: string
+            list: true
+            hidden: true
+          - name: sizes
+            type: string
+            hidden: true
+          - name: width
+            type: number
+            hidden: true
+          - name: height
+            type: number
+            hidden: true
+      - name: social
+        label: Image de partage (LinkedIn, Facebook…)
+        type: image
+        options:
+          media: images
+      - name: socialUrl
+        type: string
+        hidden: true
+
+content:
+  - name: blog
+    label: Blog
+    type: group
+    items:
+      - name: blog-fr
+        label: Articles en français
+        type: collection
+        path: content/blog/fr
+        format: json
+        filename:
+          template: "{primary}.json"
+          field: create
+        view:
+          primary: title
+          fields: [title, date, status]
+          sort: date
+          order: desc
+        fields:
+          - name: categories
+            label: Catégories
+            type: select
+            options:
+              multiple: true
+              values: ["Actualités", "À la une", "Carrière", "Events", "Formation", "Innovation", "Presse", "Archives"]
+          - name: title
+            label: Titre
+            type: string
+            required: true
+          - name: date
+            label: Date de publication
+            type: date
+            options:
+              format: yyyy-MM-dd
+          - name: status
+            label: État
+            type: select
+            options:
+              values:
+                - name: published
+                  label: Publié
+                - name: draft
+                  label: Brouillon (non visible sur le site)
+          - name: image
+            label: Image principale (en tête de l'article et dans les listes)
+            type: image
+            options:
+              media: images
+          - name: imageAlt
+            label: Description de l'image (accessibilité)
+            type: string
+          - name: body
+            label: Texte de l'article (laisser vide pour garder la mise en page d'origine des anciens articles)
+            type: rich-text
+            options:
+              format: html
+              media: images
+          - name: excerpt
+            label: Résumé affiché dans la liste du blog (facultatif, sinon le début du texte)
+            type: text
+          - name: description
+            label: Description pour Google et les réseaux sociaux
+            type: text
+          - name: seoTitle
+            label: Titre de l'onglet / Google (facultatif, sinon « Titre - Q-Leap »)
+            type: string
+          - name: tags
+            label: Mots-clés
+            type: string
+            list: true
+          - name: home
+            label: Afficher dans les actualités de la page d'accueil
+            type: boolean
+            default: true
+          - name: translation
+            label: Adresse de la version dans l'autre langue (nom du fichier, sans .json)
+            type: string
+          - name: layout
+            type: string
+            hidden: true
+          - name: postId
+            type: number
+            hidden: true
+          - name: published
+            type: string
+            hidden: true
+          - name: modified
+            type: string
+            hidden: true
+          - name: views
+            type: string
+            hidden: true
+
+      - name: blog-en
+        label: Articles en anglais
+        type: collection
+        path: content/blog/en
+        format: json
+        filename:
+          template: "{primary}.json"
+          field: create
+        view:
+          primary: title
+          fields: [title, date, status]
+          sort: date
+          order: desc
+        fields:
+          - name: categories
+            label: Categories
+            type: select
+            options:
+              multiple: true
+              values: ["News", "Headlines", "Career", "Events", "Training", "Innovation", "Press", "Archives"]
+          - name: title
+            label: Titre
+            type: string
+            required: true
+          - name: date
+            label: Date de publication
+            type: date
+            options:
+              format: yyyy-MM-dd
+          - name: status
+            label: État
+            type: select
+            options:
+              values:
+                - name: published
+                  label: Publié
+                - name: draft
+                  label: Brouillon (non visible sur le site)
+          - name: image
+            label: Image principale (en tête de l'article et dans les listes)
+            type: image
+            options:
+              media: images
+          - name: imageAlt
+            label: Description de l'image (accessibilité)
+            type: string
+          - name: body
+            label: Texte de l'article (laisser vide pour garder la mise en page d'origine des anciens articles)
+            type: rich-text
+            options:
+              format: html
+              media: images
+          - name: excerpt
+            label: Résumé affiché dans la liste du blog (facultatif, sinon le début du texte)
+            type: text
+          - name: description
+            label: Description pour Google et les réseaux sociaux
+            type: text
+          - name: seoTitle
+            label: Titre de l'onglet / Google (facultatif, sinon « Titre - Q-Leap »)
+            type: string
+          - name: tags
+            label: Mots-clés
+            type: string
+            list: true
+          - name: home
+            label: Afficher dans les actualités de la page d'accueil
+            type: boolean
+            default: true
+          - name: translation
+            label: Adresse de la version dans l'autre langue (nom du fichier, sans .json)
+            type: string
+          - name: layout
+            type: string
+            hidden: true
+          - name: postId
+            type: number
+            hidden: true
+          - name: published
+            type: string
+            hidden: true
+          - name: modified
+            type: string
+            hidden: true
+          - name: views
+            type: string
+            hidden: true
+
+  - name: trainings
+    label: Formations
+    type: collection
+    path: content/trainings
+    format: json
+    filename:
+      template: "nouvelle-formation-{year}{month}{day}{hour}{minute}.json"
+      field: create
+    view:
+      primary: order
+      fields: [order, status]
+      sort: order
+    fields:
+      - name: order
+        label: Position dans le catalogue (0 = en premier)
+        type: number
+      - name: status
+        label: État
+        type: select
+        options:
+          values:
+            - name: published
+              label: Publiée
+            - name: draft
+              label: Brouillon (non visible sur le site)
+      - name: fr
+        label: Version française
+        component: trainingVersion
+      - name: en
+        label: English version
+        component: trainingVersion
+      - name: image
+        label: Images (version française)
+        component: trainingImage
+      - name: imageEn
+        label: Images (English version)
+        component: trainingImage

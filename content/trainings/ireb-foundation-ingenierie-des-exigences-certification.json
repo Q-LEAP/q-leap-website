@@ -1,0 +1,113 @@
+{
+  "order": 4,
+  "status": "published",
+  "image": {
+    "card": {
+      "src": "assets/images/2024/01/Design-sans-titre-2-371x262.png",
+      "srcset": [
+        "assets/images/2024/01/Design-sans-titre-2.png 371w",
+        "assets/images/2024/01/Design-sans-titre-2-300x212.png 300w"
+      ],
+      "sizes": "(max-width: 600px) 100vw, 371px",
+      "width": 371,
+      "height": 262
+    },
+    "social": "assets/images/2024/01/Design-sans-titre-2.png",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2024/01/Design-sans-titre-2.png?fit=850%2C600&ssl=1"
+  },
+  "imageEn": {
+    "card": {
+      "src": "assets/images/2024/01/Design-sans-titre-2-371x262.png",
+      "srcset": [
+        "assets/images/2024/01/Design-sans-titre-2.png 371w",
+        "assets/images/2024/01/Design-sans-titre-2-300x212.png 300w"
+      ],
+      "sizes": "(max-width: 600px) 100vw, 371px",
+      "width": 371,
+      "height": 262
+    },
+    "social": "assets/images/2024/01/Design-sans-titre-2.png",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2024/01/Design-sans-titre-2.png?fit=850%2C600&ssl=1"
+  },
+  "fr": {
+    "postId": 24716,
+    "slug": "ireb-foundation-ingenierie-des-exigences-certification",
+    "title": "IREB Certifié Ingénierie des exigences – Niveau Fondation",
+    "seoTitle": "IREB Certifié Ingénierie des exigences – Niveau Fondation - Q-Leap",
+    "published": "2024-01-05T16:26:23",
+    "modified": "2024-06-07T14:16:29+00:00",
+    "description": "<p>Cette formation permettra aux participants, à son terme, de maîtriser les principes fondamentaux de l'ingénierie des exigences conformément aux normes de l'IREB (International Requirements Engineering Board). De plus, ils seront préparés à obtenir la certification IREB CPRE niveau Foundation.</p>",
+    "price": "1 750.00€ HTVA",
+    "duration": "3 jours",
+    "languages": "EN, FR",
+    "format": "",
+    "certificate": "Examen compris",
+    "programPdf": "assets/documents/2024/01/Programme-IREB-FR.pdf",
+    "syllabusPdf": "assets/documents/2024/01/cpre_foundationlevel_syllabus_fr_v.3.1.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-business-analysis-ingenierie-des-exigences",
+      "taxonomy_training-fondamentaux-des-tests-logiciels"
+    ],
+    "filters": {
+      "theme": [
+        "Business Analysis & Ingénierie"
+      ],
+      "niveau": [
+        "Débutant"
+      ],
+      "format": [
+        "Présentiel (Luxembourg)",
+        "Live Virtual Class"
+      ],
+      "certification": [
+        "Avec certification"
+      ],
+      "language": [
+        "Français",
+        "Anglais"
+      ]
+    },
+    "sessions": []
+  },
+  "en": {
+    "postId": 32717,
+    "slug": "ireb-certified-in-requirements-engineering-foundation-level",
+    "title": "IREB Certified in Requirements Engineering - Foundation Level",
+    "seoTitle": "IREB Certified in Requirements Engineering - Foundation Level - Q-Leap",
+    "published": "2024-01-05T16:26:23",
+    "modified": "2024-06-07T14:15:15+00:00",
+    "description": "<p>By the end of the course, participants will have mastered the fundamental principles of requirements engineering in line with IREB (International Requirements Engineering Board) standards. In addition, they will be prepared to obtain IREB CPRE Foundation level certification.</p>",
+    "price": "1 750.00€ EXCL. VAT",
+    "duration": "3 days",
+    "languages": "EN, FR",
+    "format": "",
+    "certificate": "Exam included",
+    "programPdf": "assets/documents/2024/01/Programme-IREB-FR.pdf",
+    "syllabusPdf": "assets/documents/2024/01/cpre_foundationlevel_syllabus_en_v.3.1.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-business-analysis-ingenierie-des-exigences"
+    ],
+    "filters": {
+      "theme": [
+        "Business Analysis & Ingénierie"
+      ],
+      "niveau": [
+        "Débutant"
+      ],
+      "format": [
+        "Présentiel (Luxembourg)",
+        "Live Virtual Class"
+      ],
+      "certification": [
+        "Avec certification"
+      ],
+      "language": [
+        "Français",
+        "Anglais"
+      ]
+    },
+    "sessions": []
+  }
+}

@@ -10,8 +10,7 @@ import re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
-content = json.load(open(os.path.join(ROOT, 'content', 'trainings.json')))
-base = next(item for item in content['trainings'] if item['id'] == 'istqb-certified-tester-foundation-level')
+base = json.load(open(os.path.join(ROOT, 'content', 'trainings', 'istqb-certified-tester-foundation-level.json')))
 
 
 def must_replace(markup, old, new, count=None, regex=False):

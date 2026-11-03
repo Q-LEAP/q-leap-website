@@ -1,0 +1,104 @@
+{
+  "order": 1,
+  "status": "published",
+  "image": {
+    "card": {
+      "src": "assets/images/2025/01/DALL·E-2025-01-24-11.44.06-A-visually-appealing-image-representing-an-advanced-training-program-on-AI-and-machine-learning-testing.-The-scene-includes-futuristic-digital-element-900x1024.webp",
+      "srcset": [],
+      "sizes": "",
+      "width": 900,
+      "height": 1024
+    },
+    "social": "assets/images/2025/01/DALL·E-2025-01-24-11.44.06-A-visually-appealing-image-representing-an-advanced-training-program-on-AI-and-machine-learning-testing.-The-scene-includes-futuristic-digital-element.webp",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2025/01/DALL·E-2025-01-24-11.44.06-A-visually-appealing-image-representing-an-advanced-training-program-on-AI-and-machine-learning-testing.-The-scene-includes-futuristic-digital-element.webp?fit=850%2C600&ssl=1"
+  },
+  "imageEn": {
+    "card": {
+      "src": "assets/images/2025/01/DALL·E-2025-01-24-11.44.06-A-visually-appealing-image-representing-an-advanced-training-program-on-AI-and-machine-learning-testing.-The-scene-includes-futuristic-digital-element-900x1024.webp",
+      "srcset": [],
+      "sizes": "",
+      "width": 900,
+      "height": 1024
+    },
+    "social": "assets/images/2025/01/DALL·E-2025-01-24-11.44.06-A-visually-appealing-image-representing-an-advanced-training-program-on-AI-and-machine-learning-testing.-The-scene-includes-futuristic-digital-element.webp",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2025/01/DALL·E-2025-01-24-11.44.06-A-visually-appealing-image-representing-an-advanced-training-program-on-AI-and-machine-learning-testing.-The-scene-includes-futuristic-digital-element.webp?fit=850%2C600&ssl=1"
+  },
+  "fr": {
+    "postId": 38345,
+    "slug": "istqb-certifie-ia",
+    "title": "CFTL / ISTQB®Testeur Certifié, Intelligence Artificielle",
+    "seoTitle": "CFTL / ISTQB®Testeur Certifié, Intelligence Artificielle - Q-Leap",
+    "published": "2025-01-24T11:46:06",
+    "modified": "2025-03-28T13:50:38+00:00",
+    "description": "<p>Découvrez notre formation <em>Testeur Certifié - Intelligence Artificielle</em>, conçue pour apprendre à maîtriser les <strong>Tests spécifiques à l'Intelligence Artificielle.</strong> <br /><br /></p>\n<p>Ce cours vise à fournir une compréhension complète des <strong>tendances actuelles et futures de l'IA</strong>, de sa mise en œuvre dans différents secteurs et de son impact sur diverses industries. Il met l'accent sur le développement de compétences essentielles pour tester les modèles d'apprentissage automatique, en abordant des défis tels que les biais et la transparence, et en apprenant à concevoir et exécuter des scénarios de test spécifiques à l'IA.</p>",
+    "price": "1.950€",
+    "duration": "4",
+    "languages": "EN, FR",
+    "format": "",
+    "certificate": "Certification CFTL/ISTQB",
+    "programPdf": "assets/documents/2022/01/Program-2-ISTQB-Certified-Tester-Artificial-Intelligence-EN.pdf",
+    "syllabusPdf": "assets/documents/2022/01/Programme-CFTL-ISTQB®-Testeur-Certifie-Intelligence-Artificielle-Artificial-FR.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-fondamentaux-des-tests-logiciels",
+      "taxonomy_training-intelligence-artificielle-ia"
+    ],
+    "filters": {
+      "theme": [
+        "Intelligence Artificielle (IA)"
+      ],
+      "niveau": [
+        "Débutant",
+        "Intermédiaire",
+        "Avancé"
+      ],
+      "format": [
+        "Live Virtual Class"
+      ],
+      "certification": [],
+      "language": [
+        "Français"
+      ]
+    },
+    "sessions": []
+  },
+  "en": {
+    "postId": 39613,
+    "slug": "cftl-istqb-certified-tester-artificial-intelligence",
+    "title": "CFTL / ISTQB® Certified Tester, Artificial Intelligence",
+    "seoTitle": "CFTL / ISTQB® Certified Tester, Artificial Intelligence - Q-Leap",
+    "published": "2025-01-24T11:46:06",
+    "modified": "",
+    "description": "<p>Découvrez notre formation <em>Testeur Certifié - Intelligence Artificielle</em>, conçue pour apprendre à maîtriser les <strong>Tests spécifiques à l'Intelligence Artificielle.</strong> <br /><br /></p>\n<p>Ce cours vise à fournir une compréhension complète des <strong>tendances actuelles et futures de l'IA</strong>, de sa mise en œuvre dans différents secteurs et de son impact sur diverses industries. Il met l'accent sur le développement de compétences essentielles pour tester les modèles d'apprentissage automatique, en abordant des défis tels que les biais et la transparence, et en apprenant à concevoir et exécuter des scénarios de test spécifiques à l'IA.</p>",
+    "price": "1.950€",
+    "duration": "4",
+    "languages": "EN, FR",
+    "format": "",
+    "certificate": "Certification CFTL/ISTQB",
+    "programPdf": "assets/documents/2022/01/Program-2-ISTQB-Certified-Tester-Artificial-Intelligence-EN.pdf",
+    "syllabusPdf": "assets/documents/2022/01/Programme-CFTL-ISTQB®-Testeur-Certifie-Intelligence-Artificielle-Artificial-FR.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-fondamentaux-des-tests-logiciels",
+      "taxonomy_training-intelligence-artificielle-ia"
+    ],
+    "filters": {
+      "theme": [
+        "Intelligence Artificielle (IA)"
+      ],
+      "niveau": [
+        "Débutant",
+        "Intermédiaire",
+        "Avancé"
+      ],
+      "format": [
+        "Live Virtual Class"
+      ],
+      "certification": [],
+      "language": [
+        "Français"
+      ]
+    },
+    "sessions": []
+  }
+}

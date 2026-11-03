@@ -12,7 +12,11 @@ python3 -m http.server 8766
 # open http://localhost:8766/
 ```
 
-## Mettre à jour les formations
+## Modifier le blog et les formations
+
+Dans Pages CMS (https://app.pagescms.org), sans code : voir [docs/editing.md](docs/editing.md). Les pages sont régénérées par le workflow GitHub *Build content*.
+
+## Mettre à jour les formations (éditeur local)
 
 ```sh
 npm run formations   # éditeur sur http://localhost:8790/
@@ -22,5 +26,6 @@ Voir [docs/trainings.md](docs/trainings.md).
 
 ## Docs
 
-- [docs/trainings.md](docs/trainings.md): content/trainings.json, the training editor and the page generator
+- [docs/editing.md](docs/editing.md): editing the blog and the trainings in Pages CMS, how pages are regenerated
+- [docs/trainings.md](docs/trainings.md): training content, the local training editor and the page generator
 - [docs/page-inventory.md](docs/page-inventory.md): the WordPress pages and what we keep, disable or delete (review page: http://localhost:8766/tools/inventory/)

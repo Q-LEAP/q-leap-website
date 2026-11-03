@@ -435,6 +435,41 @@
     apply();
   }
 
+  // trx_addons blogger "advanced pages" pagination (blog listings). The theme loaded each page with
+  // Ajax; tools/blog/build.py writes every post in the list and this shows them a page at a time,
+  // with the same navigation markup (First / Prev / numbers / Next / Last, "Page x of y").
+  function initBlogPagination() {
+    document.querySelectorAll('.sc_blogger_content[data-cards-per-page]').forEach((list) => {
+      const navigation = list.parentElement.querySelector('nav[data-blog-pagination]');
+      const items = [...list.children].filter((item) => item.matches('article'));
+      const perPage = Number(list.dataset.cardsPerPage) || 6;
+      const pages = Math.max(1, Math.ceil(items.length / perPage));
+      const windowSize = 5;
+      const link = (page, label, className = '', title = '') =>
+        `<a href="#" class="page-numbers${className ? ` ${className}` : ''}" data-page="${page}"${title ? ` title="${title}"` : ''}>${label}</a>`;
+      const show = (page) => {
+        items.forEach((item, index) => { item.hidden = Math.floor(index / perPage) !== page - 1; });
+        if (!navigation) return;
+        const first = Math.max(1, Math.min(page - Math.floor(windowSize / 2), pages - windowSize + 1));
+        const last = Math.min(pages, first + windowSize - 1);
+        let links = page > 1 ? link(1, 'First', 'first', 'First page') + link(page - 1, 'Prev', 'prev', 'Previous page') : '';
+        for (let number = first; number <= last; number += 1) {
+          links += number === page ? `<span class="page-numbers current">${number}</span>` : link(number, number);
+        }
+        if (page < pages) links += link(page + 1, 'Next', 'next', 'Next page') + link(pages, 'Last', 'last', 'Last page');
+        navigation.innerHTML = `\n\t\t\t<div class="nav-links">${links}</div><span class="page-numbers page-count">Page ${page} of ${pages}</span>`;
+      };
+      navigation?.addEventListener('click', (event) => {
+        const target = event.target.closest('a.page-numbers[data-page]');
+        if (!target) return;
+        event.preventDefault();
+        show(Number(target.dataset.page));
+        list.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      });
+      show(1);
+    });
+  }
+
   // Elementor Pro posts widget (cards / classic skins): the container gets elementor-has-item-ratio
   // (images become absolutely positioned inside a fixed-ratio box) and each thumbnail whose image
   // is flatter than the box gets elementor-fit-height (the image fills the height instead).
@@ -567,6 +602,7 @@
   initPopups();
   initElementorPosts();
   initTrainingCatalogue();
+  initBlogPagination();
   initElementorTabs();
   initMobileMenu();
   initEntranceAnimations();

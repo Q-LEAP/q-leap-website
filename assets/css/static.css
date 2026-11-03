@@ -3,3 +3,10 @@
 /* Training catalogue filtering / pagination hides cards with the hidden attribute. */
 .elementor-posts-container > article[hidden],
 .elementor-pagination[hidden] { display: none !important; }
+
+/* Blog listings (tools/blog/build.py): pagination hides posts with the hidden attribute. */
+.sc_blogger_content > article[hidden] { display: none !important; }
+
+/* Home news block, items 2-4 (image left): the widths trx_addons printed as per-item inline classes. */
+.sc_blogger_news .sc_blogger_item_list_with_image .sc_blogger_item_featured { width: 33%; }
+.sc_blogger_news .sc_blogger_item_list_with_image .sc_blogger_item_content { width: calc(100% - 33%); }

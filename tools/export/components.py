@@ -59,8 +59,11 @@ def hero(module, prefix):
 
 
 CSS_BUILD = os.path.join(ROOT, 'tools', 'export', 'build', 'css')
-# Generated pages use the stylesheets of the page their template was made from.
-TEMPLATE_SOURCE = {'trainings/': 'trainings__istqb-certified-tester-foundation-level', 'en/trainings/': 'en__trainings__istqb-certified-tester-foundation-level'}
+# Generated pages use the stylesheets of the page their template was made from: its <!-- wp-styles -->
+# block, read from that page in the repository (tools/export/build/ is not in Git, and the pages are
+# also generated on GitHub).
+TEMPLATE_SOURCE = {'trainings/': 'trainings/istqb-certified-tester-foundation-level/index.html',
+                   'en/trainings/': 'en/trainings/istqb-certified-tester-foundation-level/index.html'}
 
 
 def page_styles(path, prefix):
@@ -71,7 +74,8 @@ def page_styles(path, prefix):
     source = os.path.join(CSS_BUILD, slug + '.json')
     for folder, template in TEMPLATE_SOURCE.items():
         if path.startswith(folder) and path.count('/') == folder.count('/') + 1:
-            source = os.path.join(CSS_BUILD, template + '.json')
+            block = re.search(r'<!-- wp-styles -->\n(.*?)\n<!-- /wp-styles -->', open(os.path.join(ROOT, template), newline='').read(), re.S)
+            return block.group(1) if block else None
     if not os.path.exists(source):
         return None
     tags = []

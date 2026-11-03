@@ -1,0 +1,121 @@
+{
+  "order": 3,
+  "status": "published",
+  "image": {
+    "card": {
+      "src": "assets/images/2023/12/IQBBA3-850x600.png",
+      "srcset": [
+        "assets/images/2023/12/IQBBA3.png 850w",
+        "assets/images/2023/12/IQBBA3-300x212.png 300w",
+        "assets/images/2023/12/IQBBA3-768x542.png 768w",
+        "assets/images/2023/12/IQBBA3-370x261.png 370w",
+        "assets/images/2023/12/IQBBA3-840x593.png 840w",
+        "assets/images/2023/12/IQBBA3-410x289.png 410w"
+      ],
+      "sizes": "(max-width: 850px) 100vw, 850px",
+      "width": 850,
+      "height": 600
+    },
+    "social": "assets/images/2023/12/IQBBA3.png",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/IQBBA3.png?fit=850%2C600&ssl=1"
+  },
+  "imageEn": {
+    "card": {
+      "src": "assets/images/2023/12/IQBBA3-850x600.png",
+      "srcset": [
+        "assets/images/2023/12/IQBBA3.png 850w",
+        "assets/images/2023/12/IQBBA3-300x212.png 300w",
+        "assets/images/2023/12/IQBBA3-768x542.png 768w",
+        "assets/images/2023/12/IQBBA3-370x261.png 370w",
+        "assets/images/2023/12/IQBBA3-840x593.png 840w",
+        "assets/images/2023/12/IQBBA3-410x289.png 410w"
+      ],
+      "sizes": "(max-width: 850px) 100vw, 850px",
+      "width": 850,
+      "height": 600
+    },
+    "social": "assets/images/2023/12/IQBBA3.png",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/IQBBA3.png?fit=850%2C600&ssl=1"
+  },
+  "fr": {
+    "postId": 24720,
+    "slug": "iqbba-analyste-metier-certifie-niveau-fondation",
+    "title": "IQBBA Certifié Analyste Métier – Niveau Fondation",
+    "seoTitle": "IQBBA Certifié Analyste Métier – Niveau Fondation - Q-Leap",
+    "published": "2024-01-05T16:28:34",
+    "modified": "2024-06-07T08:40:48+00:00",
+    "description": "<p>Cette formation explore toutes les tâches, connaissances, outils et techniques nécessaires à l'identification et à la formalisation des besoins des entreprises pour proposer des solutions innovantes. En trois jours, les participants sont guidés à travers les phases clés de l'analyse métier, acquérant ainsi les connaissances indispensables pour réussir l'examen de certification IQBBA Foundation Level Business Analyst.</p>",
+    "price": "1 750.00€ HTVA",
+    "duration": "3 jours",
+    "languages": "EN, FR",
+    "format": "",
+    "certificate": "Examen compris",
+    "programPdf": "assets/documents/2024/01/Programme-IQBBA-Fondation-FR.pdf",
+    "syllabusPdf": "assets/documents/2024/01/IQBBA-CFLBA-Syllabus-v.-3.0_Fr.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-business-analysis-ingenierie-des-exigences",
+      "taxonomy_training-fondamentaux-des-tests-logiciels"
+    ],
+    "filters": {
+      "theme": [
+        "Business Analysis & Ingénierie"
+      ],
+      "niveau": [
+        "Débutant"
+      ],
+      "format": [
+        "Présentiel (Luxembourg)",
+        "Live Virtual Class"
+      ],
+      "certification": [
+        "Avec certification"
+      ],
+      "language": [
+        "Français",
+        "Anglais"
+      ]
+    },
+    "sessions": []
+  },
+  "en": {
+    "postId": 32704,
+    "slug": "iqbba-certified-business-analyst-foundation-level",
+    "title": "IQBBA Certified Business Analyst - Foundation Level",
+    "seoTitle": "IQBBA Certified Business Analyst - Foundation Level - Q-Leap",
+    "published": "2024-01-05T16:28:34",
+    "modified": "2024-06-07T14:13:18+00:00",
+    "description": "<p>This training course explores all the tasks, knowledge, tools and techniques needed to identify and formalize business needs and propose innovative solutions. In three days, participants are guided through the key phases of business analysis, acquiring the knowledge they need to pass the IQBBA Foundation Level Business Analyst certification exam.</p>",
+    "price": "1 750.00€ EXCL. VAT",
+    "duration": "3 days",
+    "languages": "EN, FR",
+    "format": "",
+    "certificate": "Exam included",
+    "programPdf": "assets/documents/2024/01/Programme-IQBBA-Fondation-FR.pdf",
+    "syllabusPdf": "assets/documents/2024/01/IQBBA-CFLBA-Syllabus-v.-3.0.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-business-analysis-ingenierie-des-exigences"
+    ],
+    "filters": {
+      "theme": [
+        "Business Analysis & Ingénierie"
+      ],
+      "niveau": [
+        "Débutant"
+      ],
+      "format": [
+        "Présentiel (Luxembourg)",
+        "Live Virtual Class"
+      ],
+      "certification": [
+        "Avec certification"
+      ],
+      "language": [
+        "Français",
+        "Anglais"
+      ]
+    },
+    "sessions": []
+  }
+}

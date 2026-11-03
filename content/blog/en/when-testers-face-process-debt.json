@@ -1,0 +1,26 @@
+{
+  "title": "When testers face process debt",
+  "date": "2017-04-11",
+  "status": "published",
+  "categories": [
+    "News",
+    "Press"
+  ],
+  "tags": [
+    "Innovation",
+    "Q-LEAP",
+    "Software Quality",
+    "testing"
+  ],
+  "image": "assets/images/2023/12/image-9.png",
+  "excerpt": "Technical debt is often overlooked, and it is essential to take it into account. Testers…",
+  "description": "Technical debt is often overlooked, and it is essential to take it into account. Testers…",
+  "seoTitle": "When testers face process debt - Q-Leap",
+  "translation": "quand-les-testeurs-font-face-a-la-dette-de-processus",
+  "body": "<p class=\"has-drop-cap\"><em>Technical debt is often overlooked, and it is essential to take it into account. Testers are committed to adapting test cases, test plans and frameworks in line with changes throughout the development process, in order to minimize the number of components that are no longer useful and optimize resources.</em>&#8220;Jorge Asensio, test automation expert at q-leap.</p>\n<p>Technical debt encompasses everything that is directly or indirectly linked to the software under development, and which is no longer useful to the development process or to the maintenance of the application under development.</p>\n<p>Process debt is a kind of technical debt generated when processes are poor or absent for handling things like defects, documentation or even test cases.</p>\n<p>Some form of technical debt will always exist. There are organizations that fight valiantly to contain it, and others that have left &#8220;I.O.U.&#8217;s&#8221; plastered in various places as reminders to &#8220;clean up failed unit tests&#8221;, &#8220;redo documentation&#8221;, &#8220;update application dependencies&#8221; or &#8220;refactor old code&#8221;. These tasks continue to be pushed back into the backlog while more important business stories are dealt with.</p>\n<p>As a tester, watching developers struggle to repay even minor technical debt is a struggle with which we should sympathize. Testers, along with their software development partners, tend to advocate cleaning up technical debt for the sake of quality. One area that testers generally have to deal with is process debt. This eats into time that would be better spent testing the software, just as technical debt eats into development time.</p>\n<p>Read the full article on the <strong>\n  <a href=\"https://www.ministryoftesting.com/search?q=when+testers+deal+with+process+debt+ideas+to+manage+it+and+get+back+to+testing+faster\">Ministry of Testing.</a>\n</strong></p>\n<h3><strong>ABOUT THE Q-LEAP EXPERT RECOMMENDING THIS ARTICLE</strong></h3>\n<p><br><em>Jorge Asensio is a test automation expert at q-leap. Jorge is a tester who likes to share his experiences and learn from others.</em></p>\n<p>He is a strong team player, has excellent customer communication skills and is fully dedicated to his career in software testing. His focus is always on perfection in terms of automation, functionality and performance. He is also an expert in Selenium Browser Automation, a framework for automating online applications. Jorge works closely within the company to help evaluate and improve existing automation frameworks, design, run and maintain automated test scripts to ensure quality control standards are achieved.</p>",
+  "layout": "simple",
+  "postId": 32084,
+  "published": "2017-04-11T10:15:28+00:00",
+  "modified": "2024-06-07T08:01:33+00:00",
+  "views": "850"
+}

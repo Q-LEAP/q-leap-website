@@ -1,0 +1,124 @@
+{
+  "order": 10,
+  "status": "published",
+  "image": {
+    "card": {
+      "src": "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-900x1200.jpeg",
+      "srcset": [
+        "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-900x1200.jpeg 900w",
+        "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-600x800.jpeg 600w",
+        "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-450x600.jpeg 450w",
+        "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-300x400.jpeg 300w",
+        "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-150x200.jpeg 150w",
+        "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-370x493.jpeg 370w",
+        "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-900x1200@2x.jpeg 1800w"
+      ],
+      "sizes": "(max-width: 900px) 100vw, 900px",
+      "width": 900,
+      "height": 1200
+    },
+    "social": "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled.jpeg",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled.jpeg?fit=850%2C600&ssl=1"
+  },
+  "imageEn": {
+    "card": {
+      "src": "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-900x1200.jpeg",
+      "srcset": [
+        "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-900x1200.jpeg 900w",
+        "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-600x800.jpeg 600w",
+        "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-450x600.jpeg 450w",
+        "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-300x400.jpeg 300w",
+        "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-150x200.jpeg 150w",
+        "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-370x493.jpeg 370w",
+        "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled-900x1200@2x.jpeg 1800w"
+      ],
+      "sizes": "(max-width: 900px) 100vw, 900px",
+      "width": 900,
+      "height": 1200
+    },
+    "social": "assets/images/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled.jpeg",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/roadmap-work-2023-11-27-04-54-33-utc-scaled.jpeg?fit=850%2C600&ssl=1"
+  },
+  "fr": {
+    "postId": 23251,
+    "slug": "istqb-agile-extension-level",
+    "title": "ISTQB Testeur Agile Certifié - Niveau Fondation extension",
+    "seoTitle": "ISTQB Testeur Agile Certifié - Niveau Fondation extension - Q-Leap",
+    "published": "2023-12-18T16:06:02",
+    "modified": "2024-06-07T13:38:03+00:00",
+    "description": "<p>La formation certifiante ISTQB testeur agile donnent aux testeurs les connaissances dont ils ont besoin pour faire partie d’une équipe de test en environnement agile. Elle vous apportera des connaissances sur développement agile ainsi que sur les principes, pratiques et processus fondamentaux du test agile.</p>",
+    "price": "1 250€ HTVA",
+    "duration": "2 jours",
+    "languages": "Anglais, Français",
+    "format": "Présentiel, Live Virtual Classroom",
+    "certificate": "Examen compris",
+    "programPdf": "assets/documents/2023/12/Programme-ISTQB-Testeur-Agile-FR-2.pdf",
+    "syllabusPdf": "assets/documents/2023/12/FND-Agile-Syllabus-GA-Candidate_FR_1.1.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-certifications-testing",
+      "taxonomy_training-fondamentaux-des-tests-logiciels"
+    ],
+    "filters": {
+      "theme": [
+        "Certifications en Testing (ISTQB)"
+      ],
+      "niveau": [
+        "Débutant"
+      ],
+      "format": [
+        "Présentiel (Luxembourg)",
+        "Live Virtual Class"
+      ],
+      "certification": [
+        "Avec certification"
+      ],
+      "language": [
+        "Français",
+        "Anglais"
+      ]
+    },
+    "sessions": []
+  },
+  "en": {
+    "postId": 32681,
+    "slug": "istqb-certified-agile-tester-foundation-level-extension",
+    "title": "ISTQB Certified Agile Tester - Foundation Level extension",
+    "seoTitle": "ISTQB Certified Agile Tester - Foundation Level extension - Q-Leap",
+    "published": "2023-12-18T16:06:02",
+    "modified": "2024-06-07T14:11:12+00:00",
+    "description": "<p>The ISTQB agile tester certification course gives testers the knowledge they need to be part of a test team in an agile environment. You will learn about agile development and the fundamental principles, practices and processes of agile testing.</p>",
+    "price": "1.250€ excl.VAT",
+    "duration": "2 days",
+    "languages": "English, French",
+    "format": "Classroom, Live Virtual Class",
+    "certificate": "Exam included",
+    "programPdf": "assets/documents/2023/12/Programme-ISTQB-Testeur-Agile-FR-2.pdf",
+    "syllabusPdf": "assets/documents/2023/12/agile-tester-syllabus_2014.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-certifications-testing",
+      "taxonomy_training-fondamentaux-des-tests-logiciels"
+    ],
+    "filters": {
+      "theme": [
+        "Certifications en Testing (ISTQB)"
+      ],
+      "niveau": [
+        "Débutant"
+      ],
+      "format": [
+        "Présentiel (Luxembourg)",
+        "Live Virtual Class"
+      ],
+      "certification": [
+        "Avec certification"
+      ],
+      "language": [
+        "Français",
+        "Anglais"
+      ]
+    },
+    "sessions": []
+  }
+}

@@ -1,5 +1,6 @@
 // Génère les fiches formation (trainings/<slug>/ et en/trainings/<slug>/) et la grille des
-// catalogues (training/ et en/training/) à partir de content/trainings.json.
+// catalogues (training/ et en/training/) à partir de content/trainings/ (une formation par fichier,
+// éditable dans Pages CMS) et de content/training-settings.json (filtres et libellés).
 // Le balisage reproduit celui du thème WordPress (single-trainings du thème enfant Qwery,
 // widget Elementor « Publications » en cartes, filtres Ajax Search Pro) : même CSS, même rendu.
 // Usage : node tools/trainings/build.mjs   (aussi appelé par l'éditeur à chaque enregistrement)
@@ -10,7 +11,8 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..', '..');
-const CONTENT_FILE = path.join(ROOT, 'content', 'trainings.json');
+const CONTENT_DIR = path.join(ROOT, 'content', 'trainings');
+const SETTINGS_FILE = path.join(ROOT, 'content', 'training-settings.json');
 const SITE = 'https://q-leap.eu';
 const CARDS_PER_PAGE = 6;
 
@@ -80,11 +82,16 @@ export function withLabels(content) {
 }
 
 export function loadContent() {
-  return withLabels(JSON.parse(fs.readFileSync(CONTENT_FILE, 'utf8')));
+  const settings = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8'));
+  const trainings = fs.readdirSync(CONTENT_DIR).filter((name) => name.endsWith('.json')).sort()
+    .map((name) => ({ id: name.slice(0, -5), ...JSON.parse(fs.readFileSync(path.join(CONTENT_DIR, name), 'utf8')) }));
+  return withLabels({ ...settings, trainings: trainings.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)) });
 }
 
+const writeJson = (file, value) => fs.writeFileSync(file, JSON.stringify(value, null, 2) + '\n');
+
 export function saveContent(content) {
-  const { labels, ...rest } = content;
+  const { labels, trainings, ...settings } = content;
   // Only labels that differ from the defaults are stored.
   const changed = {};
   for (const lang of ['fr', 'en']) {
@@ -92,11 +99,57 @@ export function saveContent(content) {
       if (JSON.stringify(value) !== JSON.stringify(DEFAULT_LABELS[lang][key])) (changed[lang] ||= {})[key] = value;
     }
   }
-  const output = Object.keys(changed).length ? { ...rest, labels: changed } : rest;
-  fs.writeFileSync(CONTENT_FILE, JSON.stringify(output, null, 2) + '\n');
+  writeJson(SETTINGS_FILE, Object.keys(changed).length ? { ...settings, labels: changed } : settings);
+  // One file per training, named after its id (the file name is the id, as in Pages CMS).
+  fs.mkdirSync(CONTENT_DIR, { recursive: true });
+  const kept = new Set();
+  for (const { id, ...training } of trainings) {
+    kept.add(`${id}.json`);
+    writeJson(path.join(CONTENT_DIR, `${id}.json`), training);
+  }
+  for (const name of fs.readdirSync(CONTENT_DIR)) if (name.endsWith('.json') && !kept.has(name)) fs.rmSync(path.join(CONTENT_DIR, name));
 }
 
-export const paths = { ROOT, CONTENT_FILE };
+export const paths = { ROOT, CONTENT_DIR, SETTINGS_FILE };
+
+// Pages CMS writes uploaded files as "/assets/…": the pages need paths relative to the site root.
+const sitePath = (file) => (file || '').replace(/^\/+/, '');
+
+// Width and height read from the file header (PNG, GIF, JPEG, WebP), for images uploaded in the CMS.
+function imageSize(file) {
+  const data = fs.readFileSync(path.join(ROOT, file));
+  if (data.toString('ascii', 1, 4) === 'PNG') return [data.readUInt32BE(16), data.readUInt32BE(20)];
+  if (data.toString('ascii', 0, 3) === 'GIF') return [data.readUInt16LE(6), data.readUInt16LE(8)];
+  if (data.toString('ascii', 8, 12) === 'WEBP') {
+    const chunk = data.toString('ascii', 12, 16);
+    if (chunk === 'VP8X') return [1 + data.readUIntLE(24, 3), 1 + data.readUIntLE(27, 3)];
+    if (chunk === 'VP8L') { const bits = data.readUInt32LE(21); return [1 + (bits & 0x3fff), 1 + ((bits >> 14) & 0x3fff)]; }
+    return [data.readUInt16LE(26) & 0x3fff, data.readUInt16LE(28) & 0x3fff];
+  }
+  for (let offset = 2; offset < data.length;) {
+    const marker = data[offset + 1];
+    if (marker >= 0xc0 && marker <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(marker)) return [data.readUInt16BE(offset + 7), data.readUInt16BE(offset + 5)];
+    offset += 2 + data.readUInt16BE(offset + 2);
+  }
+  throw new Error(`taille d'image illisible : ${file}`);
+}
+
+// The card image as imported from WordPress keeps its resized copies (srcset); an image replaced in
+// the CMS has none: the copies of another image are dropped and the size is read from the file.
+const stem = (file) => path.basename(sitePath(file)).replace(/(-\d+x\d+)?(@\dx)?\.\w+$/, '');
+function cardImage(image) {
+  const card = { ...image.card, src: sitePath(image.card.src) };
+  const srcset = (card.srcset || []).map((entry) => (Array.isArray(entry) ? entry : String(entry).trim().split(/\s+/)));
+  if (srcset.length && srcset.every(([file]) => stem(file) === stem(card.src))) return { ...card, srcset };
+  const [width, height] = imageSize(card.src);
+  return { ...card, srcset: [], sizes: '', width, height };
+}
+
+function socialImageUrl(image) {
+  const social = sitePath(image.social);
+  if (image.socialUrl && social && image.socialUrl.includes(path.basename(social).replace(/\.\w+$/, ''))) return image.socialUrl;
+  return `${SITE}/${social || cardImage(image).src}`;
+}
 
 const day = (iso) => Number(iso.slice(8, 10));
 const monthIndex = (iso) => Number(iso.slice(5, 7)) - 1;
@@ -190,13 +243,13 @@ export function articleHtml(training, lang, labels, today) {
   const version = training[lang];
   const pdfs = [];
   if (version.programPdf) pdfs.push(`
-																			<a href="{{prefix}}${escapeAttribute(version.programPdf)}" target="_blank">
+																			<a href="{{prefix}}${escapeAttribute(sitePath(version.programPdf))}" target="_blank">
 											${labels.program[0]}
 											${labels.program[1]}
 										</a>
 									`);
   if (version.syllabusPdf) pdfs.push(`
-																			<a href="{{prefix}}${escapeAttribute(version.syllabusPdf)}" target="_blank">
+																			<a href="{{prefix}}${escapeAttribute(sitePath(version.syllabusPdf))}" target="_blank">
 											${labels.syllabus[0]}
 											${labels.syllabus[1]}
 										</a>
@@ -294,7 +347,7 @@ function jsonLd(training, lang) {
   const model = fs.readFileSync(path.join(HERE, 'templates', `jsonld.${lang}.json`), 'utf8');
   const graph = JSON.parse(model);
   const url = `${SITE}/${lang === 'en' ? 'en/' : ''}trainings/${version.slug}/`;
-  const image = (lang === 'en' ? training.imageEn : training.image).socialUrl;
+  const image = socialImageUrl(lang === 'en' ? training.imageEn : training.image);
   for (const node of graph['@graph']) {
     if (node['@type'] === 'WebPage') {
       Object.assign(node, { '@id': url, url, name: version.seoTitle, primaryImageOfPage: { '@id': `${url}#primaryimage` }, image: { '@id': `${url}#primaryimage` },
@@ -323,7 +376,7 @@ export function trainingPage(content, training, lang, today = new Date().toISOSt
     seoTitle: version.seoTitle || `${version.title} - Q-Leap`,
     url,
     modified: version.modified || '',
-    socialImageUrl: image.socialUrl,
+    socialImageUrl: socialImageUrl(image),
     postId: version.postId,
     titleHtml: wpTitle(version.title),
     breadcrumbTitle: breadcrumbTitle(version.title),
@@ -336,7 +389,7 @@ export function trainingPage(content, training, lang, today = new Date().toISOSt
 
 function cardHtml(training, lang, labels, eager) {
   const version = training[lang];
-  const image = lang === 'en' ? training.imageEn : training.image;
+  const image = { card: cardImage(lang === 'en' ? training.imageEn : training.image) };
   const prefix = lang === 'en' ? '../../' : '../';
   const href = `../trainings/${version.slug}/`;
   const title = wpTitle(version.title);

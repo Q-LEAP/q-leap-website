@@ -1,0 +1,123 @@
+{
+  "order": 5,
+  "status": "published",
+  "image": {
+    "card": {
+      "src": "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-850x600.png",
+      "srcset": [
+        "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1.png 850w",
+        "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-300x212.png 300w",
+        "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-768x542.png 768w",
+        "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-370x261.png 370w",
+        "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-840x593.png 840w",
+        "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-410x289.png 410w"
+      ],
+      "sizes": "(max-width: 850px) 100vw, 850px",
+      "width": 850,
+      "height": 600
+    },
+    "social": "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1.png",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1.png?fit=850%2C600&ssl=1"
+  },
+  "imageEn": {
+    "card": {
+      "src": "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-850x600.png",
+      "srcset": [
+        "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1.png 850w",
+        "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-300x212.png 300w",
+        "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-768x542.png 768w",
+        "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-370x261.png 370w",
+        "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-840x593.png 840w",
+        "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1-410x289.png 410w"
+      ],
+      "sizes": "(max-width: 850px) 100vw, 850px",
+      "width": 850,
+      "height": 600
+    },
+    "social": "assets/images/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1.png",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/ISTQB-Certified-Tester-Test-Automation-Engineer1.png?fit=850%2C600&ssl=1"
+  },
+  "fr": {
+    "postId": 24649,
+    "slug": "istqb-advanced-level-test-automation-engineer",
+    "title": "ISTQB Testeur Certifié Test Automation Engineer - Niveau avancé",
+    "seoTitle": "ISTQB Testeur Certifié Test Automation Engineer - Niveau avancé - Q-Leap",
+    "published": "2024-01-05T15:03:47",
+    "modified": "2024-11-28T15:22:41+00:00",
+    "description": "<p>Cette formation vous permettra de maîtriser la mise en place de l’automatisation des tests, quel que soit le type de projet, et de connaître les principales tâches de la personne en charge de la conception, du développement et de la maintenance de solutions d’automatisation de tests.</p>",
+    "price": "2 450.00€ HTVA",
+    "duration": "3 jours",
+    "languages": "EN, FR",
+    "format": "",
+    "certificate": "Examen Compris",
+    "programPdf": "assets/documents/2024/01/Programme-ISTQB-Test-Automation-Engineer-FR.pdf",
+    "syllabusPdf": "assets/documents/2024/01/Avance_TA_E_Syllabus-FR-2016_Final_v_1_0.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-certifications-testing"
+    ],
+    "filters": {
+      "theme": [
+        "Certifications en Testing (ISTQB)",
+        "Automatisation"
+      ],
+      "niveau": [
+        "Intermédiaire",
+        "Avancé"
+      ],
+      "format": [
+        "Présentiel (Luxembourg)",
+        "Live Virtual Class"
+      ],
+      "certification": [
+        "Avec certification"
+      ],
+      "language": [
+        "Français",
+        "Anglais"
+      ]
+    },
+    "sessions": []
+  },
+  "en": {
+    "postId": 32691,
+    "slug": "istqb-certified-test-automation-engineer-advanced-level",
+    "title": "ISTQB Certified Test Automation Engineer - Advanced level",
+    "seoTitle": "ISTQB Certified Test Automation Engineer - Advanced level - Q-Leap",
+    "published": "2024-01-05T15:03:47",
+    "modified": "2024-11-28T15:22:52+00:00",
+    "description": "<p>Cette formation vous permettra de maîtriser la mise en place de l’automatisation des tests, quel que soit le type de projet, et de connaître les principales tâches de la personne en charge de la conception, du développement et de la maintenance de solutions d’automatisation de tests.</p>",
+    "price": "2 450.00€ HTVA",
+    "duration": "3 jours",
+    "languages": "EN, FR",
+    "format": "",
+    "certificate": "Examen Compris",
+    "programPdf": "assets/documents/2024/01/Programme-ISTQB-Test-Automation-Engineer-FR.pdf",
+    "syllabusPdf": "assets/documents/2024/01/Avance_TA_E_Syllabus-FR-2016_Final_v_1_0.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-certifications-testing"
+    ],
+    "filters": {
+      "theme": [
+        "Certifications en Testing (ISTQB)",
+        "Automatisation"
+      ],
+      "niveau": [
+        "Avancé"
+      ],
+      "format": [
+        "Présentiel (Luxembourg)",
+        "Live Virtual Class"
+      ],
+      "certification": [
+        "Avec certification"
+      ],
+      "language": [
+        "Français",
+        "Anglais"
+      ]
+    },
+    "sessions": []
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "order": 8,
+  "status": "published",
+  "image": {
+    "card": {
+      "src": "assets/images/2023/12/formation-non-certifiante32-850x600.png",
+      "srcset": [
+        "assets/images/2023/12/formation-non-certifiante32.png 850w",
+        "assets/images/2023/12/formation-non-certifiante32-300x212.png 300w",
+        "assets/images/2023/12/formation-non-certifiante32-768x542.png 768w",
+        "assets/images/2023/12/formation-non-certifiante32-370x261.png 370w",
+        "assets/images/2023/12/formation-non-certifiante32-840x593.png 840w",
+        "assets/images/2023/12/formation-non-certifiante32-410x289.png 410w"
+      ],
+      "sizes": "(max-width: 850px) 100vw, 850px",
+      "width": 850,
+      "height": 600
+    },
+    "social": "assets/images/2023/12/formation-non-certifiante32.png",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/formation-non-certifiante32.png?fit=850%2C600&ssl=1"
+  },
+  "imageEn": {
+    "card": {
+      "src": "assets/images/2023/12/formation-non-certifiante32-850x600.png",
+      "srcset": [
+        "assets/images/2023/12/formation-non-certifiante32.png 850w",
+        "assets/images/2023/12/formation-non-certifiante32-300x212.png 300w",
+        "assets/images/2023/12/formation-non-certifiante32-768x542.png 768w",
+        "assets/images/2023/12/formation-non-certifiante32-370x261.png 370w",
+        "assets/images/2023/12/formation-non-certifiante32-840x593.png 840w",
+        "assets/images/2023/12/formation-non-certifiante32-410x289.png 410w"
+      ],
+      "sizes": "(max-width: 850px) 100vw, 850px",
+      "width": 850,
+      "height": 600
+    },
+    "social": "assets/images/2023/12/formation-non-certifiante32.png",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/formation-non-certifiante32.png?fit=850%2C600&ssl=1"
+  },
+  "fr": {
+    "postId": 23597,
+    "slug": "istqb-certified-test-analyst-advanced-level",
+    "title": "ISTQB Test Analyst Certifié - Niveau Avancé",
+    "seoTitle": "ISTQB Test Analyst Certifié - Niveau Avancé - Q-Leap",
+    "published": "2024-01-02T15:43:50",
+    "modified": "2026-02-25T12:21:30+00:00",
+    "description": "<p>La diversité des systèmes et des métiers auxquels ils s’appliquent rend l’homologation des applications plus complexe. Ce cours certifiant montre comment analyser un système, structurer et exécuter les tâches définies dans la stratégie de test et implémenter les outils et techniques nécessaires à sa mise en œuvre.</p>",
+    "price": "2.100€ HTVA",
+    "duration": "4 jours",
+    "languages": "Anglais, Français",
+    "format": "Présentiel, Live Virtual Classroom",
+    "certificate": "Examen compris",
+    "programPdf": "assets/documents/2024/01/Programme-ISTQB-Test-Analyst-FR.pdf",
+    "syllabusPdf": "assets/documents/2024/01/Syllabus-2019-Analyste-de-Test-.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-certifications-testing"
+    ],
+    "filters": {
+      "theme": [
+        "Certifications en Testing (ISTQB)"
+      ],
+      "niveau": [
+        "Avancé"
+      ],
+      "format": [
+        "Présentiel (Luxembourg)",
+        "Live Virtual Class"
+      ],
+      "certification": [
+        "Avec certification"
+      ],
+      "language": [
+        "Français",
+        "Anglais"
+      ]
+    },
+    "sessions": []
+  },
+  "en": {
+    "postId": 32689,
+    "slug": "istqb-certified-test-analyst-advanced-level",
+    "title": "ISTQB Certified Test Analyst - Advanced Level",
+    "seoTitle": "ISTQB Certified Test Analyst - Advanced Level - Q-Leap",
+    "published": "2024-01-02T15:43:50",
+    "modified": "2026-02-25T12:22:39+00:00",
+    "description": "<p>La diversité des systèmes et des métiers auxquels ils s’appliquent rend l’homologation des applications plus complexe. Ce cours certifiant montre comment analyser un système, structurer et exécuter les tâches définies dans la stratégie de test et implémenter les outils et techniques nécessaires à sa mise en œuvre.</p>",
+    "price": "2.100€ HTVA",
+    "duration": "4 jours",
+    "languages": "Anglais, Français",
+    "format": "Présentiel, Live Virtual Classroom",
+    "certificate": "Examen compris",
+    "programPdf": "assets/documents/2024/01/Programme-ISTQB-Test-Analyst-FR.pdf",
+    "syllabusPdf": "assets/documents/2024/01/Syllabus-2019-Analyste-de-Test-.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-certifications-testing"
+    ],
+    "filters": {
+      "theme": [
+        "Certifications en Testing (ISTQB)"
+      ],
+      "niveau": [
+        "Avancé"
+      ],
+      "format": [
+        "Présentiel (Luxembourg)",
+        "Live Virtual Class"
+      ],
+      "certification": [
+        "Avec certification"
+      ],
+      "language": [
+        "Français",
+        "Anglais"
+      ]
+    },
+    "sessions": []
+  }
+}

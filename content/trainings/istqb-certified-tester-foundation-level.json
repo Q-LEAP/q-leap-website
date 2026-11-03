@@ -1,0 +1,134 @@
+{
+  "order": 2,
+  "status": "published",
+  "image": {
+    "card": {
+      "src": "assets/images/2023/12/ISTQB-Foundation-Level3-850x600.png",
+      "srcset": [
+        "assets/images/2023/12/ISTQB-Foundation-Level3.png 850w",
+        "assets/images/2023/12/ISTQB-Foundation-Level3-300x212.png 300w",
+        "assets/images/2023/12/ISTQB-Foundation-Level3-768x542.png 768w",
+        "assets/images/2023/12/ISTQB-Foundation-Level3-370x261.png 370w",
+        "assets/images/2023/12/ISTQB-Foundation-Level3-840x593.png 840w",
+        "assets/images/2023/12/ISTQB-Foundation-Level3-410x289.png 410w"
+      ],
+      "sizes": "(max-width: 850px) 100vw, 850px",
+      "width": 850,
+      "height": 600
+    },
+    "social": "assets/images/2023/12/ISTQB-Foundation-Level3.png",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/ISTQB-Foundation-Level3.png?fit=850%2C600&ssl=1"
+  },
+  "imageEn": {
+    "card": {
+      "src": "assets/images/2023/12/ISTQB-Foundation-Level3-850x600.png",
+      "srcset": [
+        "assets/images/2023/12/ISTQB-Foundation-Level3.png 850w",
+        "assets/images/2023/12/ISTQB-Foundation-Level3-300x212.png 300w",
+        "assets/images/2023/12/ISTQB-Foundation-Level3-768x542.png 768w",
+        "assets/images/2023/12/ISTQB-Foundation-Level3-370x261.png 370w",
+        "assets/images/2023/12/ISTQB-Foundation-Level3-840x593.png 840w",
+        "assets/images/2023/12/ISTQB-Foundation-Level3-410x289.png 410w"
+      ],
+      "sizes": "(max-width: 850px) 100vw, 850px",
+      "width": 850,
+      "height": 600
+    },
+    "social": "assets/images/2023/12/ISTQB-Foundation-Level3.png",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/ISTQB-Foundation-Level3.png?fit=850%2C600&ssl=1"
+  },
+  "fr": {
+    "postId": 23713,
+    "slug": "istqb-certified-tester-foundation-level",
+    "title": "ISTQB Testeur Certifié - Niveau Fondation",
+    "seoTitle": "ISTQB Testeur Certifié - Niveau Fondation - Q-Leap",
+    "published": "2024-01-07T16:54:00",
+    "modified": "2026-01-16T14:32:33+00:00",
+    "description": "<p>La certification ISTQB niveau fondation est destinée à des personnes qui participent à des projets de tests logiciels. Cela inclut des rôles tels que l’ingénieur de test, l’analyste de test, le gestionnaire de tests ainsi que le développeur informatique.</p>",
+    "price": "1 650.00€ HTVA",
+    "duration": "3 jours",
+    "languages": "Anglais, Français",
+    "format": "Présentiel, Live Virtual Classroom",
+    "certificate": "Examen compris",
+    "programPdf": "assets/documents/2024/01/Programme-ISTQB-Foundation-FR-1-1.pdf",
+    "syllabusPdf": "assets/documents/2024/01/ISTQB_CTFL_Syllabus-v4.0_FR_1.0.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-certifications-testing"
+    ],
+    "filters": {
+      "theme": [
+        "Certifications en Testing (ISTQB)",
+        "Fondamentaux"
+      ],
+      "niveau": [],
+      "format": [
+        "Présentiel (Luxembourg)",
+        "Live Virtual Class"
+      ],
+      "certification": [
+        "Avec certification"
+      ],
+      "language": [
+        "Français",
+        "Anglais"
+      ]
+    },
+    "sessions": [
+      {
+        "start": "2026-12-08",
+        "end": "2026-12-10",
+        "language": "",
+        "format": "Live Virtual Classroom, Onsite",
+        "eventId": "43153"
+      }
+    ]
+  },
+  "en": {
+    "postId": 32687,
+    "slug": "istqb-certified-tester-foundation-level",
+    "title": "ISTQB Certified Tester - Foundation Level",
+    "seoTitle": "ISTQB Certified Tester - Foundation Level - Q-Leap",
+    "published": "2024-01-07T16:54:00",
+    "modified": "2026-01-16T14:32:39+00:00",
+    "description": "<p>La certification ISTQB niveau fondation est destinée à des personnes qui participent à des projets de tests logiciels. Cela inclut des rôles tels que l’ingénieur de test, l’analyste de test, le gestionnaire de tests ainsi que le développeur informatique.</p>",
+    "price": "1 650.00€ HTVA",
+    "duration": "3 jours",
+    "languages": "Anglais, Français",
+    "format": "Présentiel, Live Virtual Classroom",
+    "certificate": "Examen compris",
+    "programPdf": "assets/documents/2024/01/Programme-ISTQB-Foundation-FR-1-1.pdf",
+    "syllabusPdf": "assets/documents/2024/01/ISTQB_CTFL_Syllabus-v4.0_FR_1.0.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-certifications-testing"
+    ],
+    "filters": {
+      "theme": [
+        "Certifications en Testing (ISTQB)",
+        "Fondamentaux"
+      ],
+      "niveau": [],
+      "format": [
+        "Présentiel (Luxembourg)",
+        "Live Virtual Class"
+      ],
+      "certification": [
+        "Avec certification"
+      ],
+      "language": [
+        "Français",
+        "Anglais"
+      ]
+    },
+    "sessions": [
+      {
+        "start": "2026-12-08",
+        "end": "2026-12-10",
+        "language": "",
+        "format": "Live Virtual Classroom, Onsite",
+        "eventId": "43155"
+      }
+    ]
+  }
+}

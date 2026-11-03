@@ -1,0 +1,26 @@
+{
+  "title": "Le concept de « sélection de tests » dans un environnement d’automatisation",
+  "date": "2017-07-17",
+  "status": "published",
+  "categories": [
+    "Actualités",
+    "Presse"
+  ],
+  "tags": [
+    "Innovation",
+    "Q-LEAP",
+    "Qualité Logicielle",
+    "testing"
+  ],
+  "image": "assets/images/2023/12/stephan-blog-169.jpg.webp",
+  "excerpt": "Ce que j’ai découvert, c’est que la couverture est un bon début, et peut être suffisante…",
+  "description": "Ce que j’ai découvert, c’est que la couverture est un bon début, et peut être suffisante…",
+  "seoTitle": "Le concept de \"sélection de tests\" dans un environnement d'automatisation - Q-Leap",
+  "translation": "the-concept-of-test-selection-in-an-automation-environment",
+  "body": "<p class=\"has-drop-cap wp-block-paragraph\">Ce que j&rsquo;ai découvert, c&rsquo;est que la couverture est un bon début, et peut être suffisante pour la plupart des équipes (parmi les équipes qui ne peuvent pas exécuter tous leurs tests rapidement à chaque construction). Cependant, ajouter quelques autres facteurs de sélection (ou heuristiques) et appliquer quelques poids peut vous faire aller un peu plus loin.</p>\n<p>Certaines heuristiques que j&rsquo;ai utilisées dans le passé pour la priorisation/sélection des tests incluent :</p>\n<ul>\n<li>Le test a-t-il déjà trouvé un bug ? Certains tests sont efficaces pour détecter des bugs dans le produit. Je donne plus de poids à ces tests.</li>\n<li>Quand le test a-t-il été exécuté pour la dernière fois ? Si un test a été exécuté tous les jours pendant un an sans échec, je ne lui accorde pas beaucoup de poids. Nous, testeurs, sommes toujours paranoïaques à l&rsquo;idée que le moment où nous choisissons de ne pas exécuter un test, une régression apparaîtra. Cette heuristique pondérée contribue à résoudre le dilemme de l&rsquo;exécution du test qui ne échoue jamais par rapport à la peur de manquer la régression.</li>\n<li>La stabilité du test : Si vous n&rsquo;avez jamais de tests instables, passez cette étape. Pour tous les autres, il est logique d&rsquo;exécuter mes tests qui retournent de faux positifs moins fréquemment (ou à la fin de la série de tests).</li>\n<li>Combien de temps prend le test ? Je donne plus de poids aux tests qui s&rsquo;exécutent plus rapidement {…}</li>\n</ul>\n<p>Continuez à lire l&rsquo;article complet <a href=\"https://angryweasel.com\">ici</a> sur Tooth of the Weasel, des notes et des critiques sur les logiciels et la qualité des logiciels.</p>\n<h3><br />À PROPOS DE NOTRE EXPERT Q-LEAP QUI RECOMMANDE CET ARTICLE</h3>\n<p>Stefan Papusoi est un spécialiste des tests chez q-leap. En tant que testeur axé sur le contexte et exploratoire, il accroît constamment son expérience en matière de tests, d&rsquo;automatisation de scripts, et de gestion et d&rsquo;amélioration des processus de test.</p>",
+  "layout": "simple",
+  "postId": 23197,
+  "published": "2017-07-17T12:51:01+00:00",
+  "modified": "2024-01-05T09:08:16+00:00",
+  "views": "2K"
+}

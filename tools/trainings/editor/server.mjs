@@ -1,7 +1,7 @@
 // Éditeur des formations : serveur local (aucune dépendance), http://localhost:8790/
 // - /            l'éditeur (tools/trainings/editor/app/)
 // - /site/...    le site lui-même (aperçu, images, PDF)
-// - /api/...     lecture / enregistrement de content/trainings.json, aperçu, envoi de fichiers, publication Git
+// - /api/...     lecture / enregistrement de content/trainings/ et content/training-settings.json, aperçu, envoi de fichiers, publication Git
 // Ne répond qu'en local (127.0.0.1). Lancement : npm run formations   (ou node tools/trainings/editor/server.mjs)
 import { execFile } from 'node:child_process';
 import fs from 'node:fs';

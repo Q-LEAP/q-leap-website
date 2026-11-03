@@ -1,0 +1,120 @@
+{
+  "order": 9,
+  "status": "published",
+  "image": {
+    "card": {
+      "src": "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-850x600.png",
+      "srcset": [
+        "assets/images/2023/12/ISTQB-Advanced-Test-Manager1.png 850w",
+        "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-300x212.png 300w",
+        "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-768x542.png 768w",
+        "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-370x261.png 370w",
+        "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-840x593.png 840w",
+        "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-410x289.png 410w"
+      ],
+      "sizes": "(max-width: 850px) 100vw, 850px",
+      "width": 850,
+      "height": 600
+    },
+    "social": "assets/images/2023/12/ISTQB-Advanced-Test-Manager1.png",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/ISTQB-Advanced-Test-Manager1.png?fit=850%2C600&ssl=1"
+  },
+  "imageEn": {
+    "card": {
+      "src": "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-850x600.png",
+      "srcset": [
+        "assets/images/2023/12/ISTQB-Advanced-Test-Manager1.png 850w",
+        "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-300x212.png 300w",
+        "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-768x542.png 768w",
+        "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-370x261.png 370w",
+        "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-840x593.png 840w",
+        "assets/images/2023/12/ISTQB-Advanced-Test-Manager1-410x289.png 410w"
+      ],
+      "sizes": "(max-width: 850px) 100vw, 850px",
+      "width": 850,
+      "height": 600
+    },
+    "social": "assets/images/2023/12/ISTQB-Advanced-Test-Manager1.png",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/ISTQB-Advanced-Test-Manager1.png?fit=850%2C600&ssl=1"
+  },
+  "fr": {
+    "postId": 23595,
+    "slug": "istqb-test-manager-certifie-niveau-avance",
+    "title": "ISTQB Test Manager Certifié - Niveau Avancé",
+    "seoTitle": "ISTQB Test Manager Certifié - Niveau Avancé - Q-Leap",
+    "published": "2024-01-02T15:37:03",
+    "modified": "2024-08-23T08:52:02+00:00",
+    "description": "<p>La qualification Testeur Certifié Niveau Avancé Test Manage s’adresse aux personnes qui ont atteint un point avancé dans leur carrière dans les tests logiciels et à toute personne qui veut une meilleure compréhension des tests logiciels, de la stratégie, de l’organisation des activités, de la gestion d’équipe et de la communication avec les parties prenantes.</p>",
+    "price": "3 000€ HTVA",
+    "duration": "5 jours",
+    "languages": "Anglais, Français",
+    "format": "Présentiel, Live Virtual Classroom",
+    "certificate": "Examen compris",
+    "programPdf": "assets/documents/2024/01/Programme-ISTQB-Test-Manager-FR-1.pdf",
+    "syllabusPdf": "assets/documents/2024/01/Syllabus-2012-Test-Manager.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-certifications-testing"
+    ],
+    "filters": {
+      "theme": [
+        "Certifications en Testing (ISTQB)"
+      ],
+      "niveau": [
+        "Avancé"
+      ],
+      "format": [
+        "Présentiel (Luxembourg)",
+        "Live Virtual Class"
+      ],
+      "certification": [
+        "Avec certification"
+      ],
+      "language": [
+        "Français",
+        "Anglais"
+      ]
+    },
+    "sessions": []
+  },
+  "en": {
+    "postId": 32682,
+    "slug": "istqb-certified-test-manager-advanced-level",
+    "title": "ISTQB Certified Test Manager - Advanced Level",
+    "seoTitle": "ISTQB Certified Test Manager - Advanced Level - Q-Leap",
+    "published": "2024-01-02T15:37:03",
+    "modified": "2024-08-23T08:54:23+00:00",
+    "description": "<p>La qualification Testeur Certifié Niveau Avancé Test Manage s’adresse aux personnes qui ont atteint un point avancé dans leur carrière dans les tests logiciels et à toute personne qui veut une meilleure compréhension des tests logiciels, de la stratégie, de l’organisation des activités, de la gestion d’équipe et de la communication avec les parties prenantes.</p>",
+    "price": "3 000€ HTVA",
+    "duration": "5 jours",
+    "languages": "Anglais, Français",
+    "format": "Présentiel, Live Virtual Classroom",
+    "certificate": "Examen compris",
+    "programPdf": "assets/documents/2024/01/Programme-ISTQB-Test-Manager-FR-1.pdf",
+    "syllabusPdf": "assets/documents/2024/01/Syllabus-2012-Test-Manager.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-certifications-testing"
+    ],
+    "filters": {
+      "theme": [
+        "Certifications en Testing (ISTQB)"
+      ],
+      "niveau": [
+        "Avancé"
+      ],
+      "format": [
+        "Présentiel (Luxembourg)",
+        "Live Virtual Class"
+      ],
+      "certification": [
+        "Avec certification"
+      ],
+      "language": [
+        "Français",
+        "Anglais"
+      ]
+    },
+    "sessions": []
+  }
+}

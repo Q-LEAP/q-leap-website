@@ -1,0 +1,51 @@
+# Regenerates the pages after a change to the content (Pages CMS saves, or a push): trainings
+# (tools/trainings/build.mjs) and blog (tools/blog/build.py), then commits the generated pages on the
+# same branch. Pushes made with GITHUB_TOKEN do not start workflows again.
+name: Build content
+
+on:
+  push:
+    branches: [dev, main]
+    paths:
+      - 'content/**'
+      - 'assets/images/uploads/**'
+      - 'assets/documents/uploads/**'
+      - 'tools/trainings/**'
+      - 'tools/blog/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-content-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Image library (crops for the blog listings)
+        run: pip install pillow
+      - name: Trainings
+        run: node tools/trainings/build.mjs
+      - name: Blog
+        run: python3 tools/blog/build.py
+      - name: Commit the generated pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Rien à régénérer"
+          else
+            git commit -m "Pages régénérées après modification du contenu"
+            git push
+          fi

@@ -1,0 +1,131 @@
+{
+  "order": 0,
+  "status": "published",
+  "image": {
+    "card": {
+      "src": "assets/images/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled-900x1200.jpg",
+      "srcset": [
+        "assets/images/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled-370x493.jpg 370w",
+        "assets/images/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled-900x1200@2x.jpg 1800w"
+      ],
+      "sizes": "(max-width: 900px) 100vw, 900px",
+      "width": 900,
+      "height": 1200
+    },
+    "social": "assets/images/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled.jpg",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled.jpg?fit=850%2C600&ssl=1"
+  },
+  "imageEn": {
+    "card": {
+      "src": "assets/images/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled-900x1200.jpg",
+      "srcset": [
+        "assets/images/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled-370x493.jpg 370w",
+        "assets/images/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled-900x1200@2x.jpg 1800w"
+      ],
+      "sizes": "(max-width: 900px) 100vw, 900px",
+      "width": 900,
+      "height": 1200
+    },
+    "social": "assets/images/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled.jpg",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2024/09/steve-johnson-_0iV9LmPDn0-unsplash-scaled.jpg?fit=850%2C600&ssl=1"
+  },
+  "fr": {
+    "postId": 40378,
+    "slug": "tester-avec-lia-generative-formation-certifiante-istqb",
+    "title": "Tester avec l'IA générative - Formation certifiante ISTQB®",
+    "seoTitle": "Tester avec l'IA générative - Formation certifiante ISTQB® - Q-Leap",
+    "published": "2025-09-23T10:08:18",
+    "modified": "2026-04-30T13:02:37+00:00",
+    "description": "<p data-start=\"68\" data-end=\"415\">Formation pratique. Apprenez à intégrer l’IA générative dans vos processus de tests grâce à notre formation pratique et certifiante ISTQB®. Vous y explorerez les fondamentaux de l’IA pour les testeurs, les meilleures pratiques du secteur et des outils concrets pour automatiser et optimiser vos tests.</p>\n<p data-start=\"417\" data-end=\"613\">Vous développerez des compétences clés : rédaction de prompts efficaces, exploitation des LLMs, maîtrise des risques d’erreurs et intégration de l’IA conversationnelle dans vos outils existants.</p>\n<p data-start=\"615\" data-end=\"810\">Certifiante ISTQB®, la formation permet aux titulaires de la certification “Testeur Certifié Niveau Fondation” de passer un examen officiel et d’obtenir un certificat reconnu à l’international.</p>",
+    "price": "1 800.00€ HTVA",
+    "duration": "2 jours",
+    "languages": "EN, FR, DE",
+    "format": "",
+    "certificate": "ISTQB®",
+    "programPdf": "assets/documents/2025/09/Programme-ISTQB-Certified-Tester-Artificial-Intelligence-EN.pdf",
+    "syllabusPdf": "assets/documents/2022/01/CT-GenAI-Syllabus-v1.0-FR.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-fondamentaux-des-tests-logiciels",
+      "taxonomy_training-intelligence-artificielle-ia"
+    ],
+    "filters": {
+      "theme": [
+        "Intelligence Artificielle (IA)"
+      ],
+      "niveau": [
+        "Débutant",
+        "Intermédiaire",
+        "Avancé"
+      ],
+      "format": [
+        "Présentiel (Luxembourg)",
+        "Live Virtual Class"
+      ],
+      "certification": [
+        "Avec certification"
+      ],
+      "language": [
+        "Français",
+        "Anglais"
+      ]
+    },
+    "sessions": []
+  },
+  "en": {
+    "postId": 40382,
+    "slug": "testing-with-generative-ai-istqb-certification-course",
+    "title": "Testing with generative AI - ISTQB® certification course",
+    "seoTitle": "Testing with generative AI - ISTQB® certification course - Q-Leap",
+    "published": "2025-09-23T10:08:18",
+    "modified": "2026-04-30T13:02:43+00:00",
+    "description": "<p data-start=\"68\" data-end=\"415\">Formation pratique. Apprenez à intégrer l’IA générative dans vos processus de tests grâce à notre formation pratique et certifiante ISTQB®. Vous y explorerez les fondamentaux de l’IA pour les testeurs, les meilleures pratiques du secteur et des outils concrets pour automatiser et optimiser vos tests.</p>\n<p data-start=\"417\" data-end=\"613\">Vous développerez des compétences clés : rédaction de prompts efficaces, exploitation des LLMs, maîtrise des risques d’erreurs et intégration de l’IA conversationnelle dans vos outils existants.</p>\n<p data-start=\"615\" data-end=\"810\">Certifiante ISTQB®, la formation permet aux titulaires de la certification “Testeur Certifié Niveau Fondation” de passer un examen officiel et d’obtenir un certificat reconnu à l’international.</p>",
+    "price": "1 800.00€ HTVA",
+    "duration": "2 jours",
+    "languages": "EN, FR, DE",
+    "format": "",
+    "certificate": "ISTQB®",
+    "programPdf": "assets/documents/2025/09/Programme-ISTQB-Certified-Tester-Artificial-Intelligence-EN.pdf",
+    "syllabusPdf": "assets/documents/2022/01/CT-GenAI-Syllabus-v1.0-FR.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-fondamentaux-des-tests-logiciels",
+      "taxonomy_training-intelligence-artificielle-ia"
+    ],
+    "filters": {
+      "theme": [
+        "Intelligence Artificielle (IA)"
+      ],
+      "niveau": [
+        "Débutant",
+        "Intermédiaire",
+        "Avancé"
+      ],
+      "format": [
+        "Live Virtual Class"
+      ],
+      "certification": [
+        "Avec certification"
+      ],
+      "language": [
+        "Français"
+      ]
+    },
+    "sessions": [
+      {
+        "start": "2026-11-19",
+        "end": "2026-11-20",
+        "language": "FRANÇAIS",
+        "format": "Live Virtual Classroom, Onsite",
+        "eventId": "40442"
+      },
+      {
+        "start": "2026-12-07",
+        "end": "2026-12-08",
+        "language": "FRANÇAIS",
+        "format": "Live Virtual Classroom, Onsite",
+        "eventId": "40442"
+      }
+    ]
+  }
+}

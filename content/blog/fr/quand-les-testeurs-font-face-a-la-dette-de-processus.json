@@ -1,0 +1,26 @@
+{
+  "title": "Quand les testeurs font face à la dette de processus",
+  "date": "2017-04-11",
+  "status": "published",
+  "categories": [
+    "Actualités",
+    "Presse"
+  ],
+  "tags": [
+    "Innovation",
+    "Q-LEAP",
+    "Qualité Logicielle",
+    "testing"
+  ],
+  "image": "assets/images/2023/12/image-9.png",
+  "excerpt": "La dette technique est souvent négligée, et il est essentiel de la prendre en compte.…",
+  "description": "La dette technique est souvent négligée, et il est essentiel de la prendre en compte.…",
+  "seoTitle": "Quand les testeurs font face à la dette de processus - Q-Leap",
+  "translation": "when-testers-face-process-debt",
+  "body": "<p class=\"has-drop-cap wp-block-paragraph\"><em>La dette technique est souvent négligée, et il est essentiel de la prendre en compte. Les testeurs s&rsquo;engagent à adapter les cas de test, les plans de test et les cadres en fonction des changements tout au long du processus de développement, afin de minimiser le nombre de composants qui ne sont plus utiles et d&rsquo;optimiser les ressources.</em> » Jorge Asensio, expert en automatisation des tests chez q-leap.</p>\n<p>La dette technique englobe tout ce qui est lié au logiciel en cours de développement, directement ou indirectement, et qui n&rsquo;est plus utile au processus de développement ou à la maintenance de l&rsquo;application en cours de développement.</p>\n<p>La dette de processus est une sorte de dette technique générée lorsque les processus sont médiocres ou absents pour gérer des choses comme les défauts, la documentation ou même les cas de test.</p>\n<p>Une certaine forme de dette technique existera toujours. Il y a des organisations qui luttent vaillamment pour la contenir, et d&rsquo;autres qui ont laissé des « I.O.U. » placardés à divers endroits comme rappel pour « nettoyer les tests unitaires échoués », « refaire la documentation », « mettre à jour les dépendances de l&rsquo;application » ou « refactoriser le vieux code ». Ces tâches continuent d&rsquo;être repoussées dans le backlog pendant que des histoires métier plus importantes sont traitées.</p>\n<p>En tant que testeur, observer les difficultés des développeurs à rembourser la dette technique, même une dette technique mineure, est une lutte avec laquelle nous devrions compatir. Les testeurs, avec leurs partenaires en développement logiciel, ont tendance à plaider en faveur du nettoyage de la dette technique par souci de qualité. Une zone avec laquelle les testeurs ont généralement affaire est la dette de processus. Cela grignote le temps qui serait mieux passé à tester le logiciel, tout comme la dette technique grignote le temps de développement.</p>\n<p>Lisez l&rsquo;article complet sur le site de <strong><a href=\"https://www.ministryoftesting.com/search?q=when+testers+deal+with+process+debt+ideas+to+manage+it+and+get+back+to+testing+faster\">Ministry of Testing.</a></strong></p>\n<h3><strong>À PROPOS DE L&rsquo;EXPERT DE Q-LEAP RECOMMANDANT CET ARTICLE</strong></h3>\n<p><br /><em>Jorge Asensio est un expert en automatisation des tests chez q-leap. Jorge est un testeur qui aime partager ses expériences et apprendre des autres.</em></p>\n<p>Il est un joueur d&rsquo;équipe solide, possède d&rsquo;excellentes compétences en communication avec les clients et est entièrement dédié à sa carrière dans les tests de logiciels. Il se concentre toujours sur la perfection en matière d&rsquo;automatisation, de fonctionnalité et de performance. Il est également un expert de Selenium Browser Automation, un framework pour automatiser les applications en ligne. Jorge travaille en étroite collaboration au sein de l&rsquo;entreprise pour aider à évaluer et améliorer les cadres d&rsquo;automatisation existants, concevoir, exécuter et maintenir des scripts de test automatisés afin de garantir que les normes de contrôle de la qualité sont atteintes.</p>",
+  "layout": "simple",
+  "postId": 23430,
+  "published": "2017-04-11T10:15:28+00:00",
+  "modified": "2024-01-05T09:18:28+00:00",
+  "views": "2K"
+}

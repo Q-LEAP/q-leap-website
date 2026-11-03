@@ -1,0 +1,120 @@
+{
+  "order": 6,
+  "status": "published",
+  "image": {
+    "card": {
+      "src": "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-850x600.png",
+      "srcset": [
+        "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3.png 850w",
+        "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-300x212.png 300w",
+        "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-768x542.png 768w",
+        "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-370x261.png 370w",
+        "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-840x593.png 840w",
+        "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-410x289.png 410w"
+      ],
+      "sizes": "(max-width: 850px) 100vw, 850px",
+      "width": 850,
+      "height": 600
+    },
+    "social": "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3.png",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3.png?fit=850%2C600&ssl=1"
+  },
+  "imageEn": {
+    "card": {
+      "src": "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-850x600.png",
+      "srcset": [
+        "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3.png 850w",
+        "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-300x212.png 300w",
+        "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-768x542.png 768w",
+        "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-370x261.png 370w",
+        "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-840x593.png 840w",
+        "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3-410x289.png 410w"
+      ],
+      "sizes": "(max-width: 850px) 100vw, 850px",
+      "width": 850,
+      "height": 600
+    },
+    "social": "assets/images/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3.png",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/ISTQB-Certified-Tester-Advanced-Level-Technical-Test-Analyst3.png?fit=850%2C600&ssl=1"
+  },
+  "fr": {
+    "postId": 24645,
+    "slug": "istqb-certified-technical-test-analyst-advanced-level",
+    "title": "ISTQB Certifié Analyste de Tests Techniques – Niveau Avancé",
+    "seoTitle": "ISTQB Certifié Analyste de Tests Techniques – Niveau Avancé - Q-Leap",
+    "published": "2024-01-05T14:58:25",
+    "modified": "2024-06-04T10:19:38+00:00",
+    "description": "<p>L’analyste technique de tests a pour mission de mettre en œuvre un certain nombre de techniques pour analyser la structure interne du système, et l’évaluer en termes de performance, sécurité, fiabilité. Au travers de cette formation vous apprendrez à maîtriser ces techniques et d’obtenir la certification officielle ISTQB.</p>",
+    "price": "1 850.00€ HTVA",
+    "duration": "3 jours",
+    "languages": "EN, FR",
+    "format": "",
+    "certificate": "Examen Compris",
+    "programPdf": "assets/documents/2024/01/Programme-ISTQB-Analyste-Tests-Techniques-FR-1.pdf",
+    "syllabusPdf": "assets/documents/2024/01/AL-2012-Sample-Questions-ATTA-v1-01_FR.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-certifications-testing"
+    ],
+    "filters": {
+      "theme": [
+        "Certifications en Testing (ISTQB)"
+      ],
+      "niveau": [
+        "Avancé"
+      ],
+      "format": [
+        "Présentiel (Luxembourg)",
+        "Live Virtual Class"
+      ],
+      "certification": [
+        "Avec certification"
+      ],
+      "language": [
+        "Français",
+        "Anglais"
+      ]
+    },
+    "sessions": []
+  },
+  "en": {
+    "postId": 32696,
+    "slug": "istqb-certified-technical-test-analyst-advanced-level",
+    "title": "ISTQB Certified Technical Test Analyst - Advanced Level",
+    "seoTitle": "ISTQB Certified Technical Test Analyst - Advanced Level - Q-Leap",
+    "published": "2024-01-05T14:58:25",
+    "modified": "2024-06-07T14:07:15+00:00",
+    "description": "<p>The role of the technical test analyst is to implement a number of techniques to analyze the internal structure of the system, and evaluate it in terms of performance, security and reliability. Through this training course you will learn to master these techniques and obtain official ISTQB certification.</p>",
+    "price": "1 850.00€ EXCL. VAT",
+    "duration": "3 days",
+    "languages": "EN, FR",
+    "format": "",
+    "certificate": "Exam included",
+    "programPdf": "assets/documents/2024/01/Programme-ISTQB-Analyste-Tests-Techniques-FR-1.pdf",
+    "syllabusPdf": "assets/documents/2024/01/Advanced-Level-Syllabus-2019-Technical-Test-Analyst.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-certifications-testing"
+    ],
+    "filters": {
+      "theme": [
+        "Certifications en Testing (ISTQB)"
+      ],
+      "niveau": [
+        "Avancé"
+      ],
+      "format": [
+        "Présentiel (Luxembourg)",
+        "Live Virtual Class"
+      ],
+      "certification": [
+        "Avec certification"
+      ],
+      "language": [
+        "Français",
+        "Anglais"
+      ]
+    },
+    "sessions": []
+  }
+}

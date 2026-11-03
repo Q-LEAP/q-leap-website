@@ -1,0 +1,119 @@
+{
+  "order": 7,
+  "status": "published",
+  "image": {
+    "card": {
+      "src": "assets/images/2023/12/formation-non-certifiante18-850x600.png",
+      "srcset": [
+        "assets/images/2023/12/formation-non-certifiante18.png 850w",
+        "assets/images/2023/12/formation-non-certifiante18-300x212.png 300w",
+        "assets/images/2023/12/formation-non-certifiante18-768x542.png 768w",
+        "assets/images/2023/12/formation-non-certifiante18-370x261.png 370w",
+        "assets/images/2023/12/formation-non-certifiante18-840x593.png 840w",
+        "assets/images/2023/12/formation-non-certifiante18-410x289.png 410w"
+      ],
+      "sizes": "(max-width: 850px) 100vw, 850px",
+      "width": 850,
+      "height": 600
+    },
+    "social": "assets/images/2023/12/formation-non-certifiante18.png",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/formation-non-certifiante18.png?fit=850%2C600&ssl=1"
+  },
+  "imageEn": {
+    "card": {
+      "src": "assets/images/2023/12/formation-non-certifiante18-850x600.png",
+      "srcset": [
+        "assets/images/2023/12/formation-non-certifiante18.png 850w",
+        "assets/images/2023/12/formation-non-certifiante18-300x212.png 300w",
+        "assets/images/2023/12/formation-non-certifiante18-768x542.png 768w",
+        "assets/images/2023/12/formation-non-certifiante18-370x261.png 370w",
+        "assets/images/2023/12/formation-non-certifiante18-840x593.png 840w",
+        "assets/images/2023/12/formation-non-certifiante18-410x289.png 410w"
+      ],
+      "sizes": "(max-width: 850px) 100vw, 850px",
+      "width": 850,
+      "height": 600
+    },
+    "social": "assets/images/2023/12/formation-non-certifiante18.png",
+    "socialUrl": "https://i0.wp.com/q-leap.eu/wp-content/uploads/2023/12/formation-non-certifiante18.png?fit=850%2C600&ssl=1"
+  },
+  "fr": {
+    "postId": 24634,
+    "slug": "tmmi-certified-professional",
+    "title": "TMMi Certifié Test Maturity Model Integration",
+    "seoTitle": "TMMi Certifié Test Maturity Model Integration - Q-Leap",
+    "published": "2024-01-05T14:43:59",
+    "modified": "2024-06-07T10:10:10+00:00",
+    "description": "<p>Cette formation vous permettra de consolider les processus de test et de favoriser un retour sur investissement rapide. Vous apprendrez la structure du modèle et la signification de chacun de ses 5 niveaux ainsi qu’à évaluer et faire progresser un centre de test en suivant un modèle reconnu au niveau international.</p>",
+    "price": "1 850.00€ HTVA",
+    "duration": "3 jours",
+    "languages": "EN, FR",
+    "format": "",
+    "certificate": "Examen Compris",
+    "programPdf": "assets/documents/2024/01/Programme-TMMi-FR.pdf",
+    "syllabusPdf": "assets/documents/2024/01/TMMi-Framework-R1-0-FR.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-methodologies-des-tests"
+    ],
+    "filters": {
+      "theme": [
+        "Certifications en Testing (ISTQB)",
+        "Méthodologies"
+      ],
+      "niveau": [
+        "Débutant"
+      ],
+      "format": [
+        "Présentiel (Luxembourg)",
+        "Live Virtual Class"
+      ],
+      "certification": [
+        "Avec certification"
+      ],
+      "language": [
+        "Français",
+        "Anglais"
+      ]
+    },
+    "sessions": []
+  },
+  "en": {
+    "postId": 32680,
+    "slug": "tmmi-certified-test-maturity-model-integration",
+    "title": "TMMi Certified Test Maturity Model Integration",
+    "seoTitle": "TMMi Certified Test Maturity Model Integration - Q-Leap",
+    "published": "2024-01-05T14:43:59",
+    "modified": "2024-07-05T09:04:10+00:00",
+    "description": "<p>Cette formation vous permettra de consolider les processus de test et de favoriser un retour sur investissement rapide. Vous apprendrez la structure du modèle et la signification de chacun de ses 5 niveaux ainsi qu’à évaluer et faire progresser un centre de test en suivant un modèle reconnu au niveau international.</p>",
+    "price": "1 850.00€ HTVA",
+    "duration": "3 jours",
+    "languages": "EN, FR",
+    "format": "",
+    "certificate": "Examen Compris",
+    "programPdf": "assets/documents/2024/01/Programme-TMMi-FR.pdf",
+    "syllabusPdf": "assets/documents/2024/01/TMMi-Framework-R1-0-FR.pdf",
+    "contactForm": "2",
+    "taxonomyClasses": [
+      "taxonomy_training-methodologies-des-tests"
+    ],
+    "filters": {
+      "theme": [
+        "Certifications en Testing (ISTQB)"
+      ],
+      "niveau": [
+        "Débutant"
+      ],
+      "format": [
+        "Présentiel (Luxembourg)",
+        "Live Virtual Class"
+      ],
+      "certification": [],
+      "language": [
+        "Français",
+        "Anglais"
+      ]
+    },
+    "sessions": []
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "$comment": "Réglages communs des formations (filtres du catalogue, libellés modifiés). Les formations sont dans content/trainings/ (un fichier par formation) ; elles se modifient dans Pages CMS ou avec l’éditeur local (npm run formations).",
+  "filters": {
+    "theme": {
+      "fr": "Thème",
+      "en": "Theme",
+      "choices": [
+        "Certifications en Testing (ISTQB)",
+        "Fondamentaux",
+        "Méthodologies",
+        "Outil de gestion",
+        "Automatisation",
+        "Business Analysis & Ingénierie",
+        "Intelligence Artificielle (IA)"
+      ]
+    },
+    "niveau": {
+      "fr": "Niveau",
+      "en": "Level",
+      "choices": [
+        "Débutant",
+        "Intermédiaire",
+        "Avancé"
+      ]
+    },
+    "format": {
+      "fr": "Format",
+      "en": "Format",
+      "choices": [
+        "Présentiel (Luxembourg)",
+        "Live Virtual Class"
+      ]
+    },
+    "certification": {
+      "fr": "Certification",
+      "en": "Certification",
+      "choices": [
+        "Avec certification"
+      ]
+    },
+    "language": {
+      "fr": "Langue",
+      "en": "Language",
+      "choices": [
+        "Français",
+        "Anglais"
+      ]
+    }
+  }
+}
