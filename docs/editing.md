@@ -37,6 +37,10 @@ L'ordre du blog : le plus récent d'abord en français ; en anglais, comme sur W
 - **Position dans le catalogue** : 0 = en premier.
 - **Adresse de la page** : changer l'adresse d'une formation publiée est possible, mais l'ancienne adresse ne redirige pas toute seule ; demander à l'équipe technique (champ `previousSlugs`).
 
+## Site de test
+
+https://q-leap.github.io/q-leap-website/ : la branche `dev`, republiée automatiquement après chaque modification (workflow *Deploy test site*). Les pages y sont marquées « noindex » pour que Google ne les indexe pas à la place de q-leap.eu.
+
 ## Après « Save »
 
 Chaque enregistrement est un commit dans le dépôt. Le workflow GitHub **Build content** (`.github/workflows/build-content.yml`) régénère alors les pages (fiches, catalogues, articles, listes du blog, actualités de l'accueil) et les ajoute au dépôt. Compter une à deux minutes ; l'onglet *Actions* du dépôt montre où il en est.
