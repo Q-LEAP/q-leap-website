@@ -18,3 +18,8 @@
 /* English Testing page: a dot-pattern background left from the theme demo covers the "All types of
    activities" heading (the French page has none). Same on WordPress; removed here only. */
 .elementor-31861 .elementor-element.elementor-element-7a973fc:not(.elementor-motion-effects-element-type-background) { background-image: none; }
+
+/* Testing pages, "Une équipe dédiée à vos activités de tests": the title had a -215px margin from
+   Elementor and ran over the photo; aligned with its paragraph instead. */
+.elementor-20063 .elementor-element.elementor-element-6ba4dcc > .elementor-widget-container,
+.elementor-31861 .elementor-element.elementor-element-6ba4dcc > .elementor-widget-container { margin-left: 0; padding-right: 0; }
