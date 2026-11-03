@@ -116,7 +116,8 @@ def fill_ninja_forms(markup, lang):
 
 def process(path):
     full = os.path.join(ROOT, path)
-    markup = open(full).read()
+    # newline='': keep the pages' bytes (WordPress' inline styles contain CRLF line ends)
+    markup = open(full, newline='').read()
     prefix = '../' * path.count('/')
     markup = markup.replace('?export=1&amp;', '?').replace('?export=1&', '?').replace('&amp;export=1', '').replace('&export=1', '').replace('?export=1', '')
     lang = 'en' if path.startswith('en/') else 'fr'
@@ -142,7 +143,7 @@ def process(path):
     swiper = f'<script src="{prefix}assets/js/vendor/swiper-5.4.5.min.js" defer></script>\n'
     if 'swiper-5.4.5.min.js' not in markup and 'slider_swiper' in markup:
         markup = markup.replace(f'<script src="{prefix}assets/js/main.js"', swiper + f'<script src="{prefix}assets/js/main.js"', 1)
-    open(full, 'w').write(markup)
+    open(full, 'w', newline='').write(markup)
 
 
 if __name__ == '__main__':
