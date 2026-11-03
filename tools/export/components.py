@@ -119,11 +119,78 @@ def fill_ninja_forms(markup, lang):
 ROOT_LINKS = {'/privacy-policy/': {'fr': 'data-protection-notice/', 'en': 'en/privacy-policy/'}}
 
 
+OLD_UPLOADS = re.compile(r'https://(?:i\d\.wp\.com/)?q-leap\.lu/wp-content/uploads/([^"\'?)\s]+)(?:\?[^"\'\s)]*)?')
+
+
 def fix_links(markup, prefix, lang):
+    # Images still pointing at the former domain q-leap.lu (no longer answers): local copy
+    markup = OLD_UPLOADS.sub(lambda m: prefix + 'assets/images/' + m.group(1), markup)
     markup = re.sub(r'href="([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[a-z]{2,})"', r'href="mailto:\1"', markup)
     for link, targets in ROOT_LINKS.items():
         markup = markup.replace(f'href="{link}"', f'href="{prefix}{targets[lang]}"')
     return markup
+
+
+# Testing pages: the "Activités de tests" timeline must show the four steps. Since November 2026
+# WordPress lists a duplicate "Exécution" (service 28350) after them in French (a fifth step alone on
+# a new line), and the English widget points to a group holding only its translation. The timeline
+# is rebuilt with the original steps, in the theme's markup (two steps per row).
+TIMELINE_STEPS = {
+    'testing-service/index.html': [
+        ('Analyse des besoins', 'Comprendre les exigences fonctionnelles et non fonctionnelles du logiciel à tester.'),
+        ('Planification', 'Définir la stratégie de test, les ressources et élaborer le calendrier des activités.'),
+        ('Exécution', 'Mettre en œuvre les cas de test en créant des scripts de test automatisés ou en préparant les scénarios manuels.'),
+        ('Rapport', 'Documenter les résultats des tests, signaler les anomalies et fournir des rapports détaillés sur la qualité du logiciel.'),
+    ],
+    'en/testing/index.html': [
+        ('Needs analysis', 'Understand the functional and non-functional requirements of the software to be tested.'),
+        ('Planning', 'Define test strategy, resources and schedule of activities.'),
+        ('Execution', 'Implement test cases by creating automated test scripts or preparing manual scenarios.'),
+        ('Report', 'Document test results, report anomalies and provide detailed reports on software quality.'),
+    ],
+}
+
+
+def element_end(markup, start):
+    depth = 0
+    for match in re.finditer(r'<div\b|</div>', markup[start:]):
+        depth += 1 if match.group(0) == '<div' else -1
+        if depth == 0:
+            return start + match.end()
+    return -1
+
+
+def fix_services_timeline(markup, path):
+    steps = TIMELINE_STEPS.get(path)
+    start = markup.find('<div class="sc_services_content', markup.find('<div class="sc_services sc_services_timeline')) if steps else -1
+    if start < 0:
+        return markup
+    end = element_end(markup, start)
+    item_start = markup.find('<div data-post-id=', start)
+    item = markup[item_start:element_end(markup, item_start)]
+    rows = []
+    for index in range(0, len(steps), 2):
+        cells = []
+        for title, text in steps[index:index + 2]:
+            cell = re.sub(r'(<h6 class="sc_services_item_title entry-title">).*?(</h6>)', lambda m: m.group(1) + html.escape(title, quote=False) + m.group(2), item, count=1, flags=re.S)
+            cell = re.sub(r'(<div class="sc_services_item_content">)\s*<p>.*?</p>', lambda m: m.group(1) + '<p>' + html.escape(text, quote=False) + '</p>', cell, count=1, flags=re.S)
+            cells.append(cell)
+        rows.append('<div class="extra_row">' + ''.join(cells) + '</div>')
+    opening = markup[start:markup.find('>', start) + 1]
+    return markup[:start] + opening + ''.join(rows) + '</div>' + markup[end:]
+
+
+# ISTQB practice test: the Quiz Maker script is not part of the static site, so its start button
+# does nothing. Disabled until the quiz is rebuilt (after LSTE, 26/11/2026, with Lucas).
+QUIZ_PAGES = {'istqb-exam-practice-test/index.html': 'Bientôt disponible', 'en/istqb-exam-practice-test/index.html': 'Coming soon'}
+
+
+def disable_quiz(markup, path):
+    label = QUIZ_PAGES.get(path)
+    if not label:
+        return markup
+    return re.sub(r"<input type='button'(\s+)name='next' class='ays_next start_button action-button '\s*value='[^']*'",
+                  lambda m: f"<input type='button' disabled aria-disabled='true'{m.group(1)}name='next' class='ays_next start_button action-button ql-quiz-disabled' value='{label}'", markup)
 
 
 def process(path):
@@ -135,6 +202,8 @@ def process(path):
     lang = 'en' if path.startswith('en/') else 'fr'
     markup = fill_ninja_forms(markup, lang)
     markup = fix_links(markup, prefix, lang)
+    markup = fix_services_timeline(markup, path)
+    markup = disable_quiz(markup, path)
     styles = page_styles(path, prefix)
     main_link = f'<link rel="stylesheet" href="{prefix}assets/css/main.css">'
     if styles and main_link in markup:
