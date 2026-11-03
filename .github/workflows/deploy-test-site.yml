@@ -1,5 +1,6 @@
 # Test site on GitHub Pages (https://q-leap.github.io/q-leap-website/), from the dev branch, until
-# the switch of q-leap.eu. Every page gets <meta name="robots" content="noindex, nofollow"> so the
+# the switch of q-leap.eu; the UXEnhance branch is published next to it, in /ux-enhance/ (refreshed
+# with every dev deployment, or with « Run workflow » on dev). Every page gets <meta name="robots" content="noindex, nofollow"> so the
 # copy is not indexed instead of q-leap.eu (the WordPress robots tags are removed from the copy);
 # the repository files are not changed.
 name: Deploy test site
@@ -33,10 +34,19 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: dev
+          path: dev
+      - uses: actions/checkout@v4
+        with:
+          ref: UXEnhance
+          path: ux
       - name: Site files only, not indexed
         run: |
-          mkdir _site
-          git ls-files -z | grep -zvE '^(tools|content|docs|\.github)/|^(\.pages\.yml|CLAUDE\.md|README\.md|package\.json|\.gitignore)$' | xargs -0 cp --parents -t _site
+          copy_site() {
+            mkdir -p "$2"
+            (cd "$1" && git ls-files -z | grep -zvE '^(tools|content|docs|\.github)/|^(\.pages\.yml|CLAUDE\.md|README\.md|package\.json|\.gitignore)$' | xargs -0 cp --parents -t "$2")
+          }
+          copy_site dev "$PWD/_site"
+          copy_site ux "$PWD/_site/ux-enhance"
           find _site -name '*.html' -print0 | xargs -0 perl -0pi -e 's/<meta name=["\x27]robots["\x27][^>]*>\s*//gi; s/<head([^>]*)>/<head$1>\n<meta name="robots" content="noindex, nofollow">/i'
           printf 'User-agent: *\nDisallow: /\n' > _site/robots.txt
           touch _site/.nojekyll
