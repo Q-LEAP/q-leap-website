@@ -276,11 +276,22 @@ def strip_runtime(markup):
     return markup
 
 
+# Temporary WordPress-only additions (WPCode snippets) that are not part of the site itself:
+# the LSTE 2026 promotion banner (tools/wordpress/lste-banner.*).
+WORDPRESS_ONLY = [
+    re.compile(r'<link[^>]*id=["\']lste-promo-css["\'][^>]*>\s*'),
+    re.compile(r'<style[^>]*id=["\']lste-promo[^"\']*["\'][^>]*>.*?</style>\s*', re.S),
+    re.compile(r'<aside class="lste-promo"[^>]*>.*?</aside>\s*', re.S),
+]
+
+
 def export(url):
     print('page', url)
     source = fetch(url + ('&' if '?' in url else '?') + 'export=1')
     if not source:
         return
+    for pattern in WORDPRESS_ONLY:
+        source = pattern.sub('', source)
     os.makedirs(os.path.join(EXPORT, 'raw'), exist_ok=True)
     out_rel = page_path(url)
     slug = out_rel.replace('/index.html', '').replace('index.html', 'home').replace('/', '__')
