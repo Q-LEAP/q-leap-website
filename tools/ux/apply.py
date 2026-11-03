@@ -1,0 +1,91 @@
+"""UXEnhance: adds the usability layer to the pages (idempotent, run after any page generation).
+
+- assets/css/ux.css and assets/js/ux.js on every page (after the other styles and scripts);
+- a "Contact" button in the desktop header, next to the search icon;
+- the two main paths (services, trainings) under the home hero titles;
+- the catalogue request on Formations as a real e-mail button.
+The look comes from the theme itself: its button classes (sc_button) and colour variables.
+Usage: python3 tools/ux/apply.py"""
+import os
+import re
+import subprocess
+
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+TEXT = {
+    'fr': {'contact': 'Nous contacter', 'services': 'Nos services', 'trainings': 'Nos formations',
+           'services_href': 'testing-service/', 'trainings_href': 'training/', 'contact_href': 'contact/'},
+    'en': {'contact': 'Contact us', 'services': 'Our services', 'trainings': 'Our trainings',
+           'services_href': 'en/testing/', 'trainings_href': 'en/training/', 'contact_href': 'en/contact/'},
+}
+
+
+def pages():
+    files = subprocess.run(['git', 'ls-files', '-co', '--exclude-standard', '*.html'], cwd=ROOT, capture_output=True, text=True).stdout.split()
+    templates = ['tools/blog/templates/post.fr.html', 'tools/blog/templates/post.en.html',
+                 'tools/trainings/templates/training.fr.html', 'tools/trainings/templates/training.en.html']
+    return [file for file in files if not file.startswith(('tools/', 'docs/'))] + templates
+
+
+def prefix_for(file):
+    if file.startswith('tools/'):  # templates: their pages live at <slug>/ or en/<slug>/ (trainings one level deeper)
+        depth = 1 + file.endswith('.en.html') + ('/trainings/' in file)
+        return '../' * depth
+    return '../' * file.count('/')
+
+
+def add_assets(markup, prefix):
+    if 'assets/css/ux.css' not in markup:
+        markup = markup.replace('</head>', f'<link rel="stylesheet" href="{prefix}assets/css/ux.css">\n</head>', 1)
+    if 'assets/js/ux.js' not in markup and 'assets/js/main.js' in markup:
+        markup = re.sub(r'(<script src="[^"]*assets/js/main\.js" defer></script>)',
+                        lambda m: m.group(1) + f'\n<script src="{prefix}assets/js/ux.js" defer></script>', markup, count=1)
+    return markup
+
+
+def header_cta(markup, prefix, text):
+    header = re.search(r'<header\b.*?</header>', markup, re.S)
+    if not header or 'ql-header-cta' in header.group(0):
+        return markup
+    button = (f'<a class="sc_button sc_button_default sc_button_size_small ql-header-cta" href="{prefix}{text["contact_href"]}">'
+              f'<span class="sc_button_text"><span class="sc_button_title">{text["contact"]}</span></span></a>')
+    block = header.group(0).replace('<div class="sc_layouts_search">', button + '<div class="sc_layouts_search">')
+    return markup[:header.start()] + block + markup[header.end():]
+
+
+def hero_actions(markup, prefix, text):
+    if 'ql-hero__actions' in markup or 'ql-hero__title' not in markup:
+        return markup
+    actions = (f'<div class="ql-hero__actions">'
+               f'<a class="sc_button sc_button_default" href="{prefix}{text["services_href"]}"><span class="sc_button_text"><span class="sc_button_title">{text["services"]}</span></span></a>'
+               f'<a class="sc_button sc_button_bordered" href="{prefix}{text["trainings_href"]}"><span class="sc_button_text"><span class="sc_button_title">{text["trainings"]}</span></span></a>'
+               f'</div>')
+    return re.sub(r'(<h([12]) class="ql-hero__title">.*?</h\2>)', lambda m: m.group(1) + actions, markup, flags=re.S)
+
+
+def catalogue_request(markup):
+    old = '<p>Demandez notre catalogue training@q-leap.eu</p>'
+    new = ('<p>Demandez notre catalogue :</p><p class="ql-catalogue-request">'
+           '<a class="sc_button sc_button_default" href="mailto:training@q-leap.eu?subject=Catalogue%20des%20formations">'
+           '<span class="sc_button_text"><span class="sc_button_title">training@q-leap.eu</span></span></a></p>')
+    return markup.replace(old, new)
+
+
+if __name__ == '__main__':
+    changed = 0
+    for file in pages():
+        path = os.path.join(ROOT, file)
+        markup = open(path, newline='').read()
+        if 'data-redirect' in markup[:300] or 'data-blog-redirect' in markup[:300] or '</head>' not in markup:
+            continue
+        lang = 'en' if file.startswith('en/') or file.endswith('.en.html') else 'fr'
+        prefix = prefix_for(file)
+        updated = add_assets(markup, prefix)
+        updated = header_cta(updated, prefix, TEXT[lang])
+        if file in ('index.html', 'en/index.html'):
+            updated = hero_actions(updated, prefix, TEXT[lang])
+        if file == 'training/index.html':
+            updated = catalogue_request(updated)
+        if updated != markup:
+            open(path, 'w', newline='').write(updated)
+            changed += 1
+    print(changed, 'pages mises à jour')

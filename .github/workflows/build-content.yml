@@ -5,7 +5,7 @@ name: Build content
 
 on:
   push:
-    branches: [dev, main]
+    branches: [dev, main, UXEnhance]
     paths:
       - 'content/**'
       - 'assets/images/uploads/**'
@@ -38,6 +38,8 @@ jobs:
         run: node tools/trainings/build.mjs
       - name: Blog
         run: python3 tools/blog/build.py
+      - name: UX layer (UXEnhance branch)
+        run: if [ -f tools/ux/apply.py ]; then python3 tools/ux/apply.py; fi
       - name: Commit the generated pages
         run: |
           git config user.name "github-actions[bot]"

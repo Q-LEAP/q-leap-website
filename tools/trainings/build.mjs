@@ -387,6 +387,22 @@ export function trainingPage(content, training, lang, today = new Date().toISOSt
   });
 }
 
+// UXEnhance: what a visitor needs to choose a training, on its card (duration, price, next session).
+const CARD_META = {
+  fr: { next: 'Prochaine session :', onRequest: 'Sessions sur demande' },
+  en: { next: 'Next session:', onRequest: 'Sessions on request' },
+};
+function cardMeta(version, labels, today = new Date().toISOString().slice(0, 10)) {
+  const text = labels.months[0] === 'janvier' ? CARD_META.fr : CARD_META.en;
+  const [next] = upcoming(version.sessions || [], today);
+  const session = next
+    ? `${text.next} ${day(next.start)} ${labels.months[monthIndex(next.start)]} ${year(next.start)}`
+    : text.onRequest;
+  const items = [version.duration, version.price].filter(Boolean).map((value) => `<li>${escapeText(value)}</li>`);
+  items.push(`<li class="ql-training-next">${escapeText(session)}</li>`);
+  return `<ul class="ql-training-meta">${items.join('')}</ul>`;
+}
+
 function cardHtml(training, lang, labels, eager) {
   const version = training[lang];
   const image = { card: cardImage(lang === 'en' ? training.imageEn : training.image) };
@@ -406,7 +422,7 @@ function cardHtml(training, lang, labels, eager) {
 				${title}			</a>
 		</h3>
 				<div class="elementor-post__excerpt">
-					</div>
+					${cardMeta(version, labels)}</div>
 
 		<a class="elementor-post__read-more" href="${href}" aria-label="${labels.readMoreAria} ${title}" tabindex="-1" >
 			${labels.readMore}		</a>
