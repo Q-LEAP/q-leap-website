@@ -12,6 +12,7 @@ on:
       - 'assets/documents/uploads/**'
       - 'tools/trainings/**'
       - 'tools/blog/**'
+      - 'tools/search/**'
   workflow_dispatch:
 
 permissions:

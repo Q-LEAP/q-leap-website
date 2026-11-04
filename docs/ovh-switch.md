@@ -1,0 +1,59 @@
+# Bascule de q-leap.eu : WordPress.com → GitHub Pages, DNS chez OVH
+
+> Préparé le 2026-11-04, même méthode que q-guard.app (dépôt qguard-website, docs/ovh-switch.md).
+
+## État avant la bascule
+
+- **Domaine chez OVH** (renouvellement automatique, expire le 2027-03-31), **délégué à
+  `ns1/ns2/ns3.wordpress.com`** : toute la zone (site, messagerie, sous-domaines `*.internal`) vit
+  chez WordPress.com. Pas de zone DNS OVH, pas de DNSSEC (aucun DS au registre).
+- **Messagerie @q-leap.eu chez Microsoft 365** (MX, autodiscover, DKIM selector1/2, msoid). Envois
+  aussi par Odoo (DKIM `odoo._domainkey`) et Brevo (SPF). Ce sont les enregistrements qui comptent.
+- **Sous-domaines internes** : `internal` (A 213.135.237.56) et les démos `shop-demo`, `bank-demo`,
+  `q-guard` × `dev/test/client1/client2.internal`, avec leurs CNAME de validation DigiCert/Sectigo.
+- TTL des NS au registre .eu : **86 400 s**. Une bascule (et un retour arrière) peut mettre jusqu'à
+  24 h à atteindre tous les résolveurs ; pendant ce temps les deux sites coexistent.
+
+## La zone OVH
+
+`tools/dns/make_zone.sh > tools/dns/zone.txt` : les enregistrements listés dans
+`tools/dns/records.txt`, valeurs lues en direct sur `ns1.wordpress.com` (rien n'est retapé), plus le
+web vers GitHub Pages. Différences voulues avec WordPress.com :
+
+| Enregistrement | WordPress.com | OVH |
+|---|---|---|
+| `@ A` | 192.0.78.154 / .245 (WordPress) | 185.199.108–111.153 + AAAA GitHub |
+| `www` | CNAME q-leap.eu | CNAME q-leap.github.io |
+| `* CNAME q-leap.eu` | présent | **retiré** : sur GitHub Pages, un joker permet à n'importe qui de réclamer un sous-domaine |
+| `_domainconnect` | TXT WordPress.com | retiré (propre à WordPress.com) |
+
+Le SPF garde `include:_spf.wpcloud.com` et `a:q-leap.eu` : inoffensifs, retirables plus tard.
+
+Vérification avant la bascule (comparaison serveur par serveur) : `tools/dns/compare.sh dnsXX.ovh.net`.
+
+## Ordre de la bascule
+
+1. Production sur la branche `dev` (seule branche autorisée par l'environnement `github-pages`) :
+   `.github/workflows/deploy.yml` publie le site sans `noindex`, avec `robots.txt` et `sitemap.xml`.
+2. Domaine posé sur GitHub Pages (`{"cname":"q-leap.eu"}`), puis redéploiement.
+3. Zone OVH créée et importée (aucun effet en ligne).
+4. **Serveurs de noms remplacés** par ceux d'OVH : le seul geste qui a un effet.
+5. Certificat HTTPS GitHub, puis `https_enforced`.
+
+## Retour arrière
+
+OVH → `q-leap.eu` → *Serveurs DNS* → remettre `ns1.wordpress.com`, `ns2.wordpress.com`,
+`ns3.wordpress.com` (API : `POST /domain/q-leap.eu/nameServers/update`). WordPress.com n'a pas été
+modifié : il reprend dès que les résolveurs suivent. Puis retirer le domaine de GitHub Pages.
+
+## Après la bascule
+
+- **WordPress** reste en ligne chez WordPress.com (rien n'y est supprimé), mais n'est plus à
+  l'adresse q-leap.eu : l'administration passe par l'adresse WordPress.com du site.
+- **Formulaires** (inscriptions, contact, candidatures) : FormSubmit vers `digital@q-leap.eu`
+  (destinataire de WordPress). Le premier envoi déclenche un courrier d'activation à cette adresse :
+  cliquer le lien, sinon rien n'est transmis. Si FormSubmit ne répond pas (panne du 2026-11-04 :
+  erreur 522 pendant des heures), le visiteur reçoit un lien qui ouvre son logiciel de messagerie
+  avec la demande déjà rédigée pour digital@q-leap.eu (candidatures : joindre le CV à la main).
+- **Search Console** : la balise `google-site-verification` des pages est conservée ; soumettre
+  `https://q-leap.eu/sitemap_index.xml`.

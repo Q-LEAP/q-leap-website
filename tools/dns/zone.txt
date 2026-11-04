@@ -1,0 +1,52 @@
+@                     IN A      185.199.108.153
+@                     IN A      185.199.109.153
+@                     IN A      185.199.110.153
+@                     IN A      185.199.111.153
+@                     IN AAAA   2606:50c0:8000::153
+@                     IN AAAA   2606:50c0:8001::153
+@                     IN AAAA   2606:50c0:8002::153
+@                     IN AAAA   2606:50c0:8003::153
+www                   IN CNAME  q-leap.github.io.
+@                                              IN MX     0 qleap-eu0c.mail.protection.outlook.com.
+@                                              IN TXT    "MS=ms18415093"
+@                                              IN TXT    "v=spf1 a:q-leap.eu include:_spf.odoo.com include:spf.protection.outlook.com include:spf.sendinblue.com mx include:_spf.wpcloud.com ~all"
+@                                              IN TXT    "atlassian-domain-verification=mq8ihLKhwkRAxsm2z/fKDz9Pct6854HY0Sh1UmhYtIH1y92JicXCeSGmAU9u8u7N"
+internal                                       IN A      213.135.237.56
+autodiscover                                   IN CNAME  autodiscover.outlook.com.
+msoid                                          IN CNAME  clientconfig.microsoftonline-p.net.
+odoo._domainkey                                IN CNAME  odoo._domainkey.odoo.com.
+selector1._domainkey                           IN CNAME  selector1-qleap-eu0c._domainkey.qleap365.onmicrosoft.com.
+selector2._domainkey                           IN CNAME  selector2-qleap-eu0c._domainkey.qleap365.onmicrosoft.com.
+wpcloud1._domainkey                            IN CNAME  wpcloud1._domainkey.wpcloud.com.
+wpcloud2._domainkey                            IN CNAME  wpcloud2._domainkey.wpcloud.com.
+selector1-qleap-eu0c._domainkey                IN TXT    "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQD0pX9KAmUknGiSWwpiUoXS+R0OeRkhNcQG8aLswZzx+4XSpmSB5ZicqpxcmQe+sotziENpmpsUJJKE1cZY6H/CpYiHv0wuba/eV9BPs8Vxum6dVJsMJSa23EFy3HnteWwLUEjRSnmSHLrL4fs9juYqJWSumAZqmZ4ROXDBip5TowIDAQAB;"
+selector2-qleap-eu0c._domainkey                IN TXT    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5kTjFXk/AySJvFZaro5Zkix+DAdYeLkDH6DCahtjT7y385kA9jugwQt+EhSxSkhl+EjcBVDKKT7fz6SFGivwLXmWfe4UCX2G16LoyHuUHR/O1BqZGqnoxY0gJaxlzYW3reiMliEmpa4pzxgF9309zFMp979blZU5+y+zV9jgkGyWvHuJH/VqPs25FMpLd1Qiu" "/JUD6JVMHc9Ch1IT5itzX1dd9UqOVdkpIY4sNSIZKAjTBFiIa4QTxswpwBUlQtPew4abttiZFuaHwTEBMoF0nFf22mIN7XnQpV/HCJHpVk2cpHs7i20D0k2nV3UVxyX2RH/b7WgEmSSEXtz7tb0MQIDAQAB;"
+selector2-qleap365-onmicrosoft-com._domainkey  IN TXT    "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/gRYAIzwap6kdtbWWVasK1R5cLKOaCsxcgOItHo52rqIskmxHNwXZDBHg2s/V+d1o9Selq5zxIYv/gB/7PDDXUOuJs/zmeiJIwJTeQ9d6bT08U1L9ibqtsIRRqaXNn300T0HIdQ1XfqToCR771Mvw1BhlTjOZvBvrenbunlCX5QIDAQAB;"
+_dmarc                                         IN TXT    "v=DMARC1; p=reject; sp=reject; rua=mailto:dmarc-rua@q-leap.eu; ruf=mailto:dmarc-ruf@q-leap.eu; rf=afrf; pct=100; ri=86400"
+_0c2d1e19e3278986c5225a088f765b0f              IN CNAME  dda51482d1036bde27c006e7fd6726a3.498b1eb9c8609123701fd614f244d32d.b1285cadad27f496d668.comodoca.com.
+_8cb8a7c7d8e96c64f8ab1e580f561f37.internal     IN CNAME  513c3401bb79f141eb77ddd14e91496c.db209c03f6ae231776e15fff78d49a4f.888c7d76c411aaaf31b9.sectigo.com.
+_5vxuzkp0f1zdd2nktetmuuiflxs2ja5.q-guard.dev.internal IN CNAME  dcv.digicert.com.
+shop-demo.dev.internal                         IN CNAME  internal.q-leap.eu.
+bank-demo.dev.internal                         IN CNAME  internal.q-leap.eu.
+q-guard.dev.internal                           IN CNAME  internal.q-leap.eu.
+shop-demo.test.internal                        IN CNAME  internal.q-leap.eu.
+bank-demo.test.internal                        IN CNAME  internal.q-leap.eu.
+q-guard.test.internal                          IN CNAME  internal.q-leap.eu.
+shop-demo.client1.internal                     IN CNAME  internal.q-leap.eu.
+bank-demo.client1.internal                     IN CNAME  internal.q-leap.eu.
+q-guard.client1.internal                       IN CNAME  internal.q-leap.eu.
+shop-demo.client2.internal                     IN CNAME  internal.q-leap.eu.
+bank-demo.client2.internal                     IN CNAME  internal.q-leap.eu.
+q-guard.client2.internal                       IN CNAME  internal.q-leap.eu.
+_dnsauth.shop-demo.dev.internal                IN CNAME  _867dmdooadioeudnbmyo8veb83x7hkc.dcv.digicert.com.
+_dnsauth.bank-demo.dev.internal                IN CNAME  _23km2s85lj5jqwq09u43mt114akck01.dcv.digicert.com.
+_dnsauth.q-guard.dev.internal                  IN CNAME  _3sypag4ok7ogc7eufmc11mj3sb3lmo7.dcv.digicert.com.
+_dnsauth.shop-demo.test.internal               IN CNAME  _8dnzzdobn0l1qevsh5ph2s4hg5hf92q.dcv.digicert.com.
+_dnsauth.bank-demo.test.internal               IN CNAME  _iv2gyh2id2o1qg5ok1ee5qanf9inns7.dcv.digicert.com.
+_dnsauth.q-guard.test.internal                 IN CNAME  _jtw4n4aprojere7zjs44t4phqt27wjb.dcv.digicert.com.
+_dnsauth.shop-demo.client1.internal            IN CNAME  _k9sd6skp3cfp0abb5bgcdspb7ppnbb9.dcv.digicert.com.
+_dnsauth.bank-demo.client1.internal            IN CNAME  _hqb4b46ruwsmxtkunlas4ve9bhl8v7f.dcv.digicert.com.
+_dnsauth.q-guard.client1.internal              IN CNAME  _w1c7ekcjwb24sa50gdohtgols2s9xej.dcv.digicert.com.
+_dnsauth.shop-demo.client2.internal            IN CNAME  _gkxmcnhapg35npyjrabsafynr1lhh0g.dcv.digicert.com.
+_dnsauth.bank-demo.client2.internal            IN CNAME  _f3xnqh1fe3gj4j38izj1v3tlf5flvxp.dcv.digicert.com.
+_dnsauth.q-guard.client2.internal              IN CNAME  _zbpbxc4iadcld6sxwos0m3qyqits48j.dcv.digicert.com.

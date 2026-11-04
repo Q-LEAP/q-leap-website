@@ -640,7 +640,11 @@
   // cannot receive them, FormSubmit mails them to the address WordPress used (digital@q-leap.eu
   // for all three). Forms with a file (job applications) are posted normally and come back with
   // ?envoye=1; the others are sent in the background and show the plugin's own success message.
-  const FORM_ENDPOINT = 'https://formsubmit.co/digital@q-leap.eu';
+  // FormSubmit is a free service that can be down (522 for hours on 2026-11-04): after 15 s or an
+  // error, the visitor gets a link that opens their mail app with the filled-in request instead.
+  const FORM_RECIPIENT = 'digital@q-leap.eu';
+  const FORM_ENDPOINT = `https://formsubmit.co/${FORM_RECIPIENT}`;
+  const FORM_TIMEOUT = 15000;
   function initForms() {
     const english = document.documentElement.lang.startsWith('en');
     const t = (fr, en) => (english ? en : fr);
@@ -664,9 +668,18 @@
     const missing = (form) => [...form.querySelectorAll('[required], [aria-required="true"]')]
       .filter((field) => (field.type === 'checkbox' ? !field.checked : field.type === 'file' ? !field.files.length : !field.value.trim()));
     const send = async (data) => {
-      const response = await fetch(FORM_ENDPOINT.replace('.co/', '.co/ajax/'), { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+      const response = await fetch(FORM_ENDPOINT.replace('.co/', '.co/ajax/'),
+        { method: 'POST', body: data, headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(FORM_TIMEOUT) });
       const result = await response.json().catch(() => ({}));
       if (!response.ok || String(result.success) !== 'true') throw new Error(result.message || response.status);
+    };
+    // The same request as an e-mail written by the visitor's mail app (nothing is lost if the service is down).
+    const fallback = (data) => {
+      const lines = [...data].filter(([name, value]) => !name.startsWith('_') && !(value instanceof File)).map(([name, value]) => `${name} : ${value}`);
+      const href = `mailto:${FORM_RECIPIENT}?subject=${encodeURIComponent(data.get('_subject') || 'Q-Leap')}&body=${encodeURIComponent(lines.join('\n'))}`;
+      return `<p>${t("Le service d'envoi ne répond pas pour le moment.", 'The sending service is not responding right now.')} `
+        + `<a href="${href}">${t('Envoyez votre demande par e-mail', 'Send your request by e-mail')}</a> `
+        + `${t('(le message est déjà rempli).', '(the message is already filled in).')}</p>`;
     };
     const honeypot = (form) => [...form.querySelectorAll('input[name="nf-field-hp"], textarea[name="_wpcf7_ak_hp_textarea"]')].some((field) => field.value);
 
@@ -696,12 +709,13 @@
         const button = form.querySelector('[type="submit"], .submit-wrap input');
         if (button) button.disabled = true;
         const training = form.querySelector('input[name^="nf-field-19"]')?.value;
+        const data = collect(form, training ? t(`Nouvelle inscription à ${training}`, `New registration: ${training}`) : t('Nouvelle demande (formation)', 'New request (training)'));
         try {
-          await send(collect(form, training ? t(`Nouvelle inscription à ${training}`, `New registration: ${training}`) : t('Nouvelle demande (formation)', 'New request (training)')));
+          await send(data);
           wrap.querySelector('.nf-response-msg').innerHTML = `<p>${t('Votre message a bien été envoyé.', 'Your message has been sent.')}</p>`;
           form.hidden = true;
         } catch {
-          wrap.querySelector('.nf-response-msg').innerHTML = `<p>${t("L'envoi a échoué. Écrivez-nous à contact@q-leap.eu.", 'Sending failed. Please write to contact@q-leap.eu.')}</p>`;
+          wrap.querySelector('.nf-response-msg').innerHTML = fallback(data);
           if (button) button.disabled = false;
         }
       });
@@ -729,12 +743,14 @@
         };
         if (empty.length) { status('invalid', t('Un ou plusieurs champs contiennent une erreur. Veuillez vérifier et essayer à nouveau.', 'One or more fields have an error. Please check and try again.')); empty[0].focus(); return; }
         status('submitting', '');
+        const data = collect(form, `Q-LEAP "${form.querySelector('[name="subject"]')?.value || ''}"`);
         try {
-          await send(collect(form, `Q-LEAP "${form.querySelector('[name="subject"]')?.value || ''}"`));
+          await send(data);
           status('sent', t('Merci pour votre message. Il a été envoyé.', 'Thank you for your message. It was sent.'));
           form.reset();
         } catch {
-          status('failed', t("L'envoi a échoué. Écrivez-nous à contact@q-leap.eu.", 'Sending failed. Please write to contact@q-leap.eu.'));
+          status('failed', '');
+          if (output) output.innerHTML = fallback(data);
         }
       });
     });
@@ -761,11 +777,22 @@
         message.innerHTML = `<p>${t('Votre candidature a bien été envoyée. Merci !', 'Your application has been submitted. Thank you!')}</p>`;
         form.hidden = true;
       }
-      form.addEventListener('submit', (event) => {
+      form.addEventListener('submit', async (event) => {
         event.preventDefault();
         const empty = missing(form);
         if (empty.length) { empty[0].reportValidity?.(); empty[0].focus(); return; }
         const data = collect(form, t(`Candidature : ${title}`, `Application: ${title}`));
+        // The page is left for FormSubmit's: check first that it answers (an empty request is
+        // refused without sending anything), otherwise offer the e-mail with the CV attached by hand.
+        try {
+          await fetch(FORM_ENDPOINT.replace('.co/', '.co/ajax/'), { method: 'POST', body: new FormData(), headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(8000) });
+        } catch {
+          if (message) {
+            message.style.display = '';
+            message.innerHTML = fallback(data).replace('</p>', ` ${t('Joignez votre CV au message.', 'Please attach your CV to the e-mail.')}</p>`);
+          }
+          return;
+        }
         const next = new URL(location.href);
         next.searchParams.set('envoye', '1');
         data.append('_next', next.href);
