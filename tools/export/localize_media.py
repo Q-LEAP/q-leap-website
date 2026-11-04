@@ -5,7 +5,8 @@ q-leap.eu/wp-content/uploads/…, VideoPress files). Once q-leap.eu is served by
 stop working: the CDN fetches the originals from q-leap.eu, where WordPress is gone. Each file is
 downloaded once into assets/images/<year>/<month>/ (assets/videos/ for VideoPress) while WordPress
 is still online, then referenced relatively (absolute https://q-leap.eu/… in meta tags, which need
-absolute URLs). Idempotent. Usage: python3 tools/export/localize_media.py [--dry-run]
+absolute URLs). Content files (content/**/*.json, read by the blog and training builds) get
+root-relative /assets/… addresses, like the files Pages CMS uploads. Idempotent. Usage: python3 tools/export/localize_media.py [--dry-run]
 """
 import os
 import re
@@ -16,8 +17,9 @@ import urllib.request
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SKIP_DIRS = {'tools', 'reference', 'node_modules', '.git', 'content'}
 SITE = 'https://q-leap.eu/'
-MEDIA = re.compile(r'https?://(?:i[0-3]\.wp\.com/)?(?:www\.)?q-leap\.eu/wp-content/uploads/([^"\'\s<>)&?]+)(?:\?[^"\'\s<>)]*)?'
-                   r'|https://videos\.files\.wordpress\.com/[^"\'\s<>)/]+/([^"\'\s<>)?]+)')
+# Backslashes end a URL too: in the JSON content files, HTML attribute quotes are escaped (\").
+MEDIA = re.compile(r'https?://(?:i[0-3]\.wp\.com/)?(?:www\.)?q-leap\.eu/wp-content/uploads/([^"\'\s<>)&?\\]+)(?:\?[^"\'\s<>)\\]*)?'
+                   r'|https://videos\.files\.wordpress\.com/[^"\'\s<>)/\\]+/([^"\'\s<>)?\\]+)')
 # Page templates (tools/*/templates) and the folder depth of the pages built from them.
 TEMPLATES = {'tools/blog/templates/post.fr.html': '..', 'tools/blog/templates/post.en.html': '../..',
              'tools/trainings/templates/training.fr.html': '../..', 'tools/trainings/templates/training.en.html': '../../..'}
@@ -73,6 +75,23 @@ def localize(page, dry_run, base=None):
     return updated != html
 
 
+def localize_content(path, dry_run):
+    with open(path, encoding='utf-8', newline='') as handle:
+        text = handle.read()
+
+    def replace(match):
+        local = local_path(match)
+        if not dry_run and not download(match.group(0), local):
+            return match.group(0)
+        return '/' + urllib.parse.quote(local)
+
+    updated = MEDIA.sub(replace, text)
+    if updated != text and not dry_run:
+        with open(path, 'w', encoding='utf-8', newline='') as handle:
+            handle.write(updated)
+    return updated != text
+
+
 def main():
     dry_run = '--dry-run' in sys.argv
     changed = 0
@@ -83,7 +102,11 @@ def main():
                 changed += localize(os.path.join(directory, name), dry_run)
     for template, base in TEMPLATES.items():
         changed += localize(os.path.join(ROOT, template), dry_run, base)
-    print('pages changed:', changed)
+    for directory, _, files in os.walk(os.path.join(ROOT, 'content')):
+        for name in files:
+            if name.endswith('.json'):
+                changed += localize_content(os.path.join(directory, name), dry_run)
+    print('files changed:', changed)
 
 
 if __name__ == '__main__':

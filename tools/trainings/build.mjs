@@ -145,10 +145,10 @@ function cardImage(image) {
   return { ...card, srcset: [], sizes: '', width, height };
 }
 
+// The social image is served by this site: the WordPress image CDN URL kept in image.socialUrl
+// (i0.wp.com/q-leap.eu/wp-content/…) stops working once q-leap.eu leaves WordPress.
 function socialImageUrl(image) {
-  const social = sitePath(image.social);
-  if (image.socialUrl && social && image.socialUrl.includes(path.basename(social).replace(/\.\w+$/, ''))) return image.socialUrl;
-  return `${SITE}/${social || cardImage(image).src}`;
+  return `${SITE}/${sitePath(image.social) || cardImage(image).src}`;
 }
 
 const day = (iso) => Number(iso.slice(8, 10));
