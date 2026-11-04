@@ -553,6 +553,247 @@
     });
   }
 
+  // Site search (tools/search/build.py): the search forms open search/?s=… (en/search/ in
+  // English), where the blog card list is filled with the pages whose title, description or text
+  // contain every searched word. Runs before initBlogPagination, which pages the results.
+  const siteRoot = new URL('../../', document.querySelector('script[src*="assets/js/main.js"]')?.src || location.href);
+  function initSearch() {
+    const english = document.documentElement.lang.startsWith('en');
+    const searchPage = new URL(english ? 'en/search/' : 'search/', siteRoot);
+    const query = new URLSearchParams(location.search).get('s');
+    if (query !== null && !document.querySelector('[data-ql-search]')) {
+      location.replace(`${searchPage.href}?s=${encodeURIComponent(query)}`);
+      return Promise.resolve();
+    }
+    document.querySelectorAll('form[role="search"]').forEach((form) => {
+      if (form.closest('.asp_m, .asp_w, .tribe-events-c-search')) return;
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const value = form.querySelector('input[name="s"]')?.value.trim() || '';
+        location.href = `${searchPage.href}?s=${encodeURIComponent(value)}`;
+      });
+    });
+    const list = document.querySelector('[data-ql-search]');
+    if (!list) return Promise.resolve();
+    document.querySelectorAll('form[role="search"] input[name="s"]').forEach((input) => { input.value = query || ''; });
+    const fold = (text) => text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+    const words = fold(query || '').split(/\s+/).filter(Boolean);
+    const escape = (text) => text.replace(/[&<>"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[character]));
+    const message = (text) => { list.innerHTML = `<p class="ql-search-message">${escape(text)}</p>`; };
+    if (!words.length) { message(english ? 'Enter a word to search the site.' : 'Saisissez un mot pour chercher sur le site.'); return Promise.resolve(); }
+    return fetch(new URL(`assets/search/${english ? 'en' : 'fr'}.json`, siteRoot))
+      .then((response) => response.json())
+      .then((pages) => {
+        const scored = pages.map((page) => {
+          const title = fold(page.t);
+          const all = `${title} ${fold(page.d)} ${fold(page.x)}`;
+          if (!words.every((word) => all.includes(word))) return null;
+          return { page, score: words.filter((word) => title.includes(word)).length * 10 + words.filter((word) => fold(page.d).includes(word)).length };
+        }).filter(Boolean).sort((a, b) => b.score - a.score);
+        if (!scored.length) { message(english ? `No results for “${query}”.` : `Aucun résultat pour « ${query} ».`); return; }
+        const more = english ? 'Read more' : 'Lire plus';
+        list.innerHTML = scored.map(({ page }) => {
+          const href = new URL(page.u, siteRoot).href;
+          const excerpt = (page.d || page.x).slice(0, 220).replace(/\s\S*$/, '') + '…';
+          const image = page.i ? `<div class="post_featured with_thumb hover_dots post_featured_bg" data-ratio="1:1"><span class="post_thumb post_thumb_bg bg_in" style="background-image: url(&quot;${escape(new URL(page.i, siteRoot).href)}&quot;);"></span><div class="mask"></div><a href="${escape(href)}" aria-hidden="true" class="icons"><span></span><span></span><span></span></a></div>` : '';
+          return `<article class="post_item post_item_container post_layout_band post_format_standard post type-post${page.i ? ' has-post-thumbnail' : ''}">${image}<div class="post_content_wrap"><div class="post_header entry-header"><h4 class="post_title entry-title"><a href="${escape(href)}" rel="bookmark">${escape(page.t)}</a></h4></div><div class="post_content entry-content"><div class="post_content_inner">${escape(excerpt)}</div></div><div class="more-wrap"><a class="post-more-link" href="${escape(href)}"><span class="link-text">${more}</span><span class="more-link-icon"></span></a></div></div></article>`;
+        }).join('');
+      })
+      .catch(() => message(english ? 'Search is unavailable for now.' : 'La recherche est indisponible pour le moment.'));
+  }
+
+  // WP Job Openings filters (join-us/, en/career/): WordPress filtered the listing through
+  // admin-ajax; here the cards are filtered in place by the search words and the selected terms.
+  function initJobFilters() {
+    document.querySelectorAll('.awsm-job-wrap').forEach((wrap) => {
+      const form = wrap.querySelector('.awsm-filter-wrap form');
+      const items = [...wrap.querySelectorAll('.awsm-job-listing-item')];
+      if (!form || !items.length) return;
+      const fold = (text) => text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+      const search = form.querySelector('input[name="jq"]');
+      const close = form.querySelector('.awsm-job-search-close-btn');
+      const apply = () => {
+        const words = fold(search?.value || '').split(/\s+/).filter(Boolean);
+        const terms = [...form.querySelectorAll('select')].filter((select) => select.value && select.selectedIndex > 0)
+          .map((select) => ({ name: select.name, term: fold(select.selectedOptions[0].textContent) }));
+        items.forEach((item) => {
+          const text = fold(item.textContent);
+          const specs = [...item.querySelectorAll('.awsm-job-specification-term')].map((term) => fold(term.textContent));
+          item.hidden = !(words.every((word) => text.includes(word)) && terms.every(({ term }) => specs.includes(term)));
+        });
+        close?.classList.toggle('awsm-job-hide', !search?.value);
+      };
+      form.addEventListener('submit', (event) => { event.preventDefault(); apply(); });
+      form.querySelectorAll('select').forEach((select) => select.addEventListener('change', apply));
+      search?.addEventListener('input', apply);
+      close?.addEventListener('click', () => { search.value = ''; apply(); });
+      wrap.querySelector('.awsm-filter-toggle')?.addEventListener('click', (event) => {
+        event.preventDefault();
+        const open = event.currentTarget.getAttribute('aria-pressed') !== 'true';
+        event.currentTarget.setAttribute('aria-pressed', String(open));
+        wrap.querySelector('.awsm-filter-items')?.classList.toggle('awsm-on', open);
+      });
+    });
+  }
+
+  // Forms (Ninja Forms registration, Contact Form 7, WP Job Openings applications): GitHub Pages
+  // cannot receive them, FormSubmit mails them to the address WordPress used (digital@q-leap.eu
+  // for all three). Forms with a file (job applications) are posted normally and come back with
+  // ?envoye=1; the others are sent in the background and show the plugin's own success message.
+  const FORM_ENDPOINT = 'https://formsubmit.co/digital@q-leap.eu';
+  function initForms() {
+    const english = document.documentElement.lang.startsWith('en');
+    const t = (fr, en) => (english ? en : fr);
+    const labelOf = (field) => field.dataset.qlLabel || field.placeholder || field.closest('label')?.textContent.trim()
+      || document.querySelector(`label[for="${field.id}"]`)?.textContent.replace('*', '').trim() || field.name;
+    const collect = (form, subject) => {
+      const data = new FormData();
+      form.querySelectorAll('input, textarea, select').forEach((field) => {
+        if (!field.name || field.disabled || ['submit', 'button'].includes(field.type) || field.name.startsWith('_')) return;
+        if (/recaptcha|nonce|^action$|^lang$|nf-field-hp|_wp_http_referer|^form_sub$/.test(field.name)) return;
+        if ((field.type === 'checkbox' || field.type === 'radio') && !field.checked) return;
+        if (field.type === 'file') { [...field.files].forEach((file) => data.append(labelOf(field), file)); return; }
+        if (field.value.trim()) data.append(labelOf(field), field.value.trim());
+      });
+      data.append('Page', location.href);
+      data.append('_subject', subject);
+      data.append('_template', 'table');
+      data.append('_captcha', 'false');
+      return data;
+    };
+    const missing = (form) => [...form.querySelectorAll('[required], [aria-required="true"]')]
+      .filter((field) => (field.type === 'checkbox' ? !field.checked : field.type === 'file' ? !field.files.length : !field.value.trim()));
+    const send = async (data) => {
+      const response = await fetch(FORM_ENDPOINT.replace('.co/', '.co/ajax/'), { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || String(result.success) !== 'true') throw new Error(result.message || response.status);
+    };
+    const honeypot = (form) => [...form.querySelectorAll('input[name="nf-field-hp"], textarea[name="_wpcf7_ak_hp_textarea"]')].some((field) => field.value);
+
+    // Ninja Forms (training registration and requests): the placeholders name the fields.
+    document.querySelectorAll('.nf-form-layout form').forEach((form) => {
+      const hidden = { 15: t('Formation (id)', 'Training (id)'), 16: 'Session (id)', 76: t('Date de la session', 'Session date'), 19: t('Formation', 'Training') };
+      form.querySelectorAll('input[type="hidden"]').forEach((input) => {
+        const id = input.name.match(/^nf-field-(\d+)/)?.[1];
+        if (hidden[id]) input.dataset.qlLabel = hidden[id];
+      });
+      form.querySelectorAll('.ninja-forms-field').forEach((field) => {
+        const key = field.closest('[data-testid]')?.dataset.testid || '';
+        if (/prenom/.test(key)) field.dataset.qlLabel = t('Prénom', 'First name');
+        if (field.type === 'text' && field.defaultValue && /prenom/.test(key)) { field.placeholder = field.defaultValue; field.value = ''; }
+      });
+      const wrap = form.closest('.nf-form-wrap');
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (honeypot(form)) return;
+        const empty = missing(form);
+        form.querySelectorAll('.nf-error-wrap').forEach((error) => { error.textContent = ''; });
+        empty.forEach((field) => {
+          const error = form.querySelector(`#nf-error-${field.id.replace('nf-field-', '')}`);
+          if (error) error.textContent = t('Ce champ est obligatoire.', 'This is a required field.');
+        });
+        if (empty.length) { empty[0].focus(); return; }
+        const button = form.querySelector('[type="submit"], .submit-wrap input');
+        if (button) button.disabled = true;
+        const training = form.querySelector('input[name^="nf-field-19"]')?.value;
+        try {
+          await send(collect(form, training ? t(`Nouvelle inscription à ${training}`, `New registration: ${training}`) : t('Nouvelle demande (formation)', 'New request (training)')));
+          wrap.querySelector('.nf-response-msg').innerHTML = `<p>${t('Votre message a bien été envoyé.', 'Your message has been sent.')}</p>`;
+          form.hidden = true;
+        } catch {
+          wrap.querySelector('.nf-response-msg').innerHTML = `<p>${t("L'envoi a échoué. Écrivez-nous à contact@q-leap.eu.", 'Sending failed. Please write to contact@q-leap.eu.')}</p>`;
+          if (button) button.disabled = false;
+        }
+      });
+      form.querySelector('.submit-wrap input, input[type="button"]')?.addEventListener('click', (event) => { event.preventDefault(); form.requestSubmit(); });
+    });
+
+    // Contact Form 7 (contact page FR/EN).
+    document.querySelectorAll('form.wpcf7-form').forEach((form) => {
+      form.setAttribute('novalidate', '');
+      form.querySelectorAll('textarea[name="your-message"]').forEach((field) => { field.dataset.qlLabel = 'Message'; });
+      const output = form.querySelector('.wpcf7-response-output');
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (honeypot(form)) return;
+        form.querySelectorAll('.wpcf7-not-valid-tip').forEach((tip) => tip.remove());
+        const empty = missing(form);
+        const email = form.querySelector('input[type="email"]');
+        if (email && email.value && !email.checkValidity()) empty.push(email);
+        empty.forEach((field) => field.closest('.wpcf7-form-control-wrap')?.insertAdjacentHTML('beforeend',
+          `<span class="wpcf7-not-valid-tip" aria-hidden="true">${field === email && email.value ? t("L'adresse e-mail n'est pas valide.", 'Please enter an email address.') : t('Veuillez renseigner ce champ.', 'Please fill out this field.')}</span>`));
+        const status = (state, text) => {
+          form.dataset.status = state;
+          form.className = form.className.replace(/\b(init|invalid|sent|failed|submitting)\b/g, '').trim() + ` ${state}`;
+          if (output) { output.textContent = text; output.removeAttribute('aria-hidden'); }
+        };
+        if (empty.length) { status('invalid', t('Un ou plusieurs champs contiennent une erreur. Veuillez vérifier et essayer à nouveau.', 'One or more fields have an error. Please check and try again.')); empty[0].focus(); return; }
+        status('submitting', '');
+        try {
+          await send(collect(form, `Q-LEAP "${form.querySelector('[name="subject"]')?.value || ''}"`));
+          status('sent', t('Merci pour votre message. Il a été envoyé.', 'Thank you for your message. It was sent.'));
+          form.reset();
+        } catch {
+          status('failed', t("L'envoi a échoué. Écrivez-nous à contact@q-leap.eu.", 'Sending failed. Please write to contact@q-leap.eu.'));
+        }
+      });
+    });
+
+    // WP Job Openings: the drag-and-drop upload needs the plugin, a plain file input replaces it.
+    document.querySelectorAll('form.awsm-application-form').forEach((form) => {
+      form.querySelectorAll('.awsm-form-drag-and-drop-file-control').forEach((zone) => {
+        const hidden = zone.parentElement.querySelector('input[type="hidden"][name^="awsm_file"]');
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = zone.dataset.accept || '.pdf';
+        input.name = hidden?.name || 'awsm_file';
+        input.id = input.name;
+        input.className = 'awsm-job-form-field awsm-job-form-control';
+        input.required = zone.dataset.required === '1';
+        input.dataset.qlLabel = zone.parentElement.querySelector('label')?.textContent.replace('*', '').trim() || 'CV';
+        hidden?.remove();
+        zone.replaceWith(input);
+      });
+      const title = document.querySelector('h1')?.textContent.trim() || '';
+      const message = form.parentElement.querySelector('.awsm-application-message');
+      if (new URLSearchParams(location.search).has('envoye') && message) {
+        message.style.display = '';
+        message.innerHTML = `<p>${t('Votre candidature a bien été envoyée. Merci !', 'Your application has been submitted. Thank you!')}</p>`;
+        form.hidden = true;
+      }
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const empty = missing(form);
+        if (empty.length) { empty[0].reportValidity?.(); empty[0].focus(); return; }
+        const data = collect(form, t(`Candidature : ${title}`, `Application: ${title}`));
+        const next = new URL(location.href);
+        next.searchParams.set('envoye', '1');
+        data.append('_next', next.href);
+        // A real form post: FormSubmit takes attachments only this way.
+        const post = document.createElement('form');
+        post.method = 'POST';
+        post.action = FORM_ENDPOINT;
+        post.enctype = 'multipart/form-data';
+        post.hidden = true;
+        for (const [name, value] of data) {
+          if (value instanceof File) continue;
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = name;
+          input.value = value;
+          post.append(input);
+        }
+        form.querySelectorAll('input[type="file"]').forEach((input) => {
+          if (!input.files.length) return;
+          input.name = 'attachment';
+          post.append(input);
+        });
+        document.body.append(post);
+        post.submit();
+      });
+    });
+  }
+
   // trx_addons "typed" titles (jQuery Typed.js 1.x): types each string, waits backDelay, deletes
   // it and types the next one (looped). Delay per character = typeSpeed + random 0-70 ms, as in
   // Typed.js. typeSpeed = (11 - data-speed) * 10, backDelay = data-delay s. Starts when the bottom
@@ -599,10 +840,12 @@
   document.querySelectorAll('.ql-hero').forEach(initHero);
   initTyped();
   initSessionRegistration();
+  initForms();
+  initJobFilters();
   initPopups();
   initElementorPosts();
   initTrainingCatalogue();
-  initBlogPagination();
+  initSearch().then(initBlogPagination);
   initElementorTabs();
   initMobileMenu();
   initEntranceAnimations();

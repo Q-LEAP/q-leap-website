@@ -23,3 +23,6 @@
    Elementor and ran over the photo; aligned with its paragraph instead. */
 .elementor-20063 .elementor-element.elementor-element-6ba4dcc > .elementor-widget-container,
 .elementor-31861 .elementor-element.elementor-element-6ba4dcc > .elementor-widget-container { margin-left: 0; padding-right: 0; }
+
+/* Site search results (initSearch): message when there is nothing to list. */
+.ql-search-message { margin: 0 0 2em; }

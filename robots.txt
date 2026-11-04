@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://q-leap.eu/sitemap_index.xml

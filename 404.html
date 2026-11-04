@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page introuvable - Q-Leap</title>
+<script>
+  // As on WordPress (301 Redirects: unknown addresses go to the home page), in the visitor's language.
+  (function () {
+    var base = location.hostname.endsWith('github.io') ? '/' + location.pathname.split('/')[1] + '/' : '/';
+    var english = location.pathname.slice(base.length).indexOf('en/') === 0;
+    location.replace(base + (english ? 'en/' : ''));
+  })();
+</script>
+</head>
+<body>
+<p><a href="/">Q-Leap</a></p>
+</body>
+</html>
