@@ -55,5 +55,7 @@ modifié : il reprend dès que les résolveurs suivent. Puis retirer le domaine 
   cliquer le lien, sinon rien n'est transmis. Si FormSubmit ne répond pas (panne du 2026-11-04 :
   erreur 522 pendant des heures), le visiteur reçoit un lien qui ouvre son logiciel de messagerie
   avec la demande déjà rédigée pour digital@q-leap.eu (candidatures : joindre le CV à la main).
+- **Alerte formulaires** : dans `.github/workflows/forms-monitor.yml`, passer `SITE` à
+  `https://q-leap.eu/` (le contrôle horaire vise le site de test tant que la bascule n'est pas faite).
 - **Search Console** : la balise `google-site-verification` des pages est conservée ; soumettre
   `https://q-leap.eu/sitemap_index.xml`.

@@ -645,13 +645,20 @@
   const FORM_RECIPIENT = 'digital@q-leap.eu';
   const FORM_ENDPOINT = `https://formsubmit.co/${FORM_RECIPIENT}`;
   const FORM_TIMEOUT = 15000;
+  // Mail subjects sorted in three families, always in French so the team's mailbox rules match them
+  // whatever the page language: « Candidature : <poste> » (or « Candidature spontanée »),
+  // « Inscription formation : <formation> – session du <date> » / « Demande formation : <formation> »,
+  // « Contact : <sujet> ». The body repeats the family and the site language.
+  const pageTitle = () => document.title.replace(/\s+[-–|]\s+Q-Leap\s*$/, '').trim();
   function initForms() {
     const english = document.documentElement.lang.startsWith('en');
     const t = (fr, en) => (english ? en : fr);
     const labelOf = (field) => field.dataset.qlLabel || field.placeholder || field.closest('label')?.textContent.trim()
       || document.querySelector(`label[for="${field.id}"]`)?.textContent.replace('*', '').trim() || field.name;
-    const collect = (form, subject) => {
+    const collect = (form, subject, kind) => {
       const data = new FormData();
+      data.append('Type de demande', kind);
+      data.append('Langue du site', english ? 'EN' : 'FR');
       form.querySelectorAll('input, textarea, select').forEach((field) => {
         if (!field.name || field.disabled || ['submit', 'button'].includes(field.type) || field.name.startsWith('_')) return;
         if (/recaptcha|nonce|^action$|^lang$|nf-field-hp|_wp_http_referer|^form_sub$/.test(field.name)) return;
@@ -708,8 +715,17 @@
         if (empty.length) { empty[0].focus(); return; }
         const button = form.querySelector('[type="submit"], .submit-wrap input');
         if (button) button.disabled = true;
-        const training = form.querySelector('input[name^="nf-field-19"]')?.value;
-        const data = collect(form, training ? t(`Nouvelle inscription à ${training}`, `New registration: ${training}`) : t('Nouvelle demande (formation)', 'New request (training)'));
+        const session = form.querySelector('input[name^="nf-field-16"]')?.value;
+        const training = form.querySelector('input[name^="nf-field-19"]')?.value
+          || (/\/trainings\//.test(location.pathname) ? pageTitle() : '');
+        const day = (form.querySelector('input[name^="nf-field-76"]')?.value || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
+        let subject = `Demande formation : ${training || `non précisée (page « ${pageTitle()} »)`}`;
+        let kind = 'Demande formation';
+        if (session && training) {
+          subject = `Inscription formation : ${training}${day ? ` – session du ${day[3]}/${day[2]}/${day[1]}` : ''}`;
+          kind = 'Inscription à une session';
+        }
+        const data = collect(form, subject, kind);
         try {
           await send(data);
           wrap.querySelector('.nf-response-msg').innerHTML = `<p>${t('Votre message a bien été envoyé.', 'Your message has been sent.')}</p>`;
@@ -743,7 +759,7 @@
         };
         if (empty.length) { status('invalid', t('Un ou plusieurs champs contiennent une erreur. Veuillez vérifier et essayer à nouveau.', 'One or more fields have an error. Please check and try again.')); empty[0].focus(); return; }
         status('submitting', '');
-        const data = collect(form, `Q-LEAP "${form.querySelector('[name="subject"]')?.value || ''}"`);
+        const data = collect(form, `Contact : ${form.querySelector('[name="subject"]')?.value.trim() || 'sans objet'}`, 'Contact général');
         try {
           await send(data);
           status('sent', t('Merci pour votre message. Il a été envoyé.', 'Thank you for your message. It was sent.'));
@@ -770,7 +786,8 @@
         hidden?.remove();
         zone.replaceWith(input);
       });
-      const title = document.querySelector('h1')?.textContent.trim() || '';
+      const title = pageTitle();
+      const spontaneous = /spontan|unsolicited/i.test(title + location.pathname);
       const message = form.parentElement.querySelector('.awsm-application-message');
       if (new URLSearchParams(location.search).has('envoye') && message) {
         message.style.display = '';
@@ -781,7 +798,8 @@
         event.preventDefault();
         const empty = missing(form);
         if (empty.length) { empty[0].reportValidity?.(); empty[0].focus(); return; }
-        const data = collect(form, t(`Candidature : ${title}`, `Application: ${title}`));
+        const data = collect(form, spontaneous ? 'Candidature spontanée' : `Candidature : ${title}`, spontaneous ? 'Candidature spontanée' : 'Candidature à une offre');
+        data.append('Poste visé', spontaneous ? 'Candidature spontanée' : title);
         // The page is left for FormSubmit's: check first that it answers (an empty request is
         // refused without sending anything), otherwise offer the e-mail with the CV attached by hand.
         try {

@@ -1,0 +1,59 @@
+# Forms alert: every hour, tools/verify/forms_monitor.py checks (without sending anything) that the
+# site's forms can deliver. Nothing happens while they work. On the first failure an issue
+# « Alerte formulaires » is opened and assigned (GitHub e-mails the assignee); while it lasts the
+# issue text is kept up to date without new e-mails; when the forms work again the issue is closed
+# with a comment (one more e-mail). SITE: the test site until q-leap.eu is switched to GitHub Pages.
+name: Forms monitor
+
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: forms-monitor
+  cancel-in-progress: false
+
+env:
+  SITE: https://q-leap.github.io/q-leap-website/
+  ASSIGNEE: Komorebideuxiemedunom
+  LABEL: alerte-formulaires
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev
+      - name: Check the forms
+        id: monitor
+        run: |
+          set +e
+          python3 tools/verify/forms_monitor.py "$SITE" > report.txt 2>&1
+          echo "status=$?" >> "$GITHUB_OUTPUT"
+          cat report.txt
+      - name: Open, update or close the alert issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          STATUS: ${{ steps.monitor.outputs.status }}
+        run: |
+          gh label create "$LABEL" --color B60205 --description "Formulaires du site en panne" --force >/dev/null
+          open_issue=$(gh issue list --label "$LABEL" --state open --json number --jq '.[0].number')
+          run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          if [ "$STATUS" != "0" ]; then
+            { echo "Le contrôle horaire des formulaires de $SITE a échoué :"; echo; cat report.txt; echo;
+              echo "Dernier contrôle : $(date -u '+%Y-%m-%d %H:%M UTC') ([détails]($run_url))."; } > body.md
+            if [ -z "$open_issue" ]; then
+              gh issue create --title "Alerte formulaires : des messages du site ne partent plus" --body-file body.md \
+                --label "$LABEL" --assignee "$ASSIGNEE"
+            else
+              gh issue edit "$open_issue" --body-file body.md
+            fi
+          elif [ -n "$open_issue" ]; then
+            gh issue close "$open_issue" --comment "Rétabli : $(tail -1 report.txt) ($(date -u '+%Y-%m-%d %H:%M UTC'))."
+          fi
