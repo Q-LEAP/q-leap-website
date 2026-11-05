@@ -726,12 +726,19 @@
           kind = 'Inscription à une session';
         }
         const data = collect(form, subject, kind);
+        // Ninja Forms' stylesheet hides the message area (its script used to reveal it): show it here.
+        const respond = (html) => {
+          const message = wrap.querySelector('.nf-response-msg');
+          message.innerHTML = html;
+          message.style.display = 'block';
+        };
+        respond(`<p>${t('Envoi en cours…', 'Sending…')}</p>`);
         try {
           await send(data);
-          wrap.querySelector('.nf-response-msg').innerHTML = `<p>${t('Votre message a bien été envoyé.', 'Your message has been sent.')}</p>`;
+          respond(`<p>${t('Votre message a bien été envoyé.', 'Your message has been sent.')}</p>`);
           form.hidden = true;
         } catch {
-          wrap.querySelector('.nf-response-msg').innerHTML = fallback(data);
+          respond(fallback(data));
           if (button) button.disabled = false;
         }
       });
