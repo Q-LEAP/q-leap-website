@@ -4,7 +4,7 @@
 GitHub issue on failure (its assignee gets an e-mail) and closes it when the forms work again.
 
 Checks, without sending any message:
-- FormSubmit (the service that mails the forms to digital@q-leap.eu) answers;
+- Formspree (the service that mails the forms to digital@q-leap.eu) answers;
 - assets/js/main.js on the site still holds the form handler and its fallback;
 - the contact pages (FR/EN) have their form;
 - every job linked from join-us/ and en/career/ is a real page with an application form (a job left
@@ -21,7 +21,7 @@ import urllib.request
 
 BASE = (sys.argv[1] if len(sys.argv) > 1 else 'https://q-leap.eu/').rstrip('/') + '/'
 UA = {'User-Agent': 'Q-Leap forms monitor (github.com/Q-LEAP/q-leap-website)'}
-FORM_SERVICE = 'https://formsubmit.co/'
+FORM_SERVICE = 'https://formspree.io/'
 problems = []
 
 
@@ -42,7 +42,7 @@ def check_service():
         status, _, _ = get(FORM_SERVICE, timeout=20)
         if status == 200:
             return
-    problems.append(f'FormSubmit ne répond pas (HTTP {status or "aucune réponse"}) : les formulaires du site '
+    problems.append(f'Formspree ne répond pas (HTTP {status or "aucune réponse"}) : les formulaires du site '
                     f'basculent sur le lien e-mail de secours, aucun message n\'arrive automatiquement.')
 
 
@@ -51,7 +51,7 @@ def check_script():
     if status != 200:
         problems.append(f'assets/js/main.js inaccessible (HTTP {status}).')
         return
-    for needle, what in (('formsubmit.co', 'l\'envoi vers FormSubmit'), ('function initForms', 'le gestionnaire des formulaires'),
+    for needle, what in (('formspree.io/f/', 'l\'envoi vers Formspree'), ('function initForms', 'le gestionnaire des formulaires'),
                          ('const fallback', 'le lien e-mail de secours')):
         if needle not in js:
             problems.append(f'assets/js/main.js ne contient plus {what}.')
@@ -100,7 +100,7 @@ def main():
         for problem in problems:
             print('- ' + problem)
         sys.exit(1)
-    print(f'OK : FormSubmit répond, {len(jobs)} offres et {len(trainings)} formations avec leur formulaire, contact FR/EN.')
+    print(f'OK : Formspree répond, {len(jobs)} offres et {len(trainings)} formations avec leur formulaire, contact FR/EN.')
 
 
 if __name__ == '__main__':
