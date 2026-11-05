@@ -50,11 +50,15 @@ modifié : il reprend dès que les résolveurs suivent. Puis retirer le domaine 
 
 - **WordPress** reste en ligne chez WordPress.com (rien n'y est supprimé), mais n'est plus à
   l'adresse q-leap.eu : l'administration passe par l'adresse WordPress.com du site.
-- **Formulaires** (inscriptions, contact, candidatures) : FormSubmit vers `digital@q-leap.eu`
-  (destinataire de WordPress). Le premier envoi déclenche un courrier d'activation à cette adresse :
-  cliquer le lien, sinon rien n'est transmis. Si FormSubmit ne répond pas (panne du 2026-11-04 :
-  erreur 522 pendant des heures), le visiteur reçoit un lien qui ouvre son logiciel de messagerie
-  avec la demande déjà rédigée pour digital@q-leap.eu (candidatures : joindre le CV à la main).
+- **Formulaires** (inscriptions, contact, candidatures avec CV) : relais maison
+  `tools/forms/relay` (Cloudflare Worker) qui envoie chaque demande à `digital@q-leap.eu` par Brevo
+  (offre gratuite, 300 e-mails/jour). À faire une fois, voir `tools/forms/relay/README.md` :
+  authentifier `q-leap.eu` dans Brevo et ajouter dans la zone OVH le TXT `brevo-code` et les deux
+  CNAME DKIM qu'il donne (q-leap.eu est en DMARC `p=reject` : sans eux tout est rejeté ; le SPF
+  inclut déjà Brevo), puis déployer le Worker. Si le relais ou Brevo ne répond pas, le visiteur
+  reçoit un lien qui ouvre son logiciel de messagerie avec la demande déjà rédigée pour
+  digital@q-leap.eu (candidatures : joindre le CV à la main). FormSubmit, utilisé jusqu'au
+  2026-11-05, est abandonné (erreur 522 deux jours de suite).
 - **Alerte formulaires** : dans `.github/workflows/forms-monitor.yml`, passer `SITE` à
   `https://q-leap.eu/` (le contrôle horaire vise le site de test tant que la bascule n'est pas faite).
 - **Search Console** : la balise `google-site-verification` des pages est conservée ; soumettre

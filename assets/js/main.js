@@ -637,13 +637,14 @@
   }
 
   // Forms (Ninja Forms registration, Contact Form 7, WP Job Openings applications): GitHub Pages
-  // cannot receive them, Formspree mails them to the address WordPress used (digital@q-leap.eu
-  // for all three, set on the Formspree form). Every form, CV included, is sent in the background
-  // and shows the plugin's own success message. If Formspree fails or is slow (15 s, 60 s with a
-  // CV), the visitor gets a link that opens their mail app with the filled-in request instead.
-  // (FormSubmit was used until 2026-11-05; it stayed down with HTTP 522 for two days.)
+  // cannot receive them, our relay (tools/forms/relay: a Cloudflare Worker sending through Brevo)
+  // mails them to the address WordPress used (digital@q-leap.eu for all three). Every form, CV
+  // included, is sent in the background and shows the plugin's own success message. If the relay
+  // fails or is slow (15 s, 60 s with a CV), the visitor gets a link that opens their mail app with
+  // the filled-in request instead. (FormSubmit was used until 2026-11-05; it stayed down with HTTP
+  // 522 for two days.)
   const FORM_RECIPIENT = 'digital@q-leap.eu';
-  const FORM_ENDPOINT = 'https://formspree.io/f/FORMSPREE_ID';
+  const FORM_ENDPOINT = 'https://qleap-forms.WORKERS_SUBDOMAIN.workers.dev/';
   const FORM_TIMEOUT = 15000;
   const FORM_TIMEOUT_WITH_FILE = 60000;
   // Mail subjects sorted in three families, always in French so the team's mailbox rules match them
@@ -681,7 +682,7 @@
       const response = await fetch(FORM_ENDPOINT,
         { method: 'POST', body: data, headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(timeout) });
       const result = await response.json().catch(() => ({}));
-      if (!response.ok || result.ok !== true) throw new Error(result.errors?.map((error) => error.message).join(' ') || response.status);
+      if (!response.ok || result.ok !== true) throw new Error(result.error || response.status);
     };
     // The same request as an e-mail written by the visitor's mail app (nothing is lost if the service is down).
     const fallback = (data) => {
