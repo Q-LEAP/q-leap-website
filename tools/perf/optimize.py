@@ -34,8 +34,9 @@ if PUBLISHED_COPY:
     del sys.argv[sys.argv.index('--root'):sys.argv.index('--root') + 2]
 BUNDLES = os.path.join(ROOT, 'assets', 'css', 'bundle')
 SCRIPTS = ['assets/js/main.js', 'assets/js/ux.js', 'assets/js/vendor/swiper-5.4.5.min.js']
-# Classes that libraries build at run time from pieces (Swiper: modifierClass + type/direction…)
-DYNAMIC_PREFIXES = ('swiper-',)
+# Classes that libraries build at run time from pieces (Swiper: modifierClass + type/direction…;
+# intl-tel-input: one flag class per country, iti__<iso2>, chosen from assets/js/phone-countries.json)
+DYNAMIC_PREFIXES = ('swiper-', 'iti__', 'iti--')
 WEBP_MIN_BYTES = 40 * 1024
 WEBP_QUALITY = 84
 INLINE_FONT_MAX = 4 * 1024  # base64 characters; smaller fonts (Swiper's arrows, 2.3 kB) stay in the CSS

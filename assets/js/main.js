@@ -983,6 +983,171 @@
     });
   }
 
+  // WP Job Openings phone fields (intl-tel-input 29 in the plugin): country button (flag, arrow,
+  // dial code) inside the field, a searchable country list (inline, above or below the field; a
+  // full-screen popup up to 500 px wide), the selected country's example number as placeholder.
+  // The default country renders at once; the list (assets/js/phone-countries.json: iso2, dial
+  // code, name, example) loads on first opening. The form sends "+<dial code> <number>".
+  function initPhoneFields() {
+    const english = document.documentElement.lang.startsWith('en');
+    const known = { lu: ['lu', '352', 'Luxembourg', '628 123 456'] };
+    let countries = null;
+    const loadCountries = () => countries || (countries = fetch(new URL('assets/js/phone-countries.json', siteRoot))
+      .then((response) => response.json()).catch(() => Object.values(known)));
+    const checkSvg = '<span class="iti__country-check" aria-hidden="true"><svg class="iti__country-check-svg" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l3 3 7-7"></path></svg></span>';
+    document.querySelectorAll('.awsm-job-form-iti-wrapper').forEach((wrapper, index) => {
+      const input = wrapper.querySelector('input[type="tel"]');
+      if (!input) return;
+      // The example placeholder must not become the field's label in the notification e-mail.
+      input.dataset.qlLabel = wrapper.querySelector('label')?.textContent.replace('*', '').trim() || input.name;
+      let country = known[(wrapper.dataset.defaultCountry || 'LU').toLowerCase()] || known.lu;
+      const id = `iti-${index}`;
+      const container = document.createElement('div');
+      container.className = 'iti iti--input-container iti--has-country-selector iti--show-flags iti--inline-country-selector awsm-job-form-control';
+      container.innerHTML = `<div class="iti__country-container"><button type="button" class="iti__selected-country" aria-expanded="false" aria-haspopup="dialog" aria-controls="${id}__country-selector"><div class="iti__selected-country-primary"><div class="iti__flag"></div><div class="iti__arrow" aria-hidden="true"></div></div><div class="iti__selected-dial-code"></div></button></div>`;
+      input.before(container);
+      container.append(input);
+      input.classList.add('iti__tel-input');
+      input.setAttribute('autocomplete', 'tel');
+      input.setAttribute('inputmode', 'tel');
+      const button = container.querySelector('.iti__selected-country');
+      const countryContainer = container.querySelector('.iti__country-container');
+      const show = () => {
+        const [iso, dial, name, example] = country;
+        button.querySelector('.iti__flag').className = `iti__flag iti__${iso}`;
+        button.querySelector('.iti__selected-dial-code').textContent = `+${dial}`;
+        button.title = name;
+        button.setAttribute('aria-label', `${english ? 'Change country for phone number, currently selected' : 'Changer le pays du numéro, actuellement'} ${name} (+${dial})`);
+        input.placeholder = example;
+        input.dataset.qlDialCode = dial;
+        input.style.paddingLeft = `${button.offsetWidth + 6}px`;
+      };
+      show();
+
+      let selector = null, popup = null, highlighted = null, countryList = null;
+      const close = (focusButton) => {
+        if (!selector || selector.classList.contains('iti__hide')) return;
+        selector.classList.add('iti__hide');
+        button.setAttribute('aria-expanded', 'false');
+        button.querySelector('.iti__arrow').classList.remove('iti__arrow--up');
+        if (popup) { popup.remove(); popup = null; countryContainer.append(selector); }
+        if (focusButton) button.focus();
+      };
+      const highlight = (item, scroll) => {
+        highlighted?.classList.remove('iti__highlight');
+        highlighted = item;
+        if (!item) return;
+        item.classList.add('iti__highlight');
+        selector.querySelector('.iti__search-input').setAttribute('aria-activedescendant', item.id);
+        if (scroll) item.scrollIntoView({ block: 'nearest' });
+      };
+      const choose = (item) => {
+        country = countryList.find((entry) => entry[0] === item.dataset.iso2);
+        selector.querySelectorAll('.iti__country').forEach((other) => {
+          other.setAttribute('aria-selected', String(other === item));
+          other.querySelector('.iti__country-check')?.remove();
+        });
+        item.insertAdjacentHTML('beforeend', checkSvg);
+        close(false);
+        show();
+        input.focus();
+      };
+      const build = (list) => {
+        selector = document.createElement('div');
+        selector.id = `${id}__country-selector`;
+        selector.className = 'iti__country-selector iti__hide';
+        selector.setAttribute('role', 'dialog');
+        selector.setAttribute('aria-modal', 'true');
+        selector.innerHTML = `<div class="iti__search-input-wrapper"><span class="iti__search-icon" aria-hidden="true"><svg class="iti__search-icon-svg" width="14" height="14" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span><input id="${id}__search-input" type="search" class="iti__search-input" role="combobox" aria-expanded="true" aria-controls="${id}__country-listbox" aria-autocomplete="list" autocomplete="off"></div><span class="iti__a11y-text"></span><div class="iti__no-results iti__hide" aria-hidden="true"></div><ul id="${id}__country-listbox" class="iti__country-list" role="listbox"></ul>`;
+        const search = selector.querySelector('.iti__search-input');
+        search.placeholder = english ? 'Search' : 'Rechercher';
+        search.setAttribute('aria-label', search.placeholder);
+        selector.querySelector('.iti__no-results').textContent = english ? 'No results found' : 'Aucun résultat';
+        const listbox = selector.querySelector('.iti__country-list');
+        listbox.setAttribute('aria-label', english ? 'List of countries' : 'Liste des pays');
+        listbox.innerHTML = list.map(([iso, dial, name]) => `<li id="${id}__item-${iso}" class="iti__country" tabindex="-1" role="option" aria-selected="false" data-dial-code="${dial}" data-iso2="${iso}"><div class="iti__flag iti__${iso}"></div><span class="iti__country-name"></span></li>`).join('');
+        [...listbox.children].forEach((item, position) => {
+          item.querySelector('.iti__country-name').innerHTML = '<span class="iti__dial-code"></span>';
+          item.querySelector('.iti__country-name').prepend(`${list[position][2]} `);
+          item.querySelector('.iti__dial-code').textContent = `(+${list[position][1]})`;
+        });
+        const fold = (text) => text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+        const filter = () => {
+          const query = fold(search.value.trim());
+          let count = 0, first = null;
+          [...listbox.children].forEach((item, position) => {
+            const [iso, dial, name] = list[position];
+            const words = fold(name).split(/[\s(),.-]+/);
+            const match = !query || words.some((word) => word.startsWith(query)) || fold(name).startsWith(query)
+              || iso === query || dial.startsWith(query.replace(/^\+/, ''));
+            item.classList.toggle('iti__hide', !match);
+            if (match) { count += 1; first = first || item; }
+          });
+          selector.querySelector('.iti__no-results').classList.toggle('iti__hide', count > 0);
+          selector.querySelector('.iti__a11y-text').textContent = english ? `${count} results found` : `${count} résultats`;
+          highlight(query ? first : listbox.querySelector('[aria-selected="true"]') || first, true);
+        };
+        search.addEventListener('input', filter);
+        search.addEventListener('keydown', (event) => {
+          const visible = [...listbox.children].filter((item) => !item.classList.contains('iti__hide'));
+          const position = visible.indexOf(highlighted);
+          if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+            event.preventDefault();
+            highlight(visible[Math.max(0, Math.min(visible.length - 1, position + (event.key === 'ArrowDown' ? 1 : -1)))], true);
+          } else if (event.key === 'Enter') {
+            event.preventDefault();
+            if (highlighted) choose(highlighted);
+          } else if (event.key === 'Escape') {
+            event.preventDefault();
+            close(true);
+          }
+        });
+        listbox.addEventListener('mouseover', (event) => { const item = event.target.closest('.iti__country'); if (item) highlight(item, false); });
+        listbox.addEventListener('click', (event) => { const item = event.target.closest('.iti__country'); if (item) choose(item); });
+        countryContainer.append(selector);
+        const current = listbox.querySelector(`[data-iso2="${country[0]}"]`);
+        current?.setAttribute('aria-selected', 'true');
+        current?.insertAdjacentHTML('beforeend', checkSvg);
+      };
+      const open = async () => {
+        if (!countryList) {
+          countryList = await loadCountries();
+          build(countryList);
+        }
+        const search = selector.querySelector('.iti__search-input');
+        search.value = '';
+        selector.removeAttribute('style');
+        selector.classList.remove('iti--flexible-dropdown-width');
+        if (window.innerWidth <= 500) {
+          // Full-screen popup, detached at the end of the body like intl-tel-input on small screens.
+          popup = document.createElement('div');
+          popup.className = 'iti iti--detached-country-selector iti--fullscreen-popup awsm-job-form-control';
+          selector.classList.add('iti--flexible-dropdown-width');
+          popup.append(selector);
+          document.body.append(popup);
+        } else {
+          selector.style.width = `${container.offsetWidth}px`;
+        }
+        selector.classList.remove('iti__hide');
+        if (!popup) {
+          // Opens downwards, or upwards when it does not fit below but fits above.
+          const box = container.getBoundingClientRect();
+          const height = selector.offsetHeight;
+          if (box.bottom + height > window.innerHeight && box.top - height > 0) selector.style.bottom = `${container.offsetHeight}px`;
+        }
+        button.setAttribute('aria-expanded', 'true');
+        button.querySelector('.iti__arrow').classList.add('iti__arrow--up');
+        search.dispatchEvent(new Event('input'));
+        search.focus();
+      };
+      button.addEventListener('click', () => (selector && !selector.classList.contains('iti__hide') ? close(true) : open()));
+      document.addEventListener('click', (event) => {
+        if (selector && !selector.contains(event.target) && !button.contains(event.target)) close(false);
+      });
+      window.addEventListener('resize', () => { input.style.paddingLeft = `${button.offsetWidth + 6}px`; });
+    });
+  }
+
   function initForms() {
     const english = document.documentElement.lang.startsWith('en');
     const t = (fr, en) => (english ? en : fr);
@@ -997,7 +1162,9 @@
         if (/recaptcha|nonce|^action$|^lang$|nf-field-hp|_wp_http_referer|^form_sub$/.test(field.name)) return;
         if ((field.type === 'checkbox' || field.type === 'radio') && !field.checked) return;
         if (field.type === 'file') { [...field.files].forEach((file) => data.append(labelOf(field), file)); return; }
-        if (field.value.trim()) data.append(labelOf(field), field.value.trim());
+        const value = field.value.trim();
+        // Phone fields with a country selector: the number goes with its dial code (initPhoneFields).
+        if (value) data.append(labelOf(field), field.dataset.qlDialCode && !value.startsWith('+') ? `+${field.dataset.qlDialCode} ${value}` : value);
       });
       data.append('Page', location.href);
       data.append('_subject', subject);
@@ -1263,6 +1430,7 @@
   initTyped();
   initSessionRegistration();
   initContactFormStyles();
+  initPhoneFields();
   initForms();
   initJobFilters();
   initPopups();
