@@ -6,7 +6,8 @@ generated (export + components.py, trainings, blog, UX layer) and no generated C
    order) become one file, assets/css/bundle/<hash>.css, without the rules that cannot match the page:
    a rule is dropped only when one of its selectors' classes or ids appears nowhere in the page nor
    in the site's scripts (the scripts add classes at run time). Order, media queries, @font-face and
-   @keyframes are kept (unused ones and exact duplicates excepted).
+   @keyframes are kept (unused ones and exact duplicates excepted). Fonts the stylesheets embed
+   in base64 (over 4 kB) become files next to the bundles, downloaded only when used.
 2. Images: photos heavier than 40 kB get a WebP copy at the same size (assets/…/<name>.<ext>.webp)
    used by the pages; the originals stay (social sharing, CMS). Images below the first screen load
    lazily.
@@ -35,6 +36,7 @@ SCRIPTS = ['assets/js/main.js', 'assets/js/ux.js', 'assets/js/vendor/swiper-5.4.
 DYNAMIC_PREFIXES = ('swiper-',)
 WEBP_MIN_BYTES = 40 * 1024
 WEBP_QUALITY = 84
+INLINE_FONT_MAX = 4 * 1024  # base64 characters; smaller fonts (Swiper's arrows, 2.3 kB) stay in the CSS
 BLOCK = re.compile(r'<!-- wp-styles(?::bundle)? -->\n?(.*?)\n?<!-- /wp-styles -->', re.S)
 
 
@@ -243,12 +245,30 @@ def bundle(block, page, page_dir, tokens):
     # Heavy background images get their WebP copy too (paths are relative to assets/css/bundle/)
     css = re.sub(r'url\((["\']?)([^)"\']+\.(?:jpe?g|png))\1\)', lambda m: f'url({m.group(1)}{m.group(2)}.webp{m.group(1)})'
                  if not re.match(r'(data:|https?:|//)', m.group(2)) and webp_copy(os.path.normpath(os.path.join(BUNDLES, m.group(2)))) else m.group(0), css, flags=re.I)
+    css = re.sub(r'url\((["\']?)data:([^;,)]*font[^;,)]*)(?:;[^,)]*)?;base64,([A-Za-z0-9+/=]+)\1\)', inline_font_file, css)
     digest = hashlib.sha1(css.encode()).hexdigest()[:12]
     os.makedirs(BUNDLES, exist_ok=True)
     target = os.path.join(BUNDLES, digest + '.css')
     if not os.path.exists(target):
         open(target, 'w', encoding='utf-8').write(css)
     return f'assets/css/bundle/{digest}.css', len(css)
+
+
+def inline_font_file(match):
+    """A font written into the CSS as base64 travels with every page that loads the stylesheet, used
+    or not (the quiz's "Rating" star font: 15 kB on every page). Above INLINE_FONT_MAX it becomes a
+    file next to the bundles, which the browser downloads only if some text needs it."""
+    quote, mime, data = match.groups()
+    if len(data) <= INLINE_FONT_MAX:
+        return match.group(0)
+    import base64
+    content = base64.b64decode(data)
+    extension = next((ext for key, ext in (('woff2', 'woff2'), ('woff', 'woff'), ('otf', 'otf'), ('opentype', 'otf')) if key in mime), 'ttf')
+    name = hashlib.sha1(content).hexdigest()[:12] + '.' + extension
+    os.makedirs(BUNDLES, exist_ok=True)
+    if not os.path.exists(os.path.join(BUNDLES, name)):
+        open(os.path.join(BUNDLES, name), 'wb').write(content)
+    return f'url({quote}{name}{quote})'
 
 
 # ---------------------------------------------------------------- images
