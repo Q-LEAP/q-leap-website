@@ -9,7 +9,8 @@ page's translation. This script puts them back in every indexable page, from the
   not claim another translation; the pair is then written on both sides (hreflang must be mutual);
 - like WPML: hreflang="en", hreflang="fr", then x-default = the French page (the page itself when it
   has no French version); a page without translation gets its own language and x-default;
-- canonical: the same URL, absolute (https://q-leap.eu/…).
+- canonical: the same URL, absolute (https://q-leap.eu/…);
+- redirect and noindex pages carry no alternates (the search pages are built from the blog page).
 
 Idempotent: run it again after any build (the Build content workflow does, after the trainings,
 blog and search pages are generated).
@@ -22,7 +23,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 SITE = 'https://q-leap.eu/'
 SKIP = {'tools', 'docs', 'assets', 'content', 'node_modules'}
 SWITCHER = re.compile(r'<li class="[^"]*wpml-ls-item-(en|fr)[^"]*"[^>]*>\s*<a href="([^"]*)"')
-ALTERNATE = re.compile(r'<link rel="alternate" hreflang="[^"]*" href="[^"]*" />\n')
+ALTERNATE = re.compile(r'<link rel="alternate" hreflang="[^"]*" href="[^"]*" />\r?\n')
 
 
 def page_files():
@@ -96,7 +97,8 @@ def head_links(key, page, translation):
         versions['en' if page['lang'] == 'fr' else 'fr'] = translation
     links = [f'<link rel="alternate" hreflang="{code}" href="{SITE}{versions[code]}" />' for code in ('en', 'fr') if code in versions]
     links.append(f'<link rel="alternate" hreflang="x-default" href="{SITE}{versions.get("fr", key)}" />')
-    return ''.join(link + '\n' for link in links)
+    newline = '\r\n' if '\r\n' in page['markup'] else '\n'  # a Windows checkout (core.autocrlf) has CRLF
+    return ''.join(link + newline for link in links)
 
 
 def main():
@@ -104,9 +106,13 @@ def main():
     pairs = translations(pages)
     changed = 0
     for key, page in pages.items():
-        if not page['indexable'] or page['lang'] not in ('fr', 'en'):
-            continue
         markup = ALTERNATE.sub('', page['markup'])
+        if not page['indexable'] or page['lang'] not in ('fr', 'en'):
+            # no alternates on redirects and noindex pages (search/build.py copies the blog page's head)
+            if markup != page['markup']:
+                open(os.path.join(ROOT, page['file']), 'w', encoding='utf-8', newline='').write(markup)
+                changed += 1
+            continue
         canonical = re.search(r'<link rel="canonical" href="([^"]*)" />', markup)
         if not canonical:
             continue
