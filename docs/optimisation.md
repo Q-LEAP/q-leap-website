@@ -21,9 +21,23 @@ ne pas refaire deux fois la même chose.
 | 2026-11-06 | SEO : `hreflang` et `canonical` absolus rétablis (`tools/seo/alternates.py`, lancé aussi par le workflow Build content) : l'export avait supprimé les balises `<link rel="alternate" hreflang>` de WPML et rendu les canonical relatifs (`./`, `../page/`). Paires FR/EN déduites du sélecteur de langue de chaque page (redirections suivies, page cible indexable, réciprocité), ordre et `x-default` (= page française) comme WPML ; page sans traduction : sa langue + `x-default` | 171 pages indexables, 82 paires FR/EN, 149 canonical rendus absolus | Toutes les paires réciproques ; 20 pages tirées au hasard : `hreflang` et `canonical` identiques au WordPress en ligne ; script idempotent (2ᵉ passage : 0 changement), y compris enchaîné avec `tools/search/build.py` (les pages de recherche `noindex`, copiées depuis le blog, sont débarrassées de ses `hreflang`) et quelles que soient les fins de ligne du fichier ; HTML inchangé hors ces balises, aucune erreur console |
  src=…`) se chargeaient tout de suite même à 4 800 px de haut | Accueil : 506 → 453 ko d'images au premier chargement (−53 ko) ; 8 images concernées sur l'accueil FR/EN et les calendriers | Image chargée en arrivant à l'écran, place réservée (`width`/`height`), rendu final identique ; captures accueil, EN, calendriers FR/EN × 3 largeurs en attendant chaque image différée : écarts limités au diaporama du hero et au carrousel automatique ; aucune erreur console. Écarté après mesure : retirer le texte de Swiper des mots qui protègent les règles CSS (gain < 1 ko compressé par page) |
 
-## Pistes repérées, pas encore faites
+## À valider avant de toucher
 
-- CSS : 600 à 760 ko par page après `optimize.py` (le plus gros poste de toutes les pages mesurées).
-- HTML : 160 à 260 ko par page.
-- Polices : formats anciens (`.eot`, `.svg`, `.ttf`) encore référencés à côté des `.woff2`.
-- Images lourdes sous 250 ko non converties, PNG photographiques.
+- Page Contact : le lien e-mail du bloc coordonnées est cassé (`<a href="mailto:contact@q-leap.eu>contact@q-leap.eu</a>`, guillemet manquant) et le bloc s'affiche vide ; même bug sur le WordPress en ligne. Le corriger fait apparaître l'adresse.
+- SEO : l'accueil anglais (`en/`) a pour canonical l'accueil français (`https://q-leap.eu/`), comme sur le WordPress en ligne ; Google ignore alors son `hreflang`. Le pointer sur `https://q-leap.eu/en/` ?
+- SEO : 150 pages sans `meta description` et des `h1` absents ou multiples (contenu).
+
+## Pistes restantes
+
+- Accessibilité : menu de démo du thème (« Features », « Blog ») masqué mais présent dans le HTML. Les images du calendrier sont en `alt=""` avec un titre d'événement voisin : décoratives, c'est voulu.
+- Images de fond en ligne (`style="background-image"`) sous la ligne de flottaison, chargées d'emblée (~95 ko sur l'accueil) : le chargement différé demanderait du JS et un risque d'apparition visible.
+- Polices : formats anciens (`.eot`, `.svg`, `.ttf`) encore cités dans les `@font-face` après les `.woff2` (texte CSS seulement, jamais téléchargés par les navigateurs actuels).
+
+## Mesuré et écarté
+
+- Vidéo Innovations en chargement différé : elle commence à 876 px, sous un écran de 900 px, gain nul.
+- Polices de texte Typekit : déjà réduites au latin.
+- HTML : 30 ko compressés par page, peu à gagner.
+- Retirer le texte de Swiper des mots qui protègent les règles CSS : moins de 1 ko compressé par page.
+- Précharger (`rel=preload`) les 4 polices de texte chargées sur toutes les pages (europa 300/400, sofia-pro 300/500) : en 4G lente, sur 4 pages × 2 largeurs et 2 passes, FCP +450 à +650 ms partout et LCP de l'accueil +700 ms, les ~130 ko de polices prenant la bande passante du CSS qui bloque le rendu. À ne pas refaire tant que le CSS n'est pas plus léger.
+- Chemin critique : en 4G lente le LCP de l'accueil (~3 s) est borné par le bundle CSS (~78 ko compressés) ; police du hero déjà en `swap`, Swiper limité aux 8 pages à carrousel ; CLS < 0,05 partout.
