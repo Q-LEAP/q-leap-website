@@ -4,7 +4,7 @@ import fs from 'fs';
 import puppeteer from 'puppeteer-core';
 import { CHROME, LIVE, LOCAL } from './chrome.mjs';
 
-const PAGES = { home: '', en: 'en/', 'about-us': 'about-us/', testing: 'testing-service/', training: 'training/', contact: 'contact/', blog: 'blog/', 'our-events': 'our-events/' };
+const PAGES = { home: '', en: 'en/', 'about-us': 'about-us/', testing: 'testing-service/', training: 'training/', contact: 'contact/', blog: 'blog/', 'our-events': 'our-events/', 'en-about-us': 'en/about-us/', 'join-us': 'join-us/', 'en-career': 'en/career/', innovations: 'innovations/', 'q-leap-factory': 'q-leap-factory/' };
 const VIEWPORTS = {
   desktop: { width: 1920, height: 902 },
   tablet: { width: 1024, height: 1366, isMobile: true, hasTouch: true },
