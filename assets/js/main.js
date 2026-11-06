@@ -203,8 +203,16 @@
       const controls = slider.classList.contains('slider_controls');
       const control = (name) => slider.querySelector(`:scope > .slider_controls_wrap > .slider_${name}`) || slider.parentElement.querySelector(`:scope > .slider_controls_wrap > .slider_${name}`);
       const autoplay = slider.classList.contains('slider_noautoplay') || data.autoplay === '0' || reducedMotion ? false : { delay: interval, disableOnInteraction: true };
-      // eslint-disable-next-line no-new
-      new window.Swiper(slider, {
+      // trx_addons_resize_sliders: under 1440 px the space between slides is capped at twice the
+      // padding of the "extended" Elementor column gap (e.g. 60 px becomes 30 px on a tablet).
+      const slidesSpace = () => {
+        const space = Number(data.slidesSpace) || 0;
+        if (window.innerWidth >= 1440) return space;
+        const column = document.querySelector('.elementor-column-gap-extended > .elementor-row > .elementor-column > .elementor-element-populated, .elementor-column-gap-extended > .elementor-column > .elementor-element-populated');
+        const gap = column ? parseInt(getComputedStyle(column).paddingLeft, 10) * 2 : 0;
+        return gap >= 20 && space > gap ? gap : space;
+      };
+      const swiper = new window.Swiper(slider, {
         freeMode: Number(data.freeMode) > 0,
         direction,
         initialSlide: 0,
@@ -212,7 +220,7 @@
         loop: (data.loop === undefined || Number(data.loop) > 0) && data.slidesOverflow !== '1',
         loopedSlides: perView,
         slidesPerView: perView,
-        spaceBetween: Number(data.slidesSpace) || 0,
+        spaceBetween: slidesSpace(),
         centeredSlides: data.slidesCentered === '1',
         grabCursor: true,
         autoHeight: false,
@@ -224,6 +232,10 @@
         autoplay,
       });
       slider.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, fill: 'forwards' });
+      window.addEventListener('resize', () => {
+        const space = slidesSpace();
+        if (swiper.params.spaceBetween !== space) { swiper.params.spaceBetween = space; swiper.update(); }
+      });
     });
   }
 
