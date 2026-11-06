@@ -7,7 +7,7 @@ generated (export + components.py, trainings, blog, UX layer) and no generated C
    a rule is dropped only when one of its selectors' classes or ids appears nowhere in the page nor
    in the site's scripts (the scripts add classes at run time). Order, media queries, @font-face and
    @keyframes are kept (unused ones and exact duplicates excepted).
-2. Images: photos heavier than 250 kB get a WebP copy at the same size (assets/…/<name>.<ext>.webp)
+2. Images: photos heavier than 40 kB get a WebP copy at the same size (assets/…/<name>.<ext>.webp)
    used by the pages; the originals stay (social sharing, CMS). Images below the first screen load
    lazily.
    WebP copies are committed next to their originals (created once, reused by every deploy).
@@ -27,7 +27,7 @@ BUNDLES = os.path.join(ROOT, 'assets', 'css', 'bundle')
 SCRIPTS = ['assets/js/main.js', 'assets/js/ux.js', 'assets/js/vendor/swiper-5.4.5.min.js']
 # Classes that libraries build at run time from pieces (Swiper: modifierClass + type/direction…)
 DYNAMIC_PREFIXES = ('swiper-',)
-WEBP_MIN_BYTES = 250 * 1024
+WEBP_MIN_BYTES = 40 * 1024
 WEBP_QUALITY = 84
 BLOCK = re.compile(r'<!-- wp-styles(?::bundle)? -->\n?(.*?)\n?<!-- /wp-styles -->', re.S)
 
