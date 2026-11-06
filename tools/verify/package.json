@@ -1,11 +1,12 @@
 {
-  "name": "qguard-website-verify",
+  "name": "q-leap-website-verify",
   "private": true,
-  "description": "Dev-only regression checks: static build vs the live WordPress site. Not used by the website.",
+  "description": "Dev-only checks: static build vs the live WordPress site (q-leap.eu), SEO and accessibility audit. Not used by the website.",
   "type": "module",
   "scripts": {
     "compare": "node compare.mjs",
-    "pixel": "node pixel.mjs"
+    "pixel": "node pixel.mjs",
+    "audit": "node audit.mjs"
   },
   "devDependencies": {
     "pixelmatch": "^6.0.0",

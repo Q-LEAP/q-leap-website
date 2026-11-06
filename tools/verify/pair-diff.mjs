@@ -1,12 +1,15 @@
 // Compare two local servers page by page (same paths): full-page screenshots at a given width,
-// pixel difference ratio and the first differing rows. Dev tool, no dependency.
+// pixel difference ratio and the first differing rows. Dev tool, no npm dependency.
 // Usage: node tools/verify/pair-diff.mjs <baseA> <baseB> <out dir> <width> <path> [path ...]
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { CHROME } from './chrome.mjs';
 const [, , baseA, baseB, outDir, widthArg, ...paths] = process.argv;
 const width = Number(widthArg) || 1440;
 const port = 9600 + Math.floor(Math.random() * 300);
-const chrome = spawn('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', ['--headless=new', `--remote-debugging-port=${port}`, `--user-data-dir=${fs.mkdtempSync('/tmp/pair-')}`, '--hide-scrollbars', '--force-color-profile=srgb', 'about:blank'], { stdio: 'ignore' });
+const chrome = spawn(CHROME, ['--headless=new', `--remote-debugging-port=${port}`, `--user-data-dir=${fs.mkdtempSync(path.join(os.tmpdir(), 'pair-'))}`, '--hide-scrollbars', '--force-color-profile=srgb', 'about:blank'], { stdio: 'ignore' });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 let targets; for (let i = 0; i < 60; i++) { try { targets = await (await fetch(`http://127.0.0.1:${port}/json`)).json(); if (targets.length) break; } catch {} await sleep(250); }
 const socket = new WebSocket(targets.find((t) => t.type === 'page').webSocketDebuggerUrl); await new Promise((r) => (socket.onopen = r));

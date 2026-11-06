@@ -7,3 +7,7 @@ tools/export/build/
 assets/css/bundle/
 tools/perf/styles/
 .wrangler/
+tools/verify/shots/
+tools/verify/*-report.json
+tools/verify/audit.json
+tools/verify/package-lock.json

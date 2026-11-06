@@ -1,13 +1,12 @@
-// Full-page pixel diff: q-guard.app vs local static build (headless Chrome + pixelmatch).
-// Usage: node pixel.mjs [page ...]
+// Full-page pixel diff: the live WordPress site (q-leap.eu) vs the local static build (headless Chrome + pixelmatch).
+// Usage: npm install, serve the repository on http://localhost:8765/, then node pixel.mjs [page ...]
 import fs from 'fs';
 import puppeteer from 'puppeteer-core';
 import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
+import { CHROME, LIVE, LOCAL } from './chrome.mjs';
 
-const LIVE = 'https://q-guard.app/';
-const LOCAL = 'http://localhost:8765/';
-const PAGES = { home: '', 'about-us': 'about-us/', features: 'features/', contact: 'contact/', 'support-help-faq': 'support-help-faq/', 'privacy-policy': 'privacy-policy/' };
+const PAGES = { home: '', en: 'en/', 'about-us': 'about-us/', testing: 'testing-service/', training: 'training/', contact: 'contact/', blog: 'blog/', 'our-events': 'our-events/' };
 const VIEWPORTS = {
   desktop: { width: 1920, height: 902 },
   tablet: { width: 1024, height: 1366, isMobile: true, hasTouch: true },
@@ -39,7 +38,7 @@ async function freeze(page) {
 }
 
 const browser = await puppeteer.launch({
-  executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+  executablePath: CHROME,
   headless: 'new',
   protocolTimeout: 180000,
   args: ['--hide-scrollbars', '--force-color-profile=srgb', '--font-render-hinting=none'],

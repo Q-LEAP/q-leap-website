@@ -1,11 +1,10 @@
-// Layout/style diff between q-guard.app and the local static build, in headless Chrome.
-// Usage: node compare.mjs [page ...]
+// Layout/style diff between the live WordPress site (q-leap.eu) and the local static build, in headless Chrome.
+// Usage: npm install, serve the repository on http://localhost:8765/, then node compare.mjs [page ...]
 import fs from 'fs';
 import puppeteer from 'puppeteer-core';
+import { CHROME, LIVE, LOCAL } from './chrome.mjs';
 
-const LIVE = 'https://q-guard.app/';
-const LOCAL = 'http://localhost:8765/';
-const PAGES = { home: '', 'about-us': 'about-us/', features: 'features/', contact: 'contact/', 'support-help-faq': 'support-help-faq/', 'privacy-policy': 'privacy-policy/' };
+const PAGES = { home: '', en: 'en/', 'about-us': 'about-us/', testing: 'testing-service/', training: 'training/', contact: 'contact/', blog: 'blog/', 'our-events': 'our-events/' };
 const VIEWPORTS = {
   desktop: { width: 1920, height: 902 },
   tablet: { width: 1024, height: 1366, isMobile: true, hasTouch: true },
@@ -26,7 +25,7 @@ async function collect(page) {
     const boxes = {};
     document.querySelectorAll('[data-id]').forEach(e => { if (!e.closest('.swiper')) boxes[e.dataset.id] = box(e); });
     const styles = [];
-    document.querySelectorAll('body > header.banner:not(.headhesive--clone), .wrap, .prefooter, body > footer').forEach(root =>
+    document.querySelectorAll('header.top_panel, .page_content_wrap, footer.footer_wrap').forEach(root =>
       root.querySelectorAll('h1,h2,h3,h4,h5,h6,p,a,li,span,button,input,textarea,label,img,i').forEach(e => {
         if (e.closest('.swiper, .flexslider') || !e.getClientRects().length) return; // only rendered nodes; hidden flexslider adds nav
         const c = getComputedStyle(e);
@@ -42,7 +41,7 @@ async function collect(page) {
 }
 
 const browser = await puppeteer.launch({
-  executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+  executablePath: CHROME,
   headless: 'new',
   args: ['--autoplay-policy=no-user-gesture-required', '--hide-scrollbars'],
 });
