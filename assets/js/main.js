@@ -398,6 +398,30 @@
     });
   }
 
+  // Links the theme left without any text for screen readers and keyboards: card overlays that
+  // repeat a named link of the same card (title, "Read more", phone number) leave the tab order;
+  // logo widgets with no image are empty tab stops; a logo whose image is decorative gets a name.
+  function initAccessibleNames() {
+    const english = document.documentElement.lang.startsWith('en');
+    const named = (element) => element.textContent.trim() || element.getAttribute('aria-label') || element.getAttribute('title')
+      || [...element.querySelectorAll('img[alt]')].some((image) => image.alt.trim());
+    const hide = (link) => { link.setAttribute('aria-hidden', 'true'); link.setAttribute('tabindex', '-1'); };
+    document.querySelectorAll('a[href]').forEach((link) => {
+      if (named(link)) return;
+      const href = link.getAttribute('href');
+      let container = link.parentElement;
+      for (let level = 0; container && level < 4; level += 1, container = container.parentElement) {
+        const twin = [...container.querySelectorAll('a[href]')].find((other) => other !== link && other.getAttribute('href') === href && named(other));
+        if (twin) { hide(link); return; }
+      }
+      if (link.matches('.sc_layouts_logo')) {
+        if (link.querySelector('img, svg')) link.setAttribute('aria-label', english ? 'Q-Leap, home page' : "Q-Leap, page d'accueil");
+        else hide(link);
+      }
+    });
+    document.querySelectorAll('svg.decor-svg').forEach((svg) => svg.setAttribute('aria-hidden', 'true'));
+  }
+
   // Elementor accordion / toggle / tabs (frontend handler "base-tabs"): accordion opens its first
   // item at load and closes the previous one; toggle starts closed and items are independent;
   // both slide 400 ms and close an open item when its title is clicked again. Tabs switch instantly.
@@ -958,6 +982,7 @@
   initElementorTabs();
   initMobileMenu();
   initHeaderSearch();
+  initAccessibleNames();
   initEntranceAnimations();
   initMenus();
   initSchemeWatchers();
