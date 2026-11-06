@@ -1113,20 +1113,68 @@
       });
     });
 
-    // WP Job Openings: the drag-and-drop upload needs the plugin, a plain file input replaces it.
+    // WP Job Openings drag-and-drop upload (Dropzone in the plugin): the zone keeps its look and
+    // states (dz-clickable, dz-drag-hover, dz-started, dz-preview, invalid border); a hidden file
+    // input behind it holds the file the form sends. Click, Enter/Space or a drop fill it.
     document.querySelectorAll('form.awsm-application-form').forEach((form) => {
       form.querySelectorAll('.awsm-form-drag-and-drop-file-control').forEach((zone) => {
         const hidden = zone.parentElement.querySelector('input[type="hidden"][name^="awsm_file"]');
+        const label = zone.parentElement.querySelector('label')?.textContent.replace('*', '').trim() || 'CV';
+        const accepted = (zone.dataset.accept || '.pdf').split(',').map((extension) => extension.trim().toLowerCase());
+        const maxFiles = Number(zone.dataset.maxFiles) || 1;
         const input = document.createElement('input');
         input.type = 'file';
-        input.accept = zone.dataset.accept || '.pdf';
+        input.accept = accepted.join(',');
         input.name = hidden?.name || 'awsm_file';
         input.id = input.name;
         input.className = 'awsm-job-form-field awsm-job-form-control';
-        input.required = zone.dataset.required === '1';
-        input.dataset.qlLabel = zone.parentElement.querySelector('label')?.textContent.replace('*', '').trim() || 'CV';
+        input.hidden = true;
+        // Not "required": the browser cannot point at a hidden field; missing() checks aria-required.
+        if (zone.dataset.required === '1') input.setAttribute('aria-required', 'true');
+        input.dataset.qlLabel = label;
+        input.qlZone = zone;
         hidden?.remove();
-        zone.replaceWith(input);
+        zone.before(input);
+        zone.classList.add('dz-clickable');
+        zone.tabIndex = 0;
+        zone.setAttribute('role', 'button');
+        zone.setAttribute('aria-label', label);
+        const render = () => {
+          zone.querySelector('.dz-preview')?.remove();
+          zone.classList.remove('awsm-form-drag-and-drop-invalid-control');
+          zone.classList.toggle('dz-started', input.files.length > 0);
+          zone.classList.toggle('dz-max-files-reached', input.files.length >= maxFiles);
+          [...input.files].forEach((file) => {
+            zone.insertAdjacentHTML('beforeend', '<div class="dz-preview dz-file-preview dz-complete"><div class="dz-image"></div><div class="dz-details"><div class="dz-size"><span><strong></strong> MB</span></div><div class="dz-filename"><span></span></div></div><a class="dz-remove" href="#"></a></div>');
+            const preview = zone.lastElementChild;
+            preview.querySelector('.dz-size strong').textContent = (file.size / 1e6).toFixed(1);
+            preview.querySelector('.dz-filename span').textContent = file.name;
+            preview.querySelector('.dz-remove').textContent = t('Supprimer le fichier', 'Remove file');
+          });
+        };
+        const choose = () => input.click();
+        zone.addEventListener('click', (event) => {
+          event.preventDefault();
+          if (event.target.closest('.dz-remove')) { input.value = ''; render(); return; }
+          choose();
+        });
+        zone.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); choose(); }
+        });
+        zone.addEventListener('dragover', (event) => { event.preventDefault(); zone.classList.add('dz-drag-hover'); });
+        zone.addEventListener('dragleave', () => zone.classList.remove('dz-drag-hover'));
+        zone.addEventListener('drop', (event) => {
+          event.preventDefault();
+          zone.classList.remove('dz-drag-hover');
+          const files = new DataTransfer();
+          [...event.dataTransfer.files]
+            .filter((file) => accepted.some((extension) => file.name.toLowerCase().endsWith(extension)))
+            .slice(0, maxFiles)
+            .forEach((file) => files.items.add(file));
+          input.files = files.files;
+          render();
+        });
+        input.addEventListener('change', render);
       });
       const title = pageTitle();
       const spontaneous = /spontan|unsolicited/i.test(title + location.pathname);
@@ -1140,7 +1188,11 @@
       form.addEventListener('submit', async (event) => {
         event.preventDefault();
         const empty = missing(form);
-        if (empty.length) { empty[0].reportValidity?.(); empty[0].focus(); return; }
+        if (empty.length) {
+          const zone = empty[0].qlZone;
+          if (zone) { zone.classList.add('awsm-form-drag-and-drop-invalid-control'); zone.focus(); return; }
+          empty[0].reportValidity?.(); empty[0].focus(); return;
+        }
         const data = collect(form, spontaneous ? 'Candidature spontanée' : `Candidature : ${title}`, spontaneous ? 'Candidature spontanée' : 'Candidature à une offre');
         data.append('Poste visé', spontaneous ? 'Candidature spontanée' : title);
         const attachByHand = (html) => html.replace('</p>', ` ${t('Joignez votre CV au message.', 'Please attach your CV to the e-mail.')}</p>`);
