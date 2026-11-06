@@ -420,6 +420,19 @@
       }
     });
     document.querySelectorAll('svg.decor-svg').forEach((svg) => svg.setAttribute('aria-hidden', 'true'));
+
+    // Ninja Forms hides its labels (label-hidden) and names fields with placeholders only; the
+    // hidden label is empty or a lone "*", and aria-labelledby points to it, so the field has no
+    // name. The placeholder becomes the name (required is already announced by aria-required).
+    const hasWords = (text) => /\p{L}/u.test(text || '');
+    document.querySelectorAll('input:not([type="hidden"]):not([type="submit"]):not([type="button"]), textarea, select').forEach((field) => {
+      if (field.getAttribute('aria-label') || !field.placeholder) return;
+      const labelledBy = (field.getAttribute('aria-labelledby') || '').split(/\s+/).map((id) => document.getElementById(id)?.textContent).join(' ');
+      const labels = [...(field.labels || [])].map((label) => label.textContent).join(' ');
+      if (hasWords(labelledBy) || hasWords(labels) || hasWords(field.title)) return;
+      field.removeAttribute('aria-labelledby');
+      field.setAttribute('aria-label', field.placeholder);
+    });
   }
 
   // Elementor accordion / toggle / tabs (frontend handler "base-tabs"): accordion opens its first
