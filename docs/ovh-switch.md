@@ -74,8 +74,8 @@ lien e-mail de secours. Il reste, avec les accès Q-Leap :
 
 - [x] Brevo : compte Q-Leap existant, `q-leap.eu` déjà ajouté (non authentifié) ; ses trois
       enregistrements sont dans `tools/dns/brevo.txt` et `tools/dns/zone.txt` (2026-11-06).
-- [ ] Zone OVH : importer la zone (étape 3 de la bascule) ; `tools/dns/compare.sh dnsXX.ovh.net`
-      doit afficher `ok` pour les trois lignes « (Brevo) ». Indispensable : q-leap.eu est en DMARC
+- [x] Zone OVH (dns103.ovh.net) : les trois enregistrements Brevo ajoutés le 2026-11-06 ; contrôle
+      serveur par serveur : les 42 enregistrements identiques à WordPress.com, plus le `brevo-code`. Indispensable : q-leap.eu est en DMARC
       `p=reject`, sans DKIM Brevo tous les envois sont rejetés.
 - [ ] Brevo : valider le domaine dès que la zone servie contient les enregistrements (après
       l'étape 4 ; ou plus tôt en les ajoutant aussi chez WordPress.com → Domaines → DNS).
