@@ -413,6 +413,27 @@ def pages():
     return sorted(found)
 
 
+PANEL = re.compile(r'<div\s+id="([\w-]+)"\s+class="[^"]*\bsc_layouts_panel\b[^"]*"')
+
+
+def drop_unreachable_panels(markup):
+    """ThemeREX side panels (sc_layouts_panel) open only from a link to "#<id>" (or on page load,
+    which no page uses). Most pages carry the theme demo's left panel ("Features", "Blog Layouts"…)
+    with no such link: invisible and unreachable, it goes, before the CSS is purged for the page."""
+    for match in reversed(list(PANEL.finditer(markup))):
+        panel_id, start = match.group(1), match.start()
+        head = markup[start:markup.find('>', start)]
+        if f'href="#{panel_id}"' in markup or f'data-panel-id="{panel_id}"' in markup or 'sc_layouts_show_on_page' in head:
+            continue
+        depth = 0
+        for tag in re.finditer(r'<(/?)div\b[^>]*>', markup[start:]):
+            depth += -1 if tag.group(1) else 1
+            if depth == 0:
+                markup = markup[:start] + markup[start + tag.end():]
+                break
+    return markup
+
+
 def optimize(file, script_text):
     path = os.path.join(ROOT, file)
     markup = open(path, encoding='utf-8', newline='').read()
@@ -421,6 +442,8 @@ def optimize(file, script_text):
         return None
     if '<!-- wp-styles:bundle -->' in markup:
         return None  # already optimized
+    markup = drop_unreachable_panels(markup)
+    match = BLOCK.search(markup)
     block = match.group(1)
     page_dir = os.path.dirname(file)
     prefix = '../' * file.count('/')
