@@ -279,24 +279,35 @@
     if (!menu) return;
     const overlay = menu.previousElementSibling?.classList.contains('menu_mobile_overlay') ? menu.previousElementSibling : null;
     let opener = null;
+    const english = document.documentElement.lang.startsWith('en');
+    const buttons = [...document.querySelectorAll('.sc_layouts_menu_mobile_button > a, .menu_mobile_button')];
+    const expanded = (value) => buttons.forEach((button) => button.setAttribute('aria-expanded', String(value)));
     const open = (button) => {
       opener = button;
+      expanded(true);
       menu.classList.add('opened');
       if (overlay) fade(overlay, true);
       document.body.classList.add('menu_mobile_opened');
       setTimeout(() => menu.querySelector('a')?.focus(), 100);
     };
     const close = (skipFocus) => {
+      expanded(false);
       menu.classList.remove('opened');
       if (overlay) fade(overlay, false);
       document.body.classList.remove('menu_mobile_opened');
       if (!skipFocus) opener?.focus();
     };
-    document.querySelectorAll('.sc_layouts_menu_mobile_button > a, .menu_mobile_button').forEach((button) => {
+    // The burger is an icon-only link and the close cross a focusable span whose text is "Close" in
+    // both languages: screen readers get named buttons.
+    buttons.forEach((button) => {
+      if (!button.textContent.trim() && !button.getAttribute('aria-label')) button.setAttribute('aria-label', english ? 'Open the menu' : 'Ouvrir le menu');
+      button.setAttribute('aria-expanded', 'false');
       button.addEventListener('click', (event) => { event.preventDefault(); open(button); });
     });
     overlay?.addEventListener('click', (event) => { event.preventDefault(); close(); });
     const closeButton = menu.querySelector('.menu_mobile_close');
+    closeButton?.setAttribute('role', 'button');
+    closeButton?.setAttribute('aria-label', english ? 'Close the menu' : 'Fermer le menu');
     closeButton?.addEventListener('click', (event) => { event.preventDefault(); close(); });
     closeButton?.addEventListener('keyup', (event) => { if (event.key === 'Enter' && menu.classList.contains('opened')) close(); });
     document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && menu.classList.contains('opened')) close(); });
