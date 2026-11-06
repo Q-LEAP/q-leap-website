@@ -817,6 +817,28 @@
   // « Inscription formation : <formation> – session du <date> » / « Demande formation : <formation> »,
   // « Contact : <sujet> ». The body repeats the family and the site language.
   const pageTitle = () => document.title.replace(/\s+[-–|]\s+Q-Leap\s*$/, '').trim();
+
+  // Qwery skin.js decorations of Contact Form 7 forms: the send button sits in a span that draws its
+  // paper-plane icon (span.submit-style-in), and every "style-line" field gets its grey underline
+  // (span.line). Without them the contact forms lose the icon and the lines, and the button moves.
+  function initContactFormStyles() {
+    document.querySelectorAll('.wpcf7-submit').forEach((button) => {
+      if (button.parentElement.classList.contains('wpcf7-submit-style')) return;
+      const wrapper = document.createElement('span');
+      wrapper.className = 'wpcf7-submit-style';
+      button.before(wrapper);
+      wrapper.append(button);
+      button.insertAdjacentHTML('afterend', '<span class="submit-style-in"></span>');
+      // Contact Form 7's own script puts its (hidden) spinner after "has-spinner" buttons; it takes room.
+      if (button.classList.contains('has-spinner') && !wrapper.nextElementSibling?.classList.contains('wpcf7-spinner')) {
+        wrapper.insertAdjacentHTML('afterend', '<span class="wpcf7-spinner"></span>');
+      }
+    });
+    document.querySelectorAll('div.wpcf7 .style-line .wpcf7-form-control-wrap').forEach((field) => {
+      if (!field.querySelector(':scope > .line')) field.insertAdjacentHTML('beforeend', '<span class="line"></span>');
+    });
+  }
+
   function initForms() {
     const english = document.documentElement.lang.startsWith('en');
     const t = (fr, en) => (english ? en : fr);
@@ -1042,6 +1064,7 @@
   document.querySelectorAll('.ql-hero').forEach(initHero);
   initTyped();
   initSessionRegistration();
+  initContactFormStyles();
   initForms();
   initJobFilters();
   initPopups();
