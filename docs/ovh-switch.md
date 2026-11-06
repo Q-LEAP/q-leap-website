@@ -79,16 +79,15 @@ lien e-mail de secours. Il reste, avec les accès Q-Leap :
       `p=reject`, sans DKIM Brevo tous les envois sont rejetés.
 - [ ] Brevo : valider le domaine dès que la zone servie contient les enregistrements (après
       l'étape 4 ; ou plus tôt en les ajoutant aussi chez WordPress.com → Domaines → DNS).
-- [ ] Brevo → SMTP & API → Clés API : créer `qleap-forms` (expéditeur : `bot@q-leap.eu`, déjà
-      vérifié dans Brevo ; la clé ne s'écrit jamais dans le dépôt).
+- [x] Brevo → SMTP & API → Clés API : `qleap-forms` créée le 2026-11-06, accès restreint
+      (Emails transactionnels : Tous ; Compte : Lues). Expéditeur : `bot@q-leap.eu`, déjà vérifié.
 - [x] Cloudflare : relais déployé le 2026-11-06 sur le compte qleapdigital@gmail.com :
       `https://qleap-forms.qleapdigital.workers.dev/` (reporté dans main.js et forms_monitor.py,
       `brevo-relay` fusionné dans `dev`). Redéployer après une modification : `tools/forms/relay/deploy.sh`.
-- [ ] Clé Brevo sur le relais : Cloudflare → Workers → qleap-forms → Paramètres → Variables et
-      secrets → Ajouter, type Secret, nom `BREVO_API_KEY` (ou `npx wrangler secret put BREVO_API_KEY`
-      depuis `tools/forms/relay/`).
-- [ ] `https://qleap-forms.qleapdigital.workers.dev/health` doit afficher `"ok": true` (d'ici là les
-      formulaires proposent le lien e-mail de secours).
+- [x] Clé Brevo sur le relais (secret `BREVO_API_KEY`, Cloudflare → Workers → qleap-forms →
+      Paramètres → Variables et secrets) : acceptée par Brevo le 2026-11-06 (`/health` : `"brevo": 200`).
+- [ ] Après la validation du domaine dans Brevo, `https://qleap-forms.qleapdigital.workers.dev/health`
+      doit afficher `"ok": true` (d'ici là les formulaires proposent le lien e-mail de secours).
 - [ ] Vrai envoi de test de chaque formulaire (contact, inscription formation, candidature avec
       CV) : sujet, adresse de réponse et pièce jointe reçus sur digital@q-leap.eu.
 - [ ] L'alerte « Alerte formulaires » (issue n° 1) se ferme seule au contrôle horaire suivant.
