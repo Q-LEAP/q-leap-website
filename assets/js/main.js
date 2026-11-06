@@ -285,6 +285,29 @@
     if (!show) animation.onfinish = () => { element.style.display = 'none'; };
   }
 
+  // Elementor "stretch section" (frontend handler StretchElement): a stretched section takes the
+  // inner width of the kit's container (.page_wrap on this site, the window if absent) and is pulled
+  // left by its offset inside it, so it spans the page even inside a padded content column (blog).
+  function initStretchedSections() {
+    const sections = [...document.querySelectorAll('.elementor-section.elementor-section-stretched')];
+    if (!sections.length) return;
+    const stretch = () => {
+      const container = document.querySelector('.page_wrap');
+      sections.forEach((section) => {
+        section.style.width = '';
+        section.style.left = '';
+        const containerWidth = container ? container.clientWidth : document.documentElement.clientWidth;
+        const elementOffset = section.getBoundingClientRect().left + window.scrollX;
+        const containerOffset = container ? container.getBoundingClientRect().left + window.scrollX : 0;
+        const offset = container && elementOffset > containerOffset ? elementOffset - containerOffset : elementOffset;
+        section.style.width = `${containerWidth}px`;
+        section.style.left = `${-offset}px`;
+      });
+    };
+    stretch();
+    window.addEventListener('resize', stretch);
+  }
+
   // Qwery mobile menu (full-screen panel) and vertical menus: arrow toggles for sub-menus.
   function initMobileMenu() {
     const menu = document.querySelector('.menu_mobile');
@@ -1074,6 +1097,7 @@
   }
 
   document.querySelectorAll('.ql-hero').forEach(initHero);
+  initStretchedSections();
   initTyped();
   initSessionRegistration();
   initContactFormStyles();
