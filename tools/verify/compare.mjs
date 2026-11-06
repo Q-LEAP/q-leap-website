@@ -14,6 +14,8 @@ const only = process.argv.slice(2);
 
 async function collect(page) {
   return page.evaluate(async () => {
+    // The live site's LSTE 2026 promo bar (58 px, in the flow) is not part of the static copy: it would shift every box.
+    document.getElementById('lste-promo')?.remove();
     document.querySelectorAll('.elementor-invisible').forEach(e => e.classList.remove('elementor-invisible'));
     document.querySelectorAll('.animated').forEach(e => e.classList.remove('animated'));
     document.body.classList.add('loaded');

@@ -17,6 +17,8 @@ fs.mkdirSync('shots', { recursive: true });
 
 async function freeze(page) {
   await page.evaluate(async () => {
+    // The live site's LSTE 2026 promo bar (58 px, in the flow) is not part of the static copy: it would shift every row.
+    document.getElementById('lste-promo')?.remove();
     document.querySelectorAll('.elementor-invisible').forEach(e => e.classList.remove('elementor-invisible'));
     document.querySelectorAll('.animated').forEach(e => e.classList.remove('animated'));
     document.body.classList.add('loaded');
