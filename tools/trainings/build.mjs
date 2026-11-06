@@ -517,7 +517,9 @@ export function build({ today = new Date().toISOString().slice(0, 10), content =
   updateCatalogue(content, 'en');
   // Same post-processing as the exported pages: stylesheets in WordPress order, rendered forms, etc.
   const pages = [...written.map((dir) => path.join(dir, 'index.html')), 'training/index.html', 'en/training/index.html'];
-  execFileSync('python3', [path.join(ROOT, 'tools', 'export', 'components.py'), ...pages], { cwd: ROOT, stdio: 'ignore' });
+  // On Windows "python3" is the Microsoft Store stub (exit 9009); the installed interpreter is "python".
+  const python = process.platform === 'win32' ? 'python' : 'python3';
+  execFileSync(python, [path.join(ROOT, 'tools', 'export', 'components.py'), ...pages], { cwd: ROOT, stdio: 'ignore' });
   return written;
 }
 

@@ -18,7 +18,7 @@ SITE = 'https://q-leap.eu/'
 
 
 def post_paths():
-    inventory = json.load(open(os.path.join(ROOT, 'tools', 'inventory', 'inventory.json')))
+    inventory = json.load(open(os.path.join(ROOT, 'tools', 'inventory', 'inventory.json'), encoding='utf-8'))
     for item in inventory:
         if item['kind'] == 'Article' and item['decision'] == 'Garder':
             yield item['lang'], item['url'][len(SITE):].strip('/')
@@ -73,7 +73,7 @@ def text_widget_body(page):
 
 
 def parse(lang, path):
-    page = open(os.path.join(ROOT, path, 'index.html')).read()
+    page = open(os.path.join(ROOT, path, 'index.html'), encoding='utf-8').read()
     slug = path.split('/')[-1]
     header = page[page.find('<div class="post_header post_header_single'):page.find('<div class="post_content post_content_single')]
     categories = [html.unescape(name) for name in re.findall(r'rel="category tag">([^<]+)</a>', header)]
@@ -130,7 +130,7 @@ if __name__ == '__main__':
             post['image'] = image
         folder = os.path.join(ROOT, 'content', 'blog', lang)
         os.makedirs(folder, exist_ok=True)
-        with open(os.path.join(folder, slug + '.json'), 'w') as handle:
+        with open(os.path.join(folder, slug + '.json'), 'w', encoding='utf-8') as handle:
             json.dump(post, handle, ensure_ascii=False, indent=2)
             handle.write('\n')
         counts[(lang, post['layout'])] = counts.get((lang, post['layout']), 0) + 1

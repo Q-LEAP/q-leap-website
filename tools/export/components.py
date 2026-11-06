@@ -74,12 +74,12 @@ def page_styles(path, prefix):
     source = os.path.join(CSS_BUILD, slug + '.json')
     for folder, template in TEMPLATE_SOURCE.items():
         if path.startswith(folder) and path.count('/') == folder.count('/') + 1:
-            block = re.search(r'<!-- wp-styles -->\n(.*?)\n<!-- /wp-styles -->', open(os.path.join(ROOT, template), newline='').read(), re.S)
+            block = re.search(r'<!-- wp-styles -->\n(.*?)\n<!-- /wp-styles -->', open(os.path.join(ROOT, template), newline='', encoding='utf-8').read(), re.S)
             return block.group(1) if block else None
     if not os.path.exists(source):
         return None
     tags = []
-    for chunk in json.load(open(source)):
+    for chunk in json.load(open(source, encoding='utf-8')):
         css = chunk['css'].strip()
         if not css:
             continue
@@ -94,7 +94,7 @@ def page_styles(path, prefix):
         target = os.path.join(ROOT, 'assets', 'css', 'wp', name)
         if not os.path.exists(target):
             os.makedirs(os.path.dirname(target), exist_ok=True)
-            open(target, 'w').write(css)
+            open(target, 'w', encoding='utf-8').write(css)
         tags.append(f'<link rel="stylesheet" id="{ident}" href="{prefix}assets/css/wp/{name}">')
     return '\n'.join(tags)
 
@@ -110,7 +110,7 @@ def fill_ninja_forms(markup, lang):
         snippet = os.path.join(FORMS, f'ninja-{form_id}.{lang}.{instance}.html')
         if not os.path.exists(snippet):
             return match.group(0)
-        return match.group(0).replace('<div class="nf-loading-spinner"></div>', open(snippet).read(), 1)
+        return match.group(0).replace('<div class="nf-loading-spinner"></div>', open(snippet, encoding='utf-8').read(), 1)
     return re.sub(r'<div id="nf-form-(\d+)(?:_(\d+))?-cont"[^>]*>\s*<div class="nf-loading-spinner"></div>\s*</div>', fill, markup)
 
 
@@ -198,7 +198,7 @@ def disable_quiz(markup, path):
 def process(path):
     full = os.path.join(ROOT, path)
     # newline='': keep the pages' bytes (WordPress' inline styles contain CRLF line ends)
-    markup = open(full, newline='').read()
+    markup = open(full, newline='', encoding='utf-8').read()
     prefix = '../' * path.count('/')
     markup = markup.replace('?export=1&amp;', '?').replace('?export=1&', '?').replace('&amp;export=1', '').replace('&export=1', '').replace('?export=1', '')
     lang = 'en' if path.startswith('en/') else 'fr'
@@ -227,9 +227,11 @@ def process(path):
     swiper = f'<script src="{prefix}assets/js/vendor/swiper-5.4.5.min.js" defer></script>\n'
     if 'swiper-5.4.5.min.js' not in markup and 'slider_swiper' in markup:
         markup = markup.replace(f'<script src="{prefix}assets/js/main.js"', swiper + f'<script src="{prefix}assets/js/main.js"', 1)
-    open(full, 'w', newline='').write(markup)
+    open(full, 'w', newline='', encoding='utf-8').write(markup)
 
 
 if __name__ == '__main__':
     for page in sys.argv[1:]:
-        process(page)
+        # tools/trainings/build.mjs passes Windows paths (trainings\x\index.html) on Windows; the
+        # relative prefix and the en/ test count '/' separators
+        process(page.replace('\\', '/'))

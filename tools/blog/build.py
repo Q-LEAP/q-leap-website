@@ -54,7 +54,7 @@ def load_posts():
         folder = os.path.join(CONTENT, lang)
         for name in sorted(os.listdir(folder)) if os.path.isdir(folder) else []:
             if name.endswith('.json'):
-                post = json.load(open(os.path.join(folder, name)))
+                post = json.load(open(os.path.join(folder, name), encoding='utf-8'))
                 post['slug'], post['lang'] = name[:-5], lang
                 post['image'] = (post.get('image') or '').lstrip('/')
                 post.setdefault('layout', 'simple')
@@ -172,7 +172,7 @@ def tag_slugs(lang):
         for name in os.listdir(os.path.join(CONTENT, post_lang)) if os.path.isdir(os.path.join(CONTENT, post_lang)) else []:
             page = os.path.join(folder, name[:-5], 'index.html')
             if post_lang == lang and os.path.exists(page):
-                for slug, tag in re.findall(r'href="[./]*tag/([^/]+)/" rel="tag">([^<]+)</a>', open(page).read()):
+                for slug, tag in re.findall(r'href="[./]*tag/([^/]+)/" rel="tag">([^<]+)</a>', open(page, encoding='utf-8').read()):
                     found[html.unescape(tag)] = slug
     return found
 
@@ -271,7 +271,7 @@ def render_post(post, older, newer, tags, all_slugs):
     target = os.path.join(page_dir(post), 'index.html')
     created = not os.path.exists(target)
     source = os.path.join(HERE, 'templates', f'post.{lang}.html') if created else target
-    page = open(source).read()
+    page = open(source, encoding='utf-8').read()
     if created:  # the template's address becomes this post's
         page = page.replace(f'/{TEMPLATE_SLUG[lang]}/', f'/{post["slug"]}/').replace('<html ', '<html data-blog-generated ', 1)
     now = current_values(page, prefix)
@@ -338,7 +338,7 @@ def render_post(post, older, newer, tags, all_slugs):
 
     page = update_linked_data(page, post, changed, words)
     os.makedirs(os.path.dirname(target), exist_ok=True)
-    open(target, 'w').write(page)
+    open(target, 'w', encoding='utf-8').write(page)
     return os.path.relpath(target, ROOT), created
 
 
@@ -355,7 +355,7 @@ def element_end(page, start):
 
 
 def band_card(post, prefix, hidden=False):
-    page = open(os.path.join(page_dir(post), 'index.html')).read()
+    page = open(os.path.join(page_dir(post), 'index.html'), encoding='utf-8').read()
     link = href(post, prefix)
     categories = categories_html(post, prefix, ' ')
     image = f' style="background-image: url(&quot;{prefix}{post["image"]}&quot;);"' if post['image'] else ''
@@ -398,7 +398,7 @@ def update_blog_page(lang, posts):
     if BLOG_ORDER[lang] == 'views':
         posts = sorted(posts, key=lambda post: (views(post), published(post)), reverse=True)
     file = os.path.join(ROOT, BLOG_PAGE[lang], 'index.html')
-    page = open(file).read()
+    page = open(file, encoding='utf-8').read()
     prefix = '../../' if lang == 'en' else '../'
     # Posts after the first page are hidden in the HTML already, so their images are not downloaded
     cards = ''.join(band_card(post, prefix, index >= CARDS_PER_PAGE) for index, post in enumerate(posts))
@@ -409,7 +409,7 @@ def update_blog_page(lang, posts):
     pages = max(1, math.ceil(len(posts) / CARDS_PER_PAGE))
     block = (f'<div class="sc_blogger_content sc_item_content sc_item_posts_container posts_container band_wrap" data-cards-per-page="{CARDS_PER_PAGE}">'
              f'{cards}</div>{pagination(lang, pages)}')
-    open(file, 'w').write(page[:start] + block + page[end:])
+    open(file, 'w', encoding='utf-8').write(page[:start] + block + page[end:])
 
 
 def news_item(post, number, prefix):
@@ -441,7 +441,7 @@ def news_item(post, number, prefix):
 
 def update_home(lang, posts):
     file = os.path.join(ROOT, HOME_PAGE[lang])
-    page = open(file).read()
+    page = open(file, encoding='utf-8').read()
     prefix = '../' if lang == 'en' else ''
     chosen = [post for post in posts if post.get('home', True)][:HOME_NEWS]
     news = page.index('class="sc_blogger sc_blogger_news')
@@ -449,7 +449,7 @@ def update_home(lang, posts):
     end = element_end(page, start) - len('</div>')
     start = page.index('>', start) + 1
     items = ''.join(news_item(post, number, prefix) for number, post in enumerate(chosen, 1))
-    open(file, 'w').write(page[:start] + items + page[end:])
+    open(file, 'w', encoding='utf-8').write(page[:start] + items + page[end:])
 
 
 # ---------------------------------------------------------------- tidy
@@ -478,7 +478,7 @@ def tidy(posts):
         file = os.path.join(page_dir(post), 'index.html')
         if os.path.exists(file):
             prefix = '../../' if post['lang'] == 'en' else '../'
-            open(file, 'w').write(REDIRECT.format(lang=post['lang'], site=SITE, target=BLOG_PAGE[post['lang']] + '/', prefix=prefix))
+            open(file, 'w', encoding='utf-8').write(REDIRECT.format(lang=post['lang'], site=SITE, target=BLOG_PAGE[post['lang']] + '/', prefix=prefix))
             changed.append(os.path.relpath(file, ROOT))
     drafts = {(post['lang'], post['slug']) for post in DRAFTS}
     for lang in LANGS:
@@ -487,7 +487,7 @@ def tidy(posts):
             file = os.path.join(base, name, 'index.html')
             if name in live[lang] or (lang, name) in drafts or not os.path.isfile(file):
                 continue
-            with open(file) as handle:
+            with open(file, encoding='utf-8') as handle:
                 head = handle.read(300)
             if 'data-blog-generated' in head:
                 shutil.rmtree(os.path.join(base, name))
