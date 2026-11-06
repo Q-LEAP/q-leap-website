@@ -4,6 +4,7 @@
 # the WordPress A records, "* CNAME q-leap.eu" (a wildcard on GitHub Pages lets any subdomain
 # be claimed) and _domainconnect (WordPress.com only). Each record keeps its WordPress.com TTL
 # (internal: 300 s). The web records get 300 s, so a correction spreads within minutes.
+# Brevo's records (brevo.txt, copied from Brevo) are added at the end.
 # Usage: tools/dns/make_zone.sh > zone.txt
 cd "$(dirname "$0")"
 SERVER=${1:-ns1.wordpress.com}
@@ -28,3 +29,4 @@ grep -v '^#' records.txt | while read -r name type; do
     printf '%-46s %-5s IN %-6s %s\n' "$name" "$ttl" "$type" "$value"
   done
 done
+grep -v '^#' brevo.txt | grep -v '^ *$' || true

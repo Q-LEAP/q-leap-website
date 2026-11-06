@@ -6,13 +6,18 @@
 //                 are instructions, not content: _subject (mail subject), _replyto (visitor's
 //                 address, used as Reply-To). Files are attached. Answers {"ok": true} or
 //                 {"ok": false, "error": "…"}; the site shows its e-mail fallback on any failure.
-// GET  /health    {"ok": true} when Brevo accepts the API key (used by tools/verify/forms_monitor.py).
+// GET  /health    {"ok": true} when Brevo accepts the API key and sees the sender's domain as
+//                 authenticated (used by tools/verify/forms_monitor.py).
 //
 // Settings (wrangler.toml [vars] and secrets): BREVO_API_KEY (secret), RECIPIENT, SENDER_EMAIL,
 // SENDER_NAME, ALLOWED_ORIGINS (comma-separated). Swapping Brevo for another provider means
 // rewriting sendMail() only.
 
+// Brevo refuses attachments over 4 MB and any extension outside its list: such files are turned
+// down here with a clear error (the site then offers the e-mail fallback) rather than by Brevo.
+const MAX_FILE_BYTES = 4 * 1024 * 1024;
 const MAX_TOTAL_BYTES = 8 * 1024 * 1024; // CV and cover letter together, before base64
+const ALLOWED_EXTENSIONS = ['pdf', 'doc', 'docx', 'odt', 'rtf', 'txt', 'jpg', 'jpeg', 'png'];
 const MAX_FIELDS = 60;
 const MAX_FIELD_LENGTH = 10000;
 
@@ -45,7 +50,8 @@ export default {
         else fields.push([name.slice(0, 300), value.slice(0, MAX_FIELD_LENGTH)]);
       } else if (value.size) {
         total += value.size;
-        if (total > MAX_TOTAL_BYTES) return json({ ok: false, error: 'Attachments too large' }, 413, cors);
+        if (value.size > MAX_FILE_BYTES || total > MAX_TOTAL_BYTES) return json({ ok: false, error: 'Attachments too large' }, 413, cors);
+        if (!ALLOWED_EXTENSIONS.includes(extension(value.name))) return json({ ok: false, error: 'File type not allowed' }, 415, cors);
         files.push({ label: name, file: value });
       }
     }
@@ -56,7 +62,7 @@ export default {
         subject: (instructions._subject || 'Formulaire du site').replace(/[\r\n]+/g, ' '),
         replyTo: validEmail(instructions._replyto) ? instructions._replyto : null,
         html: renderHtml(fields, files),
-        attachments: await Promise.all(files.map(async ({ file }) => ({ name: file.name || 'piece-jointe', content: base64(await file.arrayBuffer()) }))),
+        attachments: await Promise.all(files.map(async ({ file }) => ({ name: file.name, content: base64(await file.arrayBuffer()) }))),
       });
     } catch (error) {
       console.error('Brevo send failed:', error.message);
@@ -83,12 +89,18 @@ async function sendMail(env, { subject, replyTo, html, attachments }) {
   if (!response.ok) throw new Error(`${response.status} ${await response.text()}`);
 }
 
+// The key alone is not enough: q-leap.eu has DMARC p=reject, so until Brevo sees the sender's
+// domain as authenticated (brevo-code TXT and DKIM in the zone) every mail it sends is rejected.
 async function health(env, cors) {
+  const domain = String(env.SENDER_EMAIL).split('@')[1];
   try {
-    const response = await fetch('https://api.brevo.com/v3/account', { headers: { 'api-key': env.BREVO_API_KEY, Accept: 'application/json' } });
-    return json({ ok: response.ok, brevo: response.status }, response.ok ? 200 : 502, cors);
+    const response = await fetch(`https://api.brevo.com/v3/senders/domains/${encodeURIComponent(domain)}`,
+      { headers: { 'api-key': env.BREVO_API_KEY, Accept: 'application/json' } });
+    const result = await response.json().catch(() => ({}));
+    const ok = response.ok && result.authenticated === true;
+    return json({ ok, brevo: response.status, domain, authenticated: result.authenticated === true }, ok ? 200 : 502, cors);
   } catch {
-    return json({ ok: false, brevo: 0 }, 502, cors);
+    return json({ ok: false, brevo: 0, domain, authenticated: false }, 502, cors);
   }
 }
 
@@ -111,6 +123,10 @@ function json(data, status, headers) {
 
 function validEmail(value) {
   return typeof value === 'string' && /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/.test(value) && value.length < 255;
+}
+
+function extension(fileName) {
+  return /\.([a-z0-9]+)$/i.exec(fileName || '')?.[1].toLowerCase() || '';
 }
 
 function escape(text) {

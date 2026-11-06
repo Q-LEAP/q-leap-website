@@ -1,0 +1,7 @@
+# Brevo records for the form relay (tools/forms/relay), added to the OVH zone by make_zone.sh and
+# checked by compare.sh. They are not at WordPress.com: copy them from Brevo > Senders, domains &
+# dedicated IPs > Domains > q-leap.eu > Authenticate, then uncomment. Without them q-leap.eu's
+# DMARC p=reject makes every relay mail bounce. Format: name ttl type value (as in zone.txt).
+# @                                              300   IN TXT    "brevo-code:<code shown by Brevo>"
+# brevo1._domainkey                              300   IN CNAME  <b1 target shown by Brevo>.
+# brevo2._domainkey                              300   IN CNAME  <b2 target shown by Brevo>.

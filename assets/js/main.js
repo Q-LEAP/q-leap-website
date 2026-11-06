@@ -647,6 +647,7 @@
   const FORM_ENDPOINT = 'https://qleap-forms.WORKERS_SUBDOMAIN.workers.dev/';
   const FORM_TIMEOUT = 15000;
   const FORM_TIMEOUT_WITH_FILE = 60000;
+  const FORM_MAX_FILE_BYTES = 4 * 1024 * 1024; // Brevo's limit per attachment, also checked by the relay
   // Mail subjects sorted in three families, always in French so the team's mailbox rules match them
   // whatever the page language: « Candidature : <poste> » (or « Candidature spontanée »),
   // « Inscription formation : <formation> – session du <date> » / « Demande formation : <formation> »,
@@ -685,10 +686,10 @@
       if (!response.ok || result.ok !== true) throw new Error(result.error || response.status);
     };
     // The same request as an e-mail written by the visitor's mail app (nothing is lost if the service is down).
-    const fallback = (data) => {
+    const fallback = (data, reason = t("Le service d'envoi ne répond pas pour le moment.", 'The sending service is not responding right now.')) => {
       const lines = [...data].filter(([name, value]) => !name.startsWith('_') && !(value instanceof File)).map(([name, value]) => `${name} : ${value}`);
       const href = `mailto:${FORM_RECIPIENT}?subject=${encodeURIComponent(data.get('_subject') || 'Q-Leap')}&body=${encodeURIComponent(lines.join('\n'))}`;
-      return `<p>${t("Le service d'envoi ne répond pas pour le moment.", 'The sending service is not responding right now.')} `
+      return `<p>${reason} `
         + `<a href="${href}">${t('Envoyez votre demande par e-mail', 'Send your request by e-mail')}</a> `
         + `${t('(le message est déjà rempli).', '(the message is already filled in).')}</p>`;
     };
@@ -812,6 +813,11 @@
         if (empty.length) { empty[0].reportValidity?.(); empty[0].focus(); return; }
         const data = collect(form, spontaneous ? 'Candidature spontanée' : `Candidature : ${title}`, spontaneous ? 'Candidature spontanée' : 'Candidature à une offre');
         data.append('Poste visé', spontaneous ? 'Candidature spontanée' : title);
+        const attachByHand = (html) => html.replace('</p>', ` ${t('Joignez votre CV au message.', 'Please attach your CV to the e-mail.')}</p>`);
+        if ([...data.values()].some((value) => value instanceof File && value.size > FORM_MAX_FILE_BYTES)) {
+          show(attachByHand(fallback(data, t("Votre fichier dépasse 4 Mo, la limite de l'envoi en ligne.", 'Your file is larger than 4 MB, the limit for sending online.'))));
+          return;
+        }
         if (button) button.disabled = true;
         show(`<p>${t('Envoi en cours…', 'Sending…')}</p>`);
         try {
@@ -819,7 +825,7 @@
           show(`<p>${t('Votre candidature a bien été envoyée. Merci !', 'Your application has been submitted. Thank you!')}</p>`);
           form.hidden = true;
         } catch {
-          show(fallback(data).replace('</p>', ` ${t('Joignez votre CV au message.', 'Please attach your CV to the e-mail.')}</p>`));
+          show(attachByHand(fallback(data)));
           if (button) button.disabled = false;
         }
       });

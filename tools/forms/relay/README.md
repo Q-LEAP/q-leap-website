@@ -12,21 +12,29 @@ one e-mail to `digital@q-leap.eu` through Brevo's transactional API. Nothing is 
 
 ## Setup (once)
 
-1. Brevo: a free account for Q-Leap. Senders, domains & dedicated IPs > Domains > add `q-leap.eu`
-   and add the records Brevo shows (a `brevo-code` TXT and two DKIM CNAMEs) to the DNS zone.
-   q-leap.eu has DMARC `p=reject`: without this authentication every mail would be rejected.
-   SPF already includes Brevo (`include:spf.sendinblue.com`).
-2. Brevo: SMTP & API > API keys > create a key named `qleap-forms`.
-3. Deploy, from this folder:
-   ```
-   npx wrangler login
-   npx wrangler secret put BREVO_API_KEY
-   npx wrangler deploy
-   ```
-   The Worker answers at `https://qleap-forms.<account>.workers.dev`: put that address in
-   `FORM_ENDPOINT` (main.js) and `FORM_RELAY` (forms_monitor.py).
+1. Brevo: a free account for Q-Leap (check first whether one exists: q-leap.eu's SPF already
+   includes `spf.sendinblue.com`). Senders, domains & dedicated IPs > Domains > add `q-leap.eu`.
+2. DNS: Brevo shows a `brevo-code` TXT and two DKIM CNAMEs. Paste them, uncommented, in
+   `tools/dns/brevo.txt`: `tools/dns/make_zone.sh` adds them to the OVH zone and
+   `tools/dns/compare.sh` checks them. q-leap.eu has DMARC `p=reject`: without them every mail is
+   rejected. Brevo validates the domain only once it can read them, i.e. once the zone served for
+   q-leap.eu holds them (OVH after the switch, or WordPress.com > Domains > DNS records before it).
+3. Brevo: Senders > add `formulaires@q-leap.eu` (the `SENDER_EMAIL` of `wrangler.toml`) if Brevo
+   asks for it; SMTP & API > API keys > create a key named `qleap-forms`.
+4. Deploy: `npx wrangler login` (the Q-Leap Cloudflare account), then
+   `tools/forms/relay/deploy.sh`. It asks for the Brevo key the first time (stored as a Worker
+   secret, never in the repository), deploys, writes the Worker's address in `FORM_ENDPOINT`
+   (main.js) and `FORM_RELAY` (forms_monitor.py), and prints `/health`.
+5. `/health` answers `"ok": true` once Brevo accepts the key and sees q-leap.eu as authenticated.
+   Then commit the two files, merge into `dev`, and send one real test of each form.
+
+## Tests
+
+`node tools/forms/relay/test.mjs`: the Worker in Node with Brevo simulated (attachments, header
+injection, size and type limits, origins, Brevo failure, health). No account needed.
 
 ## Limits
 
-Brevo free plan: 300 e-mails a day. Attachments: 8 MB in total per form (checked here); Brevo's own
-limit applies on top. Only the origins listed in `ALLOWED_ORIGINS` (and localhost) may post.
+Brevo free plan: 300 e-mails a day. Attachments: PDF, Word, ODT, RTF, TXT, JPEG or PNG, 4 MB per
+file (Brevo's limit) and 8 MB per form; beyond that the site offers the e-mail fallback right away
+(CV attached by hand). Only the origins listed in `ALLOWED_ORIGINS` (and localhost) may post.

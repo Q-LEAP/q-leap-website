@@ -5,7 +5,7 @@ GitHub issue on failure (its assignee gets an e-mail) and closes it when the for
 
 Checks, without sending any message:
 - the form relay (tools/forms/relay, which mails the forms to digital@q-leap.eu through Brevo)
-  answers and Brevo accepts its key;
+  answers, Brevo accepts its key and sees q-leap.eu as authenticated (DKIM, else DMARC rejects all);
 - assets/js/main.js on the site still holds the form handler and its fallback;
 - the contact pages (FR/EN) have their form;
 - every job linked from join-us/ and en/career/ is a real page with an application form (a job left
@@ -43,7 +43,8 @@ def check_service():
         status, _, _ = get(FORM_RELAY + 'health', timeout=20)
         if status == 200:
             return
-    problems.append(f'Le relais des formulaires ou Brevo ne répond pas (HTTP {status or "aucune réponse"}) : les formulaires du site '
+    problems.append(f'Le relais des formulaires ne répond pas, ou Brevo refuse la clé ou ne voit pas q-leap.eu comme authentifié '
+                    f'(HTTP {status or "aucune réponse"}, détail : {FORM_RELAY}health) : les formulaires du site '
                     f'basculent sur le lien e-mail de secours, aucun message n\'arrive automatiquement.')
 
 
