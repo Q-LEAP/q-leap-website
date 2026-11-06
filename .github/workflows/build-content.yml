@@ -1,5 +1,6 @@
 # Regenerates the pages after a change to the content (Pages CMS saves, or a push): trainings
-# (tools/trainings/build.mjs), blog (tools/blog/build.py) and search index (tools/search/build.py), then commits the generated pages on the
+# (tools/trainings/build.mjs), blog (tools/blog/build.py), search index (tools/search/build.py) and
+# hreflang / canonical URLs (tools/seo/alternates.py), then commits the generated pages on the
 # same branch. Pushes made with GITHUB_TOKEN do not start workflows again.
 name: Build content
 
@@ -13,6 +14,7 @@ on:
       - 'tools/trainings/**'
       - 'tools/blog/**'
       - 'tools/search/**'
+      - 'tools/seo/**'
   workflow_dispatch:
 
 permissions:
@@ -41,6 +43,8 @@ jobs:
         run: python3 tools/blog/build.py
       - name: Site search (index and results pages)
         run: python3 tools/search/build.py
+      - name: Language alternates (hreflang) and absolute canonical URLs
+        run: python3 tools/seo/alternates.py
       - name: UX layer (UXEnhance branch)
         run: if [ -f tools/ux/apply.py ]; then python3 tools/ux/apply.py; fi
       - name: Commit the generated pages
