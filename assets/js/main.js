@@ -644,7 +644,7 @@
   // the filled-in request instead. (FormSubmit was used until 2026-11-05; it stayed down with HTTP
   // 522 for two days.)
   const FORM_RECIPIENT = 'digital@q-leap.eu';
-  const FORM_ENDPOINT = 'https://qleap-forms.WORKERS_SUBDOMAIN.workers.dev/';
+  const FORM_ENDPOINT = 'https://qleap-forms.qleapdigital.workers.dev/';
   const FORM_TIMEOUT = 15000;
   const FORM_TIMEOUT_WITH_FILE = 60000;
   const FORM_MAX_FILE_BYTES = 4 * 1024 * 1024; // Brevo's limit per attachment, also checked by the relay

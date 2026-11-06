@@ -22,7 +22,7 @@ import urllib.request
 
 BASE = (sys.argv[1] if len(sys.argv) > 1 else 'https://q-leap.eu/').rstrip('/') + '/'
 UA = {'User-Agent': 'Q-Leap forms monitor (github.com/Q-LEAP/q-leap-website)'}
-FORM_RELAY = 'https://qleap-forms.WORKERS_SUBDOMAIN.workers.dev/'
+FORM_RELAY = 'https://qleap-forms.qleapdigital.workers.dev/'
 problems = []
 
 
