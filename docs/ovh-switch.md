@@ -50,16 +50,37 @@ modifié : il reprend dès que les résolveurs suivent. Puis retirer le domaine 
 
 - **WordPress** reste en ligne chez WordPress.com (rien n'y est supprimé), mais n'est plus à
   l'adresse q-leap.eu : l'administration passe par l'adresse WordPress.com du site.
-- **Formulaires** (inscriptions, contact, candidatures avec CV) : relais maison
-  `tools/forms/relay` (Cloudflare Worker) qui envoie chaque demande à `digital@q-leap.eu` par Brevo
-  (offre gratuite, 300 e-mails/jour). À faire une fois, voir `tools/forms/relay/README.md` :
-  authentifier `q-leap.eu` dans Brevo et ajouter dans la zone OVH le TXT `brevo-code` et les deux
-  CNAME DKIM qu'il donne (q-leap.eu est en DMARC `p=reject` : sans eux tout est rejeté ; le SPF
-  inclut déjà Brevo), puis déployer le Worker. Si le relais ou Brevo ne répond pas, le visiteur
-  reçoit un lien qui ouvre son logiciel de messagerie avec la demande déjà rédigée pour
-  digital@q-leap.eu (candidatures : joindre le CV à la main). FormSubmit, utilisé jusqu'au
-  2026-11-05, est abandonné (erreur 522 deux jours de suite).
+- **Formulaires** (inscriptions, contact, candidatures) : encore FormSubmit vers
+  `digital@q-leap.eu`, en panne (522) depuis le 2026-11-04 ; le visiteur reçoit un lien qui ouvre
+  son logiciel de messagerie avec la demande déjà rédigée (candidatures : joindre le CV à la main).
+  Remplacement par le relais maison : voir « Relais des formulaires » ci-dessous.
 - **Alerte formulaires** : dans `.github/workflows/forms-monitor.yml`, passer `SITE` à
   `https://q-leap.eu/` (le contrôle horaire vise le site de test tant que la bascule n'est pas faite).
 - **Search Console** : la balise `google-site-verification` des pages est conservée ; soumettre
   `https://q-leap.eu/sitemap_index.xml`.
+
+## Relais des formulaires (Cloudflare Worker + Brevo) — à faire
+
+Décidé le 2026-11-05 : FormSubmit est abandonné (erreur 522 deux jours de suite) au profit d'un
+relais maison, gratuit, CV compris. Code prêt et testé (Brevo simulé) sur la branche
+`brevo-relay` : `tools/forms/relay/` (Worker + README), `initForms()` de `assets/js/main.js`,
+`tools/verify/forms_monitor.py`. Il reste :
+
+- [ ] Brevo : vérifier si Q-Leap a déjà un compte Brevo/Sendinblue (le SPF de q-leap.eu contient
+      déjà `include:spf.sendinblue.com`), sinon créer un compte gratuit au nom de Q-Leap.
+- [ ] Brevo → Domaines : ajouter `q-leap.eu`, relever le TXT `brevo-code` et les deux CNAME DKIM.
+- [ ] Zone OVH : ajouter ces trois enregistrements. Indispensable : q-leap.eu est en DMARC
+      `p=reject`, sans DKIM Brevo tous les envois sont rejetés.
+- [ ] Brevo : valider le domaine, une fois les serveurs de noms passés chez OVH (après l'étape 4
+      de la bascule ; tant que WordPress.com sert la zone, Brevo ne voit pas les enregistrements).
+- [ ] Brevo → SMTP & API → Clés API : créer `qleap-forms`. La clé ne s'écrit nulle part dans le
+      dépôt : elle se saisit au déploiement (`npx wrangler secret put BREVO_API_KEY`).
+- [ ] Choisir le compte Cloudflare Q-Leap, puis depuis `tools/forms/relay/` :
+      `npx wrangler login`, `npx wrangler secret put BREVO_API_KEY`, `npx wrangler deploy`.
+- [ ] Reporter l'adresse du Worker (`https://qleap-forms.<compte>.workers.dev/`) à la place de
+      `WORKERS_SUBDOMAIN` dans `FORM_ENDPOINT` (main.js) et `FORM_RELAY` (forms_monitor.py),
+      fusionner `brevo-relay` dans `dev`.
+- [ ] Vrai envoi de test de chaque formulaire (contact, inscription formation, candidature avec
+      CV) : sujet, adresse de réponse et pièce jointe reçus sur digital@q-leap.eu.
+- [ ] L'alerte « Alerte formulaires » (issue n° 1) se ferme seule au contrôle horaire suivant.
+- [ ] Supprimer la branche `formspree` (piste abandonnée).
