@@ -5,7 +5,7 @@ import puppeteer from 'puppeteer-core';
 import { CHROME, LIVE, LOCAL } from './chrome.mjs';
 
 const PAGES = { home: '', en: 'en/', 'about-us': 'about-us/', testing: 'testing-service/', training: 'training/', contact: 'contact/', blog: 'blog/', 'our-events': 'our-events/', 'en-about-us': 'en/about-us/', 'join-us': 'join-us/', 'en-career': 'en/career/', innovations: 'innovations/', 'q-leap-factory': 'q-leap-factory/',
-  'test-automation': 'automatisation-des-tests/', accessibility: 'tests-daccessibilite/', calendar: 'calendrier-formation/', references: 'our-references/', 'training-istqb-fl': 'trainings/istqb-certified-tester-foundation-level/', post: 'le-lien-entre-la-qualite-et-linnovation/', privacy: 'data-protection-notice/',
+  'test-automation': 'automatisation-des-tests/', accessibility: 'tests-daccessibilite/', calendar: 'calendrier-formation/', 'en-calendar': 'en/training-calendar/', references: 'our-references/', 'training-istqb-fl': 'trainings/istqb-certified-tester-foundation-level/', post: 'le-lien-entre-la-qualite-et-linnovation/', privacy: 'data-protection-notice/',
   'portfolio-luxair': 'portfolio/luxair/', 'jobs-spontaneous': 'jobs/candidature-spontanee/', 'en-jobs-spontaneous': 'en/jobs/unsolicited-application/', 'en-post': 'en/quality-is-not-tested-but-built/' };
 const VIEWPORTS = {
   desktop: { width: 1920, height: 902 },

@@ -417,6 +417,20 @@
     window.addEventListener('resize', stretch);
   }
 
+  // The Events Calendar views (calendar, home event list): the plugin's breakpoints.js adds
+  // tribe-common--breakpoint-xsmall / -medium / -full to the view from its own width; the plugin's
+  // CSS switches to the desktop layout (search bar, month grid without the mobile list) on them.
+  function initEventsBreakpoints() {
+    const views = [...document.querySelectorAll('[data-js="tribe-events-view"]')];
+    if (!views.length) return;
+    const breakpoints = [['tribe-common--breakpoint-xsmall', 500], ['tribe-common--breakpoint-medium', 768], ['tribe-common--breakpoint-full', 960]];
+    const update = () => views.forEach((view) => {
+      breakpoints.forEach(([className, minWidth]) => view.classList.toggle(className, view.offsetWidth >= minWidth));
+    });
+    update();
+    window.addEventListener('resize', update);
+  }
+
   // Qwery mobile menu (full-screen panel) and vertical menus: arrow toggles for sub-menus.
   function initMobileMenu() {
     const menu = document.querySelector('.menu_mobile');
@@ -1426,6 +1440,7 @@
 
   document.querySelectorAll('.ql-hero').forEach(initHero);
   initStretchedSections();
+  initEventsBreakpoints();
   initGalleries();
   initTyped();
   initSessionRegistration();
