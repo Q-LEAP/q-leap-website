@@ -48,7 +48,7 @@ jobs:
             mkdir -p "$2"
             (cd "$1" && git ls-files -z | grep -zvE '^(tools|content|docs|\.github)/|^(\.pages\.yml|CLAUDE\.md|README\.md|package\.json|\.gitignore)$' | xargs -0 cp --parents -t "$2")
           }
-          pip install pillow
+          pip install pillow fonttools brotli
           # Page speed on the published copy only (tools/perf/optimize.py): one stylesheet per page,
           # WebP images, lazy loading. Each site is optimized with its own scripts and assets.
           copy_site dev "$PWD/_site"

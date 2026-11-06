@@ -11,6 +11,11 @@ generated (export + components.py, trainings, blog, UX layer) and no generated C
    used by the pages; the originals stay (social sharing, CMS). Images below the first screen load
    lazily.
    WebP copies are committed next to their originals (created once, reused by every deploy).
+3. Icon fonts (fontello, trx_addons_icons…: woff2 files whose characters are all private-use
+   codepoints, no letters) keep only the icons the published pages can show: codepoints written in the bundles,
+   the other stylesheets the pages link, the pages and the scripts. Published copy only (--root):
+   the repository keeps the full fonts, so an icon added later comes back at the next deploy. Needs
+   fontTools and brotli (pip install fonttools brotli); skipped without them.
 Usage: python3 tools/perf/optimize.py [--root DIR] [page.html …]   (default: every page of DIR)"""
 import functools
 import hashlib
@@ -20,7 +25,8 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-if '--root' in sys.argv:
+PUBLISHED_COPY = '--root' in sys.argv
+if PUBLISHED_COPY:
     ROOT = os.path.abspath(sys.argv[sys.argv.index('--root') + 1])
     del sys.argv[sys.argv.index('--root'):sys.argv.index('--root') + 2]
 BUNDLES = os.path.join(ROOT, 'assets', 'css', 'bundle')
@@ -294,6 +300,61 @@ def lazy_images(markup):
     return head + re.sub(r'<img\s[^>]*>', tag, body)
 
 
+# ---------------------------------------------------------------- icon fonts
+
+def used_codepoints(page_files):
+    """Private-use characters the site can display: CSS escapes (content: "\\e800"), HTML entities, raw characters."""
+    texts = [os.path.join(ROOT, file) for file in page_files]
+    linked = set()
+    for file in texts:
+        linked.update(re.findall(r'href="[./]*(assets/css/[^"]+\.css)"', open(file, encoding='utf-8', errors='ignore').read()))
+    texts += [os.path.join(ROOT, href) for href in linked if os.path.exists(os.path.join(ROOT, href))]
+    texts += [os.path.join(BUNDLES, name) for name in os.listdir(BUNDLES)]
+    for folder, dirs, files in os.walk(os.path.join(ROOT, 'assets', 'js')):
+        texts += [os.path.join(folder, name) for name in files if name.endswith('.js')]
+    used = set()
+    for file in texts:
+        text = open(file, encoding='utf-8', errors='ignore').read()
+        used.update(int(code, 16) for code in re.findall(r'\\([0-9a-fA-F]{4,5})(?![0-9a-fA-F])', text))
+        used.update(int(code, 16) for code in re.findall(r'&#x([0-9a-fA-F]{4,5});', text))
+        used.update(ord(char) for char in text if '\ue000' <= char <= '\uf8ff')
+    return used
+
+
+def subset_icon_fonts(used):
+    try:
+        from fontTools import subset
+        from fontTools.ttLib import TTFont
+    except ImportError:
+        print("Polices d'icônes non réduites (pip install fonttools brotli)")
+        return
+    saved = 0
+    for folder, dirs, files in os.walk(os.path.join(ROOT, 'assets', 'fonts')):
+        for name in files:
+            path = os.path.join(folder, name)
+            if not name.endswith('.woff2'):
+                continue
+            font = TTFont(path)
+            codes = set(font.getBestCmap())
+            icons = {code for code in codes if 0xE000 <= code <= 0xF8FF}
+            if len(icons) < 0.9 * len(codes) or codes & set(range(ord('a'), ord('z') + 1)):
+                continue  # text fonts, and icon fonts drawn from words (Material Icons ligatures)
+            keep = (codes & used) | (codes - icons)
+            if keep == codes:
+                continue
+            options = subset.Options()
+            options.flavor = 'woff2'
+            options.name_IDs = ['*']
+            options.notdef_outline = True
+            subsetter = subset.Subsetter(options)
+            subsetter.populate(unicodes=keep or [min(codes)])  # an empty font is not valid woff2
+            subsetter.subset(font)
+            before = os.path.getsize(path)
+            font.save(path)
+            saved += before - os.path.getsize(path)
+    print(f"Polices d'icônes : {saved // 1024} ko de moins")
+
+
 # ---------------------------------------------------------------- pages
 
 def pages():
@@ -340,4 +401,6 @@ if __name__ == '__main__':
         for name in os.listdir(BUNDLES):
             if name.endswith('.css') and name not in used:
                 os.remove(os.path.join(BUNDLES, name))
+        if PUBLISHED_COPY:
+            subset_icon_fonts(used_codepoints(pages()))
     print(f'{count} pages, CSS moyen {total // max(count, 1) // 1024} ko, {len(os.listdir(BUNDLES))} fichiers dans assets/css/bundle/')
