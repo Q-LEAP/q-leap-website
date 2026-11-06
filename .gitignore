@@ -6,3 +6,4 @@ tools/export/raw/
 tools/export/build/
 assets/css/bundle/
 tools/perf/styles/
+.wrangler/
