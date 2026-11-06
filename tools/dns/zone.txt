@@ -50,3 +50,6 @@ _dnsauth.q-guard.client1.internal              3600  IN CNAME  _w1c7ekcjwb24sa50
 _dnsauth.shop-demo.client2.internal            3600  IN CNAME  _gkxmcnhapg35npyjrabsafynr1lhh0g.dcv.digicert.com.
 _dnsauth.bank-demo.client2.internal            3600  IN CNAME  _f3xnqh1fe3gj4j38izj1v3tlf5flvxp.dcv.digicert.com.
 _dnsauth.q-guard.client2.internal              3600  IN CNAME  _zbpbxc4iadcld6sxwos0m3qyqits48j.dcv.digicert.com.
+@                                              300   IN TXT    "brevo-code:73525542eba0102fc00d1576b96360a1"
+brevo1._domainkey                              300   IN CNAME  b1.q-leap-eu.dkim.brevo.com.
+brevo2._domainkey                              300   IN CNAME  b2.q-leap-eu.dkim.brevo.com.

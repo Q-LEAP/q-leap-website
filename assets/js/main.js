@@ -637,14 +637,17 @@
   }
 
   // Forms (Ninja Forms registration, Contact Form 7, WP Job Openings applications): GitHub Pages
-  // cannot receive them, FormSubmit mails them to the address WordPress used (digital@q-leap.eu
-  // for all three). Forms with a file (job applications) are posted normally and come back with
-  // ?envoye=1; the others are sent in the background and show the plugin's own success message.
-  // FormSubmit is a free service that can be down (522 for hours on 2026-11-04): after 15 s or an
-  // error, the visitor gets a link that opens their mail app with the filled-in request instead.
+  // cannot receive them, our relay (tools/forms/relay: a Cloudflare Worker sending through Brevo)
+  // mails them to the address WordPress used (digital@q-leap.eu for all three). Every form, CV
+  // included, is sent in the background and shows the plugin's own success message. If the relay
+  // fails or is slow (15 s, 60 s with a CV), the visitor gets a link that opens their mail app with
+  // the filled-in request instead. (FormSubmit was used until 2026-11-05; it stayed down with HTTP
+  // 522 for two days.)
   const FORM_RECIPIENT = 'digital@q-leap.eu';
-  const FORM_ENDPOINT = `https://formsubmit.co/${FORM_RECIPIENT}`;
+  const FORM_ENDPOINT = 'https://qleap-forms.qleapdigital.workers.dev/';
   const FORM_TIMEOUT = 15000;
+  const FORM_TIMEOUT_WITH_FILE = 60000;
+  const FORM_MAX_FILE_BYTES = 4 * 1024 * 1024; // Brevo's limit per attachment, also checked by the relay
   // Mail subjects sorted in three families, always in French so the team's mailbox rules match them
   // whatever the page language: « Candidature : <poste> » (or « Candidature spontanée »),
   // « Inscription formation : <formation> – session du <date> » / « Demande formation : <formation> »,
@@ -668,23 +671,25 @@
       });
       data.append('Page', location.href);
       data.append('_subject', subject);
-      data.append('_template', 'table');
-      data.append('_captcha', 'false');
+      // Replying to the notification e-mail answers the visitor.
+      const email = form.querySelector('input[type="email"]')?.value.trim();
+      if (email) data.append('_replyto', email);
       return data;
     };
     const missing = (form) => [...form.querySelectorAll('[required], [aria-required="true"]')]
       .filter((field) => (field.type === 'checkbox' ? !field.checked : field.type === 'file' ? !field.files.length : !field.value.trim()));
     const send = async (data) => {
-      const response = await fetch(FORM_ENDPOINT.replace('.co/', '.co/ajax/'),
-        { method: 'POST', body: data, headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(FORM_TIMEOUT) });
+      const timeout = [...data.values()].some((value) => value instanceof File) ? FORM_TIMEOUT_WITH_FILE : FORM_TIMEOUT;
+      const response = await fetch(FORM_ENDPOINT,
+        { method: 'POST', body: data, headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(timeout) });
       const result = await response.json().catch(() => ({}));
-      if (!response.ok || String(result.success) !== 'true') throw new Error(result.message || response.status);
+      if (!response.ok || result.ok !== true) throw new Error(result.error || response.status);
     };
     // The same request as an e-mail written by the visitor's mail app (nothing is lost if the service is down).
-    const fallback = (data) => {
+    const fallback = (data, reason = t("Le service d'envoi ne répond pas pour le moment.", 'The sending service is not responding right now.')) => {
       const lines = [...data].filter(([name, value]) => !name.startsWith('_') && !(value instanceof File)).map(([name, value]) => `${name} : ${value}`);
       const href = `mailto:${FORM_RECIPIENT}?subject=${encodeURIComponent(data.get('_subject') || 'Q-Leap')}&body=${encodeURIComponent(lines.join('\n'))}`;
-      return `<p>${t("Le service d'envoi ne répond pas pour le moment.", 'The sending service is not responding right now.')} `
+      return `<p>${reason} `
         + `<a href="${href}">${t('Envoyez votre demande par e-mail', 'Send your request by e-mail')}</a> `
         + `${t('(le message est déjà rempli).', '(the message is already filled in).')}</p>`;
     };
@@ -796,52 +801,33 @@
       const title = pageTitle();
       const spontaneous = /spontan|unsolicited/i.test(title + location.pathname);
       const message = form.parentElement.querySelector('.awsm-application-message');
-      if (new URLSearchParams(location.search).has('envoye') && message) {
+      const show = (html) => {
+        if (!message) return;
         message.style.display = '';
-        message.innerHTML = `<p>${t('Votre candidature a bien été envoyée. Merci !', 'Your application has been submitted. Thank you!')}</p>`;
-        form.hidden = true;
-      }
+        message.innerHTML = html;
+      };
+      const button = form.querySelector('[type="submit"]');
       form.addEventListener('submit', async (event) => {
         event.preventDefault();
         const empty = missing(form);
         if (empty.length) { empty[0].reportValidity?.(); empty[0].focus(); return; }
         const data = collect(form, spontaneous ? 'Candidature spontanée' : `Candidature : ${title}`, spontaneous ? 'Candidature spontanée' : 'Candidature à une offre');
         data.append('Poste visé', spontaneous ? 'Candidature spontanée' : title);
-        // The page is left for FormSubmit's: check first that it answers (an empty request is
-        // refused without sending anything), otherwise offer the e-mail with the CV attached by hand.
-        try {
-          await fetch(FORM_ENDPOINT.replace('.co/', '.co/ajax/'), { method: 'POST', body: new FormData(), headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(8000) });
-        } catch {
-          if (message) {
-            message.style.display = '';
-            message.innerHTML = fallback(data).replace('</p>', ` ${t('Joignez votre CV au message.', 'Please attach your CV to the e-mail.')}</p>`);
-          }
+        const attachByHand = (html) => html.replace('</p>', ` ${t('Joignez votre CV au message.', 'Please attach your CV to the e-mail.')}</p>`);
+        if ([...data.values()].some((value) => value instanceof File && value.size > FORM_MAX_FILE_BYTES)) {
+          show(attachByHand(fallback(data, t("Votre fichier dépasse 4 Mo, la limite de l'envoi en ligne.", 'Your file is larger than 4 MB, the limit for sending online.'))));
           return;
         }
-        const next = new URL(location.href);
-        next.searchParams.set('envoye', '1');
-        data.append('_next', next.href);
-        // A real form post: FormSubmit takes attachments only this way.
-        const post = document.createElement('form');
-        post.method = 'POST';
-        post.action = FORM_ENDPOINT;
-        post.enctype = 'multipart/form-data';
-        post.hidden = true;
-        for (const [name, value] of data) {
-          if (value instanceof File) continue;
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = name;
-          input.value = value;
-          post.append(input);
+        if (button) button.disabled = true;
+        show(`<p>${t('Envoi en cours…', 'Sending…')}</p>`);
+        try {
+          await send(data);
+          show(`<p>${t('Votre candidature a bien été envoyée. Merci !', 'Your application has been submitted. Thank you!')}</p>`);
+          form.hidden = true;
+        } catch {
+          show(attachByHand(fallback(data)));
+          if (button) button.disabled = false;
         }
-        form.querySelectorAll('input[type="file"]').forEach((input) => {
-          if (!input.files.length) return;
-          input.name = 'attachment';
-          post.append(input);
-        });
-        document.body.append(post);
-        post.submit();
       });
     });
   }
