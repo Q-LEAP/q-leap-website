@@ -17,6 +17,8 @@ generated (export + components.py, trainings, blog, UX layer) and no generated C
    the other stylesheets the pages link, the pages and the scripts. Published copy only (--root):
    the repository keeps the full fonts, so an icon added later comes back at the next deploy. Needs
    fontTools and brotli (pip install fonttools brotli); skipped without them.
+4. Stylesheets that only fed the bundles (assets/css/wp/…, main.css: ~170 files, 12 MB) are not
+   published when no page, script or stylesheet names them any more. Published copy only.
 Usage: python3 tools/perf/optimize.py [--root DIR] [page.html …]   (default: every page of DIR)"""
 import functools
 import hashlib
@@ -377,6 +379,30 @@ def subset_icon_fonts(used):
     print(f"Polices d'icônes : {saved // 1024} ko de moins")
 
 
+def drop_bundled_stylesheets():
+    """Removes the stylesheets outside assets/css/bundle/ whose file name appears in no page, script,
+    stylesheet or data file of the published copy (matched by name, so any reference keeps a file)."""
+    named = set()
+    for folder, dirs, files in os.walk(ROOT):
+        for name in files:
+            if name.endswith(('.html', '.js', '.css', '.json', '.xml', '.txt', '.webmanifest')):
+                text = open(os.path.join(folder, name), encoding='utf-8', errors='ignore').read()
+                named.update(os.path.basename(match) for match in re.findall(r'[\w./%-]+\.css\b', text))
+    removed, size = 0, 0
+    for folder, dirs, files in os.walk(os.path.join(ROOT, 'assets', 'css')):
+        dirs[:] = [name for name in dirs if os.path.join(folder, name) != BUNDLES]
+        for name in files:
+            if name.endswith('.css') and name not in named:
+                path = os.path.join(folder, name)
+                size += os.path.getsize(path)
+                os.remove(path)
+                removed += 1
+    for folder, dirs, files in sorted(os.walk(os.path.join(ROOT, 'assets', 'css')), reverse=True):
+        if folder != BUNDLES and not os.listdir(folder):
+            os.rmdir(folder)
+    print(f'Feuilles de style déjà dans les bundles, non publiées : {removed} ({size // 1024 // 1024} Mo)')
+
+
 # ---------------------------------------------------------------- pages
 
 def pages():
@@ -425,4 +451,5 @@ if __name__ == '__main__':
                 os.remove(os.path.join(BUNDLES, name))
         if PUBLISHED_COPY:
             subset_icon_fonts(used_codepoints(pages()))
+            drop_bundled_stylesheets()
     print(f'{count} pages, CSS moyen {total // max(count, 1) // 1024} ko, {len(os.listdir(BUNDLES))} fichiers dans assets/css/bundle/')
