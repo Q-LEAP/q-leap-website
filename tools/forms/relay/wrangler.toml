@@ -6,7 +6,7 @@ workers_dev = true
 
 [vars]
 RECIPIENT = "digital@q-leap.eu"
-SENDER_EMAIL = "formulaires@q-leap.eu"
+SENDER_EMAIL = "bot@q-leap.eu" # already a verified sender in Q-Leap's Brevo account
 SENDER_NAME = "Site q-leap.eu"
 ALLOWED_ORIGINS = "https://q-leap.eu,https://www.q-leap.eu,https://q-leap.github.io"
 # Secret, never in this file: npx wrangler secret put BREVO_API_KEY

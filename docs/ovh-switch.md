@@ -70,17 +70,15 @@ service `tools/forms/relay/deploy.sh` et l'emplacement des enregistrements Brevo
 (`tools/dns/brevo.txt`). Tant que ce n'est pas en service, les formulaires de `dev` proposent le
 lien e-mail de secours. Il reste, avec les accès Q-Leap :
 
-- [ ] Brevo : vérifier si Q-Leap a déjà un compte Brevo/Sendinblue (le SPF de q-leap.eu contient
-      déjà `include:spf.sendinblue.com`), sinon créer un compte gratuit au nom de Q-Leap.
-- [ ] Brevo → Domaines : ajouter `q-leap.eu`, copier le TXT `brevo-code` et les deux CNAME DKIM
-      dans `tools/dns/brevo.txt` (décommentés), puis `tools/dns/make_zone.sh > tools/dns/zone.txt`.
+- [x] Brevo : compte Q-Leap existant, `q-leap.eu` déjà ajouté (non authentifié) ; ses trois
+      enregistrements sont dans `tools/dns/brevo.txt` et `tools/dns/zone.txt` (2026-11-06).
 - [ ] Zone OVH : importer la zone (étape 3 de la bascule) ; `tools/dns/compare.sh dnsXX.ovh.net`
       doit afficher `ok` pour les trois lignes « (Brevo) ». Indispensable : q-leap.eu est en DMARC
       `p=reject`, sans DKIM Brevo tous les envois sont rejetés.
 - [ ] Brevo : valider le domaine dès que la zone servie contient les enregistrements (après
       l'étape 4 ; ou plus tôt en les ajoutant aussi chez WordPress.com → Domaines → DNS).
-- [ ] Brevo → Expéditeurs : ajouter `formulaires@q-leap.eu` s'il le demande ; SMTP & API → Clés
-      API : créer `qleap-forms` (elle se saisit au déploiement, jamais dans le dépôt).
+- [ ] Brevo → SMTP & API → Clés API : créer `qleap-forms` (expéditeur : `bot@q-leap.eu`, déjà
+      vérifié dans Brevo) (elle se saisit au déploiement, jamais dans le dépôt).
 - [ ] Cloudflare : `npx wrangler login` sur le compte Q-Leap, puis `tools/forms/relay/deploy.sh`
       (clé Brevo, déploiement, adresse du Worker reportée dans main.js et forms_monitor.py,
       affichage de `/health`).

@@ -19,8 +19,8 @@ one e-mail to `digital@q-leap.eu` through Brevo's transactional API. Nothing is 
    `tools/dns/compare.sh` checks them. q-leap.eu has DMARC `p=reject`: without them every mail is
    rejected. Brevo validates the domain only once it can read them, i.e. once the zone served for
    q-leap.eu holds them (OVH after the switch, or WordPress.com > Domains > DNS records before it).
-3. Brevo: Senders > add `formulaires@q-leap.eu` (the `SENDER_EMAIL` of `wrangler.toml`) if Brevo
-   asks for it; SMTP & API > API keys > create a key named `qleap-forms`.
+3. Brevo: the sender (`SENDER_EMAIL` of `wrangler.toml`, `bot@q-leap.eu`) must be a verified
+   sender (it is); SMTP & API > API keys > create a key named `qleap-forms`.
 4. Deploy: `npx wrangler login` (the Q-Leap Cloudflare account), then
    `tools/forms/relay/deploy.sh`. It asks for the Brevo key the first time (stored as a Worker
    secret, never in the repository), deploys, writes the Worker's address in `FORM_ENDPOINT`

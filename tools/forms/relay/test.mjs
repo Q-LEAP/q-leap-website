@@ -6,7 +6,7 @@ import worker from './worker.js';
 const env = {
   BREVO_API_KEY: 'test-key',
   RECIPIENT: 'digital@q-leap.eu',
-  SENDER_EMAIL: 'formulaires@q-leap.eu',
+  SENDER_EMAIL: 'bot@q-leap.eu',
   SENDER_NAME: 'Site q-leap.eu',
   ALLOWED_ORIGINS: 'https://q-leap.eu,https://q-leap.github.io',
 };
@@ -49,7 +49,7 @@ test('application with CV and cover letter: one mail, both attached', async () =
   assert.equal(sent.length, 1);
   const [mail] = sent;
   assert.deepEqual(mail.to, [{ email: 'digital@q-leap.eu' }]);
-  assert.equal(mail.sender.email, 'formulaires@q-leap.eu');
+  assert.equal(mail.sender.email, 'bot@q-leap.eu');
   assert.equal(mail.subject, 'Candidature spontanée Bcc: evil@example.com', 'no header injection');
   assert.deepEqual(mail.replyTo, { email: 'candidat@example.com' });
   assert.deepEqual(mail.attachment.map((file) => file.name), ['cv.pdf', 'lettre.pdf']);
