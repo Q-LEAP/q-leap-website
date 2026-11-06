@@ -217,7 +217,7 @@ def site_css(page):
     text = ' '.join(re.findall(r'style="([^"]*)"', page))
     for href in re.findall(r'<link[^>]*rel="stylesheet"[^>]*href="[./]*(assets/css/[^"]+\.css)"', page):
         if '/bundle/' not in href and os.path.exists(os.path.join(ROOT, href)):
-            text += open(os.path.join(ROOT, href), errors='ignore').read()
+            text += open(os.path.join(ROOT, href), encoding='utf-8', errors='ignore').read()
     return text
 
 
@@ -241,7 +241,7 @@ def bundle(block, page, page_dir, tokens):
     os.makedirs(BUNDLES, exist_ok=True)
     target = os.path.join(BUNDLES, digest + '.css')
     if not os.path.exists(target):
-        open(target, 'w').write(css)
+        open(target, 'w', encoding='utf-8').write(css)
     return f'assets/css/bundle/{digest}.css', len(css)
 
 
@@ -300,13 +300,13 @@ def pages():
     found = []
     for folder, dirs, files in os.walk(ROOT):
         dirs[:] = [name for name in dirs if not name.startswith('.') and name not in ('tools', 'docs', 'node_modules', 'assets')]
-        found += [os.path.relpath(os.path.join(folder, name), ROOT) for name in files if name.endswith('.html')]
+        found += [os.path.relpath(os.path.join(folder, name), ROOT).replace(os.sep, '/') for name in files if name.endswith('.html')]
     return sorted(found)
 
 
 def optimize(file, script_text):
     path = os.path.join(ROOT, file)
-    markup = open(path, newline='').read()
+    markup = open(path, encoding='utf-8', newline='').read()
     match = BLOCK.search(markup)
     if not match:
         return None
@@ -320,12 +320,12 @@ def optimize(file, script_text):
     href, size = bundle(block, rest, page_dir, tokens)
     markup = markup[:match.start()] + f'<!-- wp-styles:bundle -->\n<link rel="stylesheet" href="{prefix}{href}">\n<!-- /wp-styles -->' + markup[match.end():]
     markup = lazy_images(use_webp(markup, page_dir))
-    open(path, 'w', newline='').write(markup)
+    open(path, 'w', encoding='utf-8', newline='').write(markup)
     return size
 
 
 if __name__ == '__main__':
-    script_text = ''.join(open(os.path.join(ROOT, script), errors='ignore').read() for script in SCRIPTS if os.path.exists(os.path.join(ROOT, script)))
+    script_text = ''.join(open(os.path.join(ROOT, script), encoding='utf-8', errors='ignore').read() for script in SCRIPTS if os.path.exists(os.path.join(ROOT, script)))
     files = sys.argv[1:] or pages()
     total, count = 0, 0
     for file in files:
@@ -336,7 +336,7 @@ if __name__ == '__main__':
     if not sys.argv[1:]:  # full run: bundles no page uses any more are generated files, removed
         used = set()
         for file in pages():
-            used.update(re.findall(r'assets/css/bundle/([0-9a-f]+\.css)', open(os.path.join(ROOT, file), errors='ignore').read()))
+            used.update(re.findall(r'assets/css/bundle/([0-9a-f]+\.css)', open(os.path.join(ROOT, file), encoding='utf-8', errors='ignore').read()))
         for name in os.listdir(BUNDLES):
             if name.endswith('.css') and name not in used:
                 os.remove(os.path.join(BUNDLES, name))
