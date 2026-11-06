@@ -267,7 +267,9 @@
   }
   function fade(element, show, duration = 400) {
     if (show) element.style.display = 'block';
-    const animation = element.animate([{ opacity: show ? 0 : 1 }, { opacity: show ? 1 : 0 }], { duration, easing: swing });
+    // Like jQuery, to and from the element's own opacity (the search overlay is a 20 % veil).
+    const opacity = getComputedStyle(element).opacity;
+    const animation = element.animate([{ opacity: show ? 0 : opacity }, { opacity: show ? opacity : 0 }], { duration, easing: swing });
     if (!show) animation.onfinish = () => { element.style.display = 'none'; };
   }
 
@@ -323,6 +325,75 @@
           return;
         }
         if (container === menu && !arrow) close(true);
+      });
+    });
+  }
+
+  // Qwery "modern" header search (skin.js): the magnifier drops the search panel from the top of the
+  // window and fades the overlay in; the close button, the overlay and Escape play the theme's
+  // closing animation (body.search_out_anim, 800 ms) before the panel goes back up.
+  function initHeaderSearch() {
+    document.querySelectorAll('.search_modern .search_wrap:not(.inited)').forEach((panel) => {
+      panel.classList.add('inited');
+      const container = panel.parentElement;
+      const opener = panel.previousElementSibling?.classList.contains('search_submit') ? panel.previousElementSibling : null;
+      const overlay = panel.nextElementSibling?.classList.contains('search_overlay') ? panel.nextElementSibling : null;
+      const field = panel.querySelector('.search_field');
+      const closeButton = panel.querySelector('.search_close');
+      if (!opener || !field) return;
+      const english = document.documentElement.lang.startsWith('en');
+      // The theme drew these as a bare span and an <a> without href: keyboard and screen readers get buttons.
+      opener.setAttribute('role', 'button');
+      opener.setAttribute('tabindex', '0');
+      opener.setAttribute('aria-label', english ? 'Search' : 'Rechercher');
+      opener.setAttribute('aria-expanded', 'false');
+      closeButton?.setAttribute('role', 'button');
+      closeButton?.setAttribute('tabindex', '0');
+      closeButton?.setAttribute('aria-label', english ? 'Close search' : 'Fermer la recherche');
+      let closing = false;
+
+      const open = () => {
+        container.classList.add('search_active');
+        document.body.classList.add('search_active');
+        if (panel.classList.contains('search_opened')) {
+          if (field.value.trim()) panel.querySelector('form')?.requestSubmit();
+          else close();
+          return;
+        }
+        panel.classList.add('search_opened');
+        opener.setAttribute('aria-expanded', 'true');
+        document.body.classList.add('search_open_anim');
+        if (overlay) fade(overlay, true);
+        setTimeout(() => field.focus(), 500);
+      };
+      const close = () => {
+        if (closing || !panel.classList.contains('search_opened')) return;
+        closing = true;
+        document.body.classList.add('search_out_anim');
+        setTimeout(() => {
+          panel.classList.remove('search_opened');
+          opener.setAttribute('aria-expanded', 'false');
+          document.body.classList.remove('search_open_anim', 'search_out_anim');
+          if (overlay) fade(overlay, false);
+        }, 800);
+        setTimeout(() => {
+          container.classList.remove('search_active');
+          document.body.classList.remove('search_active');
+          closing = false;
+          opener.focus({ preventScroll: true });
+        }, 1200);
+      };
+
+      opener.addEventListener('click', (event) => { event.preventDefault(); open(); });
+      opener.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); open(); }
+      });
+      [closeButton, overlay].forEach((element) => element?.addEventListener('click', (event) => { event.preventDefault(); close(); }));
+      closeButton?.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); close(); }
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && panel.classList.contains('search_opened')) { field.value = ''; close(); }
       });
     });
   }
@@ -886,6 +957,7 @@
   initSearch().then(initBlogPagination);
   initElementorTabs();
   initMobileMenu();
+  initHeaderSearch();
   initEntranceAnimations();
   initMenus();
   initSchemeWatchers();
