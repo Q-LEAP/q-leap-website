@@ -316,7 +316,9 @@ def lazy_images(markup):
         count[0] += 1
         if count[0] <= 2 or 'loading=' in img or 'fetchpriority' in img or 'logo_image' in img:
             return img
-        return img.replace('<img ', '<img loading="lazy" ', 1) if 'decoding=' in img else img.replace('<img ', '<img loading="lazy" decoding="async" ', 1)
+        # The tag may continue on the next line (<img\n src=…, The Events Calendar's markup)
+        attributes = 'loading="lazy" ' if 'decoding=' in img else 'loading="lazy" decoding="async" '
+        return re.sub(r'^<img\s+', '<img ' + attributes, img, count=1)
     return head + re.sub(r'<img\s[^>]*>', tag, body)
 
 
