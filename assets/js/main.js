@@ -285,6 +285,115 @@
     if (!show) animation.onfinish = () => { element.style.display = 'none'; };
   }
 
+  // Elementor Pro gallery, "justified" layout (E-Gallery 1.2.0 with the settings the Elementor Pro
+  // handler passes): rows of images at the ideal row height, scaled to fill the width, positioned by
+  // CSS variables the gallery stylesheet reads; images load when they come into view. Without it the
+  // gallery has no height and its photos never show (join-us/, en/career/).
+  function initGalleries() {
+    // Elementor's active breakpoints on this site (mobile up to 767 px, tablet up to 1279 px).
+    const device = () => (window.innerWidth < 767 ? 'mobile' : window.innerWidth < 1279 ? 'tablet' : 'desktop');
+    document.querySelectorAll('.elementor-widget-gallery').forEach((widget) => {
+      const container = widget.querySelector('.elementor-gallery__container');
+      let settings = {};
+      try { settings = JSON.parse(widget.dataset.settings || '{}'); } catch { return; }
+      if (!container || settings.gallery_layout !== 'justified') return;
+      // elementorFrontend.getDeviceSetting: mobile falls back to tablet, tablet to desktop.
+      const setting = (name) => {
+        const chain = { mobile: ['_mobile', '_tablet', ''], tablet: ['_tablet', ''], desktop: [''] }[device()];
+        const found = chain.map((suffix) => settings[name + suffix]).find((value) => value && value.size !== '' && value.size !== undefined);
+        return found ? Number(found.size) : 0;
+      };
+      const lazy = settings.lazyload === 'yes';
+      const items = [...container.querySelectorAll('.e-gallery-item')];
+      const images = items.map((item) => item.querySelector('.e-gallery-image'));
+      const data = images.map((image) => {
+        const width = Number(image.dataset.width), height = Number(image.dataset.height);
+        return { thumbnail: image.dataset.thumbnail, width, height, ratio: width / height, loading: false };
+      });
+      container.classList.add('e-gallery-container', 'e-gallery-justified', 'e-gallery--ltr');
+      if (lazy) container.classList.add('e-gallery--lazyload');
+      else images.forEach((image, index) => { image.style.backgroundImage = `url("${data[index].thumbnail}")`; });
+
+      const layout = () => {
+        const width = container.clientWidth;
+        const ideal = setting('ideal_row_height');
+        const gap = setting('gap');
+        container.style.setProperty('--hgap', `${gap}px`);
+        container.style.setProperty('--vgap', `${gap}px`);
+        container.style.setProperty('--animation-duration', '350ms');
+        const rowHeights = [];
+        let rowsCount = 0;
+        const fit = (from, to, rowWidth) => {
+          const gapCount = to - from - 1;
+          let start = 0;
+          for (let index = from; index < to; index += 1) {
+            const image = data[index], item = items[index], share = image.computedWidth / rowWidth;
+            item.style.setProperty('--item-width', share);
+            item.style.setProperty('--gap-count', gapCount);
+            item.style.setProperty('--item-height', `${(image.height / image.width) * 100}%`);
+            item.style.setProperty('--item-start', start);
+            item.style.setProperty('--item-row-index', index - from);
+            start += share;
+            if (index === from) {
+              item.classList.add('e-gallery-first-row-item');
+              rowHeights.push((share * (width - gapCount * gap)) / image.ratio);
+            } else item.classList.remove('e-gallery-first-row-item');
+          }
+        };
+        let rowStart = 0;
+        rows: for (;;) {
+          let rowWidth = 0;
+          for (let index = rowStart; ; index += 1) {
+            const image = data[index];
+            const itemWidth = Math.min(Math.round(ideal * image.ratio), width);
+            const next = rowWidth + itemWidth;
+            if (next > width && width - rowWidth < next - width) {
+              fit(rowStart, index, rowWidth);
+              rowsCount += 1;
+              rowStart = index;
+              continue rows;
+            }
+            image.computedWidth = itemWidth;
+            if (index === data.length - 1) {
+              fit(rowStart, index + 1, next / width >= 0.7 ? next : width); // lastRow "normal"
+              break rows;
+            }
+            rowWidth = next;
+          }
+        }
+        const total = rowHeights.reduce((sum, height) => sum + height, 0) + rowsCount * gap;
+        const percents = rowHeights.map((height) => (height / total) * 100);
+        let row = -1, top = 0;
+        items.forEach((item) => {
+          if (item.style.getPropertyValue('--item-row-index') === '0' && ++row) top += percents[row - 1];
+          item.style.setProperty('--item-top', `${top}%`);
+          item.style.setProperty('--item-height', `${percents[row]}%`);
+          item.style.setProperty('--row', row);
+        });
+        container.style.setProperty('--container-aspect-ratio', total / width);
+      };
+      const loadVisible = () => {
+        items.forEach((item, index) => {
+          const image = data[index], box = item.getBoundingClientRect();
+          if (image.loading || box.top > window.innerHeight || box.bottom < 0) return;
+          image.loading = true;
+          const loader = new Image();
+          loader.onload = () => { images[index].style.backgroundImage = `url("${image.thumbnail}")`; images[index].classList.add('e-gallery-image-loaded'); };
+          loader.src = image.thumbnail;
+        });
+      };
+      // E-Gallery runs (and reruns on resize) through a 300 ms debounce, then loads the visible images.
+      let timer;
+      const run = () => { clearTimeout(timer); timer = setTimeout(() => { layout(); if (lazy) setTimeout(loadVisible, 300); }, 300); };
+      run();
+      window.addEventListener('resize', run);
+      if (lazy) {
+        let scrollTimer;
+        window.addEventListener('scroll', () => { clearTimeout(scrollTimer); scrollTimer = setTimeout(loadVisible, 16); }, { passive: true });
+      }
+    });
+  }
+
   // Elementor "stretch section" (frontend handler StretchElement): a stretched section takes the
   // inner width of the kit's container (.page_wrap on this site, the window if absent) and is pulled
   // left by its offset inside it, so it spans the page even inside a padded content column (blog).
@@ -1098,6 +1207,7 @@
 
   document.querySelectorAll('.ql-hero').forEach(initHero);
   initStretchedSections();
+  initGalleries();
   initTyped();
   initSessionRegistration();
   initContactFormStyles();
