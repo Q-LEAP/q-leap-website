@@ -398,6 +398,51 @@
     });
   }
 
+  // ThemeREX side panels (sc_layouts_panel, e.g. the socials / contact panel behind the header's
+  // "⋮" icon): a link to "#<panel id>" opens or closes the panel, like trx_addons; the cross inside
+  // and Escape close it. Class names are written out in full so optimize.py keeps their CSS rules.
+  function initLayoutPanels() {
+    const openedOnSide = { left: 'sc_layouts_panel_opened_left', right: 'sc_layouts_panel_opened_right', top: 'sc_layouts_panel_opened_top', bottom: 'sc_layouts_panel_opened_bottom' };
+    document.querySelectorAll('.sc_layouts_panel[id]:not(.inited)').forEach((panel) => {
+      panel.classList.add('inited');
+      const links = [...document.querySelectorAll(`a[href="#${CSS.escape(panel.id)}"]`)];
+      if (!links.length) return;
+      const bodyClasses = ['sc_layouts_panel_opened', openedOnSide[panel.dataset.panelPosition], panel.dataset.panelClass && `${panel.dataset.panelClass}_opened`].filter(Boolean);
+      let opener = null;
+      const open = (link) => {
+        opener = link;
+        panel.classList.add('sc_layouts_panel_opened');
+        document.body.classList.add(...bodyClasses);
+        links.forEach((each) => each.setAttribute('aria-expanded', 'true'));
+        setTimeout(() => panel.querySelector('a[href], button')?.focus({ preventScroll: true }), 300);
+      };
+      const close = () => {
+        panel.classList.remove('sc_layouts_panel_opened');
+        document.body.classList.remove(...bodyClasses);
+        links.forEach((each) => each.setAttribute('aria-expanded', 'false'));
+        opener?.focus({ preventScroll: true });
+      };
+      links.forEach((link) => {
+        link.classList.add('trx_addons_panel_link');
+        link.setAttribute('aria-controls', panel.id);
+        link.setAttribute('aria-expanded', 'false');
+        if (!link.textContent.trim() && !link.getAttribute('aria-label')) {
+          link.setAttribute('aria-label', document.documentElement.lang.startsWith('en') ? 'Social networks and contact' : 'Réseaux sociaux et contact');
+        }
+        link.addEventListener('click', (event) => {
+          event.preventDefault();
+          if (panel.classList.contains('sc_layouts_panel_opened')) close(); else open(link);
+        });
+      });
+      panel.addEventListener('click', (event) => {
+        if (event.target.closest('.sc_layouts_panel_close')) { event.preventDefault(); close(); }
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && panel.classList.contains('sc_layouts_panel_opened')) close();
+      });
+    });
+  }
+
   // Links the theme left without any text for screen readers and keyboards: card overlays that
   // repeat a named link of the same card (title, "Read more", phone number) leave the tab order;
   // logo widgets with no image are empty tab stops; a logo whose image is decorative gets a name.
@@ -995,6 +1040,7 @@
   initElementorTabs();
   initMobileMenu();
   initHeaderSearch();
+  initLayoutPanels();
   initAccessibleNames();
   initEntranceAnimations();
   initMenus();
