@@ -3,6 +3,7 @@
    window width) and scales text and layer sizes by --hero-scale = min(1, window / grid);
    row and column margins are not scaled. Values below are the module's own settings. */
 
+/* Only chevron_left and chevron_right are kept in this font (tools/perf/subset_icons.py). */
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
