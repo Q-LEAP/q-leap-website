@@ -64,3 +64,7 @@ jobs:
           path: _site
       - id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          # The artifact (site + ux-enhance copy) is ~420 MB: GitHub's file sync took 4-9 min and
+          # now exceeds the action's default 10 min wait.
+          timeout: 1800000
