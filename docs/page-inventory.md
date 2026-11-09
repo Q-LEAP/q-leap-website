@@ -252,7 +252,7 @@ Proposition à valider : rien n’est supprimé sur WordPress, le tri décide de
 | Article | en | ISTQB Certification: Online Practice Test | /en/istqb-certification-online-mock-exam-on-our-website/ | Actualité datée (2020) : événement passé, arrivée, vœux… | /en/blog/ |
 | Offre d’emploi | en | Senior Test Consultant (M/F) | /en/jobs/senior-test-consultant-m-f/ | N’est plus affichée sur la page Carrière (poste pourvu ?) | /en/career/ |
 | Offre d’emploi | fr | Senior Test Consultant (M/F) | /jobs/senior-test-consultant/ | N’est plus affichée sur la page Carrière (poste pourvu ?) | /join-us/ |
-| Offre d’emploi | fr | Stage - Testeur logiciel (M/F) | /jobs/stage-testeur-logiciel/ | N’est plus affichée sur la page Carrière (poste pourvu ?) | /join-us/ |
+| Offre d’emploi | fr | Stage - Testeur logiciel (M/F) | /jobs/stage-testeur-logiciel/ | Dépubliée sur WordPress le 2026-11-09 (FR 33529 + EN 33531 en brouillon) | /join-us/ |
 | Offre d’emploi | fr | Test Manager (M/F) | /jobs/test-manager/ | N’est plus affichée sur la page Carrière (poste pourvu ?) | /join-us/ |
 | Référence client | fr | Portfolio Archive | /portfolio/ | Archive du thème, doublon de la page Références | /our-references/ |
 
