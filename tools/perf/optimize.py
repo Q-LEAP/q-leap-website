@@ -9,7 +9,8 @@ generated (export + components.py, trainings, blog, UX layer) and no generated C
    @keyframes are kept (unused ones and exact duplicates excepted). Fonts the stylesheets embed
    in base64 (over 4 kB) become files next to the bundles, downloaded only when used.
 2. Images: photos heavier than 40 kB get a WebP copy at the same size (assets/…/<name>.<ext>.webp)
-   used by the pages; the originals stay (social sharing, CMS). Images below the first screen load
+   used by the pages; the originals stay (social sharing, CMS). WebP uploads too (many were saved
+   near-lossless by WordPress): their copy is kept when it is at least 20 % lighter. Images below the first screen load
    lazily.
    WebP copies are committed next to their originals (created once, reused by every deploy).
 3. Icon fonts (fontello, trx_addons_icons…: woff2 files whose characters are all private-use
@@ -39,6 +40,10 @@ SCRIPTS = ['assets/js/main.js', 'assets/js/ux.js', 'assets/js/vendor/swiper-5.4.
 DYNAMIC_PREFIXES = ('swiper-', 'iti__', 'iti--')
 WEBP_MIN_BYTES = 40 * 1024
 WEBP_QUALITY = 84
+# Images that get a lighter WebP copy: JPEG/PNG, and WebP uploads saved at a high quality (the
+# copy of a WebP is kept only when it is at least WEBP_MIN_GAIN lighter). Not the copies themselves.
+WEBP_SOURCE = r'(?<!\.jpg)(?<!\.jpeg)(?<!\.png)(?<!\.webp)\.(?:jpe?g|png|webp)'
+WEBP_MIN_GAIN = 0.2
 INLINE_FONT_MAX = 4 * 1024  # base64 characters; smaller fonts (Swiper's arrows, 2.3 kB) stay in the CSS
 BLOCK = re.compile(r'<!-- wp-styles(?::bundle)? -->\n?(.*?)\n?<!-- /wp-styles -->', re.S)
 
@@ -246,7 +251,7 @@ def bundle(block, page, page_dir, tokens):
         parts.append(purge(css, tokens))
     css = prune_unused('\n'.join(part for part in parts if part), tokens, site_css(page))
     # Heavy background images get their WebP copy too (paths are relative to assets/css/bundle/)
-    css = re.sub(r'url\((["\']?)([^)"\']+\.(?:jpe?g|png))\1\)', lambda m: f'url({m.group(1)}{m.group(2)}.webp{m.group(1)})'
+    css = re.sub(r'url\((["\']?)([^)"\']+' + WEBP_SOURCE + r')\1\)', lambda m: f'url({m.group(1)}{m.group(2)}.webp{m.group(1)})'
                  if not re.match(r'(data:|https?:|//)', m.group(2)) and webp_copy(os.path.normpath(os.path.join(BUNDLES, m.group(2)))) else m.group(0), css, flags=re.I)
     css = re.sub(r'url\((["\']?)data:([^;,)]*font[^;,)]*)(?:;[^,)]*)?;base64,([A-Za-z0-9+/=]+)\1\)', inline_font_file, css)
     digest = hashlib.sha1(css.encode()).hexdigest()[:12]
@@ -277,17 +282,21 @@ def inline_font_file(match):
 # ---------------------------------------------------------------- images
 
 def webp_copy(path):
-    """<file>.webp next to a heavy JPEG/PNG (created once); None when not worth it."""
-    if not re.search(r'\.(jpe?g|png)$', path, re.I) or not os.path.isfile(path) or os.path.getsize(path) < WEBP_MIN_BYTES:
+    """<file>.webp next to a heavy JPEG/PNG/WebP (created once); None when not worth it."""
+    if not re.search(WEBP_SOURCE + '$', path, re.I) or not os.path.isfile(path) or os.path.getsize(path) < WEBP_MIN_BYTES:
         return None
     target = path + '.webp'
     if not os.path.exists(target):
         from PIL import Image
         with Image.open(path) as image:
+            if getattr(image, 'is_animated', False):  # only the first frame would be kept
+                open(target + '.skip', 'w').close()
+                return None
             if image.mode not in ('RGB', 'RGBA'):
                 image = image.convert('RGBA' if 'transparency' in image.info or image.mode in ('LA', 'P') else 'RGB')
             image.save(target, 'WEBP', quality=WEBP_QUALITY, method=6)
-        if os.path.getsize(target) >= os.path.getsize(path):
+        limit = os.path.getsize(path) * (1 - WEBP_MIN_GAIN if path.lower().endswith('.webp') else 1)
+        if os.path.getsize(target) >= limit:
             open(target + '.skip', 'w').close()
     if os.path.exists(target + '.skip'):
         return None
@@ -297,7 +306,7 @@ def webp_copy(path):
 def use_webp(markup, page_dir):
     def swap(url):
         clean = html.unescape(url)
-        if re.match(r'(data:|https?:|//|#)', clean) or not re.search(r'\.(jpe?g|png)$', clean, re.I):
+        if re.match(r'(data:|https?:|//|#)', clean) or not re.search(WEBP_SOURCE + '$', clean, re.I):
             return url
         file = os.path.normpath(os.path.join(ROOT, page_dir, clean))
         return url + '.webp' if webp_copy(file) else url
