@@ -37,9 +37,9 @@ L'ordre du blog : le plus récent d'abord en français ; en anglais, comme sur W
 - **Position dans le catalogue** : 0 = en premier.
 - **Adresse de la page** : changer l'adresse d'une formation publiée est possible, mais l'ancienne adresse ne redirige pas toute seule ; demander à l'équipe technique (champ `previousSlugs`).
 
-## Site de test
+## Publication
 
-https://q-leap.github.io/q-leap-website/ : la branche `dev`, republiée automatiquement après chaque modification (workflow *Deploy test site*). Les pages y sont marquées « noindex » pour que Google ne les indexe pas à la place de q-leap.eu.
+La branche `dev` est publiée sur https://q-leap.eu/ (GitHub Pages) automatiquement après chaque modification (workflow *Deploy q-leap.eu*). Il n'y a plus de site de test séparé : l'adresse q-leap.github.io/q-leap-website/ redirige vers q-leap.eu. La prévisualisation de la branche UXEnhance reste à l'adresse q-leap.eu/ux-enhance/, non indexée par Google.
 
 ## Après « Save »
 
