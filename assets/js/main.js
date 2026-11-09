@@ -617,8 +617,13 @@
   // logo widgets with no image are empty tab stops; a logo whose image is decorative gets a name.
   function initAccessibleNames() {
     const english = document.documentElement.lang.startsWith('en');
-    const named = (element) => element.textContent.trim() || element.getAttribute('aria-label') || element.getAttribute('title')
+    // Rendered text, not textContent: the theme hides the « En savoir plus » / « Lire plus » text
+    // of the arrow links in CSS, which leaves them without a name for screen readers. Links that
+    // are hidden themselves (closed submenus, mobile menu) keep their textContent.
+    const shownText = (element) => (element.checkVisibility({ visibilityProperty: true }) ? element.innerText : element.textContent).trim();
+    const named = (element) => shownText(element) || element.getAttribute('aria-label') || element.getAttribute('title')
       || [...element.querySelectorAll('img[alt]')].some((image) => image.alt.trim());
+    const socialNetworks = { 'facebook.com': 'Facebook', 'linkedin.com': 'LinkedIn', 'instagram.com': 'Instagram', 'youtube.com': 'YouTube', 'x.com': 'X', 'twitter.com': 'X' };
     const hide = (link) => { link.setAttribute('aria-hidden', 'true'); link.setAttribute('tabindex', '-1'); };
     document.querySelectorAll('a[href]').forEach((link) => {
       if (named(link)) return;
@@ -631,9 +636,17 @@
       if (link.matches('.sc_layouts_logo')) {
         if (link.querySelector('img, svg')) link.setAttribute('aria-label', english ? 'Q-Leap, home page' : "Q-Leap, page d'accueil");
         else hide(link);
+      } else if (link.matches('.social_item')) {
+        const host = link.hostname.replace(/^www\./, '');
+        const network = socialNetworks[host];
+        if (network) link.setAttribute('aria-label', english ? `Q-Leap on ${network}` : `Q-Leap sur ${network}`);
       }
     });
     document.querySelectorAll('svg.decor-svg').forEach((svg) => svg.setAttribute('aria-hidden', 'true'));
+    document.querySelectorAll('.sc_googlemap iframe:not([title])').forEach((map) => {
+      map.title = english ? 'Map: Q-Leap, Bertrange' : 'Plan : Q-Leap, Bertrange';
+      if (!map.getAttribute('aria-label')) map.removeAttribute('aria-label');
+    });
 
     // Ninja Forms hides its labels (label-hidden) and names fields with placeholders only; the
     // hidden label is empty or a lone "*", and aria-labelledby points to it, so the field has no
@@ -663,7 +676,7 @@
       const contentFor = (tab) => widget.querySelectorAll(`.elementor-tab-content[data-tab="${tab}"]`);
       const titlesFor = (tab) => titles.filter((title) => title.dataset.tab === tab);
       const setOpen = (tab, open, animate) => {
-        titlesFor(tab).forEach((title) => { title.classList.toggle('elementor-active', open); title.setAttribute('aria-expanded', String(open)); title.setAttribute('aria-selected', String(open)); });
+        titlesFor(tab).forEach((title) => { title.classList.toggle('elementor-active', open); title.setAttribute('aria-expanded', String(open)); if (title.getAttribute('role') === 'tab') title.setAttribute('aria-selected', String(open)); else title.removeAttribute('aria-selected'); });
         contentFor(tab).forEach((content) => {
           content.classList.toggle('elementor-active', open);
           if (animate && kind.animate) slide(content, open);
