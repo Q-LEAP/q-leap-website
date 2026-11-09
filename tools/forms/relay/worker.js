@@ -4,8 +4,15 @@
 //
 // POST /          multipart form data from assets/js/main.js (initForms). Fields starting with "_"
 //                 are instructions, not content: _subject (mail subject), _replyto (visitor's
-//                 address, used as Reply-To). Files are attached. Answers {"ok": true} or
-//                 {"ok": false, "error": "…"}; the site shows its e-mail fallback on any failure.
+//                 address, used as Reply-To), and for the automatic reply _autoreply (contact,
+//                 training or job), _lang (fr or en) and _topic (training or job title). Files are
+//                 attached. Answers {"ok": true} or {"ok": false, "error": "…"}; the site shows its
+//                 e-mail fallback on any failure.
+//                 Automatic reply: once the team's mail is sent, the visitor gets an acknowledgement
+//                 in the page's language (English when unknown), from fixed texts (AUTOREPLIES): only
+//                 the training or job title comes from the request, escaped and shortened, so the
+//                 relay cannot be used to send someone else's words. A failed acknowledgement is only
+//                 logged: the request did reach the team. AUTOREPLY = "off" in [vars] disables it.
 // GET  /health    {"ok": true} when Brevo accepts the API key and sees the sender's domain as
 //                 authenticated (used by tools/verify/forms_monitor.py).
 //
@@ -20,6 +27,57 @@ const MAX_TOTAL_BYTES = 8 * 1024 * 1024; // CV and cover letter together, before
 const ALLOWED_EXTENSIONS = ['pdf', 'doc', 'docx', 'odt', 'rtf', 'txt', 'jpg', 'jpeg', 'png'];
 const MAX_FIELDS = 60;
 const MAX_FIELD_LENGTH = 10000;
+const MAX_TOPIC_LENGTH = 150;
+
+// Acknowledgements sent to the visitor. {topic} = the training or job title (escaped), when known.
+const AUTOREPLIES = {
+  fr: {
+    contact: {
+      subject: 'Nous avons bien reçu votre message',
+      text: ['Merci pour votre message. Nous l’avons bien reçu et notre équipe vous répondra dans les meilleurs délais.'],
+    },
+    training: {
+      subject: 'Nous avons bien reçu votre demande de formation',
+      text: ['Merci pour votre demande concernant la formation <strong>{topic}</strong>. Nous l’avons bien reçue.',
+        'Ce message confirme sa réception : notre équipe revient vers vous pour en préciser les détails (session, modalités) et confirmer votre inscription.'],
+      textWithoutTopic: ['Merci pour votre demande de formation. Nous l’avons bien reçue.',
+        'Ce message confirme sa réception : notre équipe revient vers vous pour en préciser les détails (formation, session, modalités).'],
+    },
+    job: {
+      subject: 'Nous avons bien reçu votre candidature',
+      text: ['Merci pour votre candidature au poste <strong>{topic}</strong>. Nous l’avons bien reçue, avec les documents joints.',
+        'Notre équipe l’étudie avec attention et reviendra vers vous si votre profil correspond à nos besoins.'],
+      textWithoutTopic: ['Merci pour votre candidature spontanée. Nous l’avons bien reçue, avec les documents joints.',
+        'Notre équipe l’étudie avec attention et reviendra vers vous si votre profil correspond à nos besoins.'],
+    },
+    hello: 'Bonjour,',
+    signature: 'L’équipe Q-Leap',
+    automatic: 'Ce message est envoyé automatiquement. Pour compléter votre demande, répondez simplement à cet e-mail.',
+  },
+  en: {
+    contact: {
+      subject: 'We have received your message',
+      text: ['Thank you for your message. We have received it and our team will get back to you as soon as possible.'],
+    },
+    training: {
+      subject: 'We have received your training request',
+      text: ['Thank you for your request about the <strong>{topic}</strong> training. We have received it.',
+        'This message confirms that we received it: our team will get back to you with the details (session, practical information) and to confirm your registration.'],
+      textWithoutTopic: ['Thank you for your training request. We have received it.',
+        'This message confirms that we received it: our team will get back to you with the details (training, session, practical information).'],
+    },
+    job: {
+      subject: 'We have received your application',
+      text: ['Thank you for applying for the <strong>{topic}</strong> position. We have received your application and the attached documents.',
+        'Our team will review it carefully and get back to you if your profile matches our needs.'],
+      textWithoutTopic: ['Thank you for your unsolicited application. We have received it, along with the attached documents.',
+        'Our team will review it carefully and get back to you if your profile matches our needs.'],
+    },
+    hello: 'Hello,',
+    signature: 'The Q-Leap team',
+    automatic: 'This message was sent automatically. To add anything to your request, simply reply to this e-mail.',
+  },
+};
 
 export default {
   async fetch(request, env) {
@@ -57,10 +115,12 @@ export default {
     }
     if (!fields.length) return json({ ok: false, error: 'Empty form' }, 400, cors);
 
+    const visitor = validEmail(instructions._replyto) ? instructions._replyto : null;
     try {
       await sendMail(env, {
+        to: env.RECIPIENT,
         subject: (instructions._subject || 'Formulaire du site').replace(/[\r\n]+/g, ' '),
-        replyTo: validEmail(instructions._replyto) ? instructions._replyto : null,
+        replyTo: visitor,
         html: renderHtml(fields, files),
         attachments: await Promise.all(files.map(async ({ file }) => ({ name: file.name, content: base64(await file.arrayBuffer()) }))),
       });
@@ -68,14 +128,22 @@ export default {
       console.error('Brevo send failed:', error.message);
       return json({ ok: false, error: 'Sending failed' }, 502, cors);
     }
+    const reply = visitor && env.AUTOREPLY !== 'off' && autoreply(instructions);
+    if (reply) {
+      try {
+        await sendMail(env, { to: visitor, subject: reply.subject, replyTo: env.RECIPIENT, html: reply.html, attachments: [] });
+      } catch (error) {
+        console.error('Brevo autoreply failed:', error.message);
+      }
+    }
     return json({ ok: true }, 200, cors);
   },
 };
 
-async function sendMail(env, { subject, replyTo, html, attachments }) {
+async function sendMail(env, { to, subject, replyTo, html, attachments }) {
   const body = {
-    sender: { email: env.SENDER_EMAIL, name: env.SENDER_NAME || 'Site q-leap.eu' },
-    to: [{ email: env.RECIPIENT }],
+    sender: { email: env.SENDER_EMAIL, name: to === env.RECIPIENT ? env.SENDER_NAME || 'Site q-leap.eu' : 'Q-Leap' },
+    to: [{ email: to }],
     subject,
     htmlContent: html,
   };
@@ -109,6 +177,24 @@ function renderHtml(fields, files) {
   const rows = fields.map(([name, value]) => `<tr><th style="text-align:left;vertical-align:top;padding:6px 12px 6px 0;color:#555;font-weight:600">${escape(name)}</th><td style="padding:6px 0;white-space:pre-wrap">${linkify(escape(value))}</td></tr>`);
   if (files.length) rows.push(`<tr><th style="text-align:left;vertical-align:top;padding:6px 12px 6px 0;color:#555;font-weight:600">Pièces jointes</th><td style="padding:6px 0">${files.map(({ label, file }) => `${escape(file.name)} (${escape(label)})`).join('<br>')}</td></tr>`);
   return `<div style="font-family:Arial,sans-serif;font-size:14px;color:#222"><table style="border-collapse:collapse">${rows.join('')}</table></div>`;
+}
+
+// The visitor's acknowledgement: fixed text in their language, same look as the site (dark header,
+// violet accent), no image so it reads the same with images blocked.
+function autoreply(instructions) {
+  const texts = AUTOREPLIES[instructions._lang === 'fr' ? 'fr' : 'en'];
+  const kind = texts[instructions._autoreply];
+  if (!kind || !['contact', 'training', 'job'].includes(instructions._autoreply)) return null;
+  const topic = escape(String(instructions._topic || '').replace(/[\r\n]+/g, ' ').trim().slice(0, MAX_TOPIC_LENGTH));
+  const paragraphs = topic || !kind.textWithoutTopic ? kind.text.map((line) => line.replace('{topic}', topic)) : kind.textWithoutTopic;
+  const p = (html, style = '') => `<p style="margin:0 0 16px;line-height:1.6;${style}">${html}</p>`;
+  const html = `<div style="background:#f4f4f6;padding:24px 12px;font-family:Arial,Helvetica,sans-serif;font-size:15px;color:#222">
+<table role="presentation" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;margin:0 auto;background:#ffffff;border-collapse:collapse">
+<tr><td style="background:#1a1726;padding:18px 28px;color:#ffffff;font-size:20px;font-weight:bold;letter-spacing:.5px">Q-Leap</td></tr>
+<tr><td style="padding:28px">${p(texts.hello)}${paragraphs.map((line) => p(line)).join('')}${p(texts.signature, 'margin-bottom:0')}</td></tr>
+<tr><td style="padding:16px 28px;border-top:1px solid #e5e5ea;font-size:12px;line-height:1.5;color:#777">${texts.automatic}<br>Q-Leap · 10B, rue des Mérovingiens · L-8070 Bertrange · +352 20 21 17 · <a href="https://q-leap.eu/" style="color:#6d28d9">q-leap.eu</a></td></tr>
+</table></div>`;
+  return { subject: `${kind.subject} – Q-Leap`, html };
 }
 
 function corsHeaders(origin, env) {

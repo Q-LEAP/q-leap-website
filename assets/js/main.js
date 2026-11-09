@@ -1180,7 +1180,9 @@
     const t = (fr, en) => (english ? en : fr);
     const labelOf = (field) => field.dataset.qlLabel || field.placeholder || field.closest('label')?.textContent.trim()
       || document.querySelector(`label[for="${field.id}"]`)?.textContent.replace('*', '').trim() || field.name;
-    const collect = (form, subject, kind) => {
+    // reply = { type: 'contact' | 'training' | 'job', topic }: the relay sends the visitor an
+    // acknowledgement in the page's language (tools/forms/relay/worker.js, AUTOREPLIES).
+    const collect = (form, subject, kind, reply) => {
       const data = new FormData();
       data.append('Type de demande', kind);
       data.append('Langue du site', english ? 'EN' : 'FR');
@@ -1198,6 +1200,11 @@
       // Replying to the notification e-mail answers the visitor.
       const email = form.querySelector('input[type="email"]')?.value.trim();
       if (email) data.append('_replyto', email);
+      if (reply) {
+        data.append('_autoreply', reply.type);
+        data.append('_lang', english ? 'en' : 'fr');
+        if (reply.topic) data.append('_topic', reply.topic);
+      }
       return data;
     };
     const missing = (form) => [...form.querySelectorAll('[required], [aria-required="true"]')]
@@ -1254,7 +1261,7 @@
           subject = `Inscription formation : ${training}${day ? ` – session du ${day[3]}/${day[2]}/${day[1]}` : ''}`;
           kind = 'Inscription à une session';
         }
-        const data = collect(form, subject, kind);
+        const data = collect(form, subject, kind, { type: 'training', topic: training });
         // Ninja Forms' stylesheet hides the message area (its script used to reveal it): show it here.
         const respond = (html) => {
           const message = wrap.querySelector('.nf-response-msg');
@@ -1295,7 +1302,7 @@
         };
         if (empty.length) { status('invalid', t('Un ou plusieurs champs contiennent une erreur. Veuillez vérifier et essayer à nouveau.', 'One or more fields have an error. Please check and try again.')); empty[0].focus(); return; }
         status('submitting', '');
-        const data = collect(form, `Contact : ${form.querySelector('[name="subject"]')?.value.trim() || 'sans objet'}`, 'Contact général');
+        const data = collect(form, `Contact : ${form.querySelector('[name="subject"]')?.value.trim() || 'sans objet'}`, 'Contact général', { type: 'contact' });
         try {
           await send(data);
           status('sent', t('Merci pour votre message. Il a été envoyé.', 'Thank you for your message. It was sent.'));
@@ -1387,7 +1394,8 @@
           if (zone) { zone.classList.add('awsm-form-drag-and-drop-invalid-control'); zone.focus(); return; }
           empty[0].reportValidity?.(); empty[0].focus(); return;
         }
-        const data = collect(form, spontaneous ? 'Candidature spontanée' : `Candidature : ${title}`, spontaneous ? 'Candidature spontanée' : 'Candidature à une offre');
+        const data = collect(form, spontaneous ? 'Candidature spontanée' : `Candidature : ${title}`, spontaneous ? 'Candidature spontanée' : 'Candidature à une offre',
+          { type: 'job', topic: spontaneous ? '' : title });
         data.append('Poste visé', spontaneous ? 'Candidature spontanée' : title);
         const attachByHand = (html) => html.replace('</p>', ` ${t('Joignez votre CV au message.', 'Please attach your CV to the e-mail.')}</p>`);
         if ([...data.values()].some((value) => value instanceof File && value.size > FORM_MAX_FILE_BYTES)) {

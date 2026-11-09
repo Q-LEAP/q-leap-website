@@ -10,6 +10,17 @@ one e-mail to `digital@q-leap.eu` through Brevo's transactional API. Nothing is 
   `tools/verify/forms_monitor.py`. Both keep working if the provider changes: only `sendMail()` in
   `worker.js` knows about Brevo.
 
+## Automatic reply
+
+Once the team's mail is sent, the visitor (the form's e-mail field) gets an acknowledgement from
+`bot@q-leap.eu` (« Q-Leap »), in the page's language: French on French pages, English otherwise.
+The site tells the relay which form it is (`_autoreply`: contact, training or job), the language
+(`_lang`) and the training or job title (`_topic`). The texts are fixed, in `AUTOREPLIES` at the
+top of `worker.js` (edit them there, then redeploy): only the title comes from the request, escaped
+and cut at 150 characters, so nobody can use the relay to send their own words to someone else.
+Replying to the acknowledgement reaches `RECIPIENT`. If it fails, the request still counts as sent
+(the team has it). `AUTOREPLY = "off"` in `[vars]` turns it off.
+
 ## Setup (once)
 
 1. Brevo: a free account for Q-Leap (check first whether one exists: q-leap.eu's SPF already
@@ -35,6 +46,6 @@ injection, size and type limits, origins, Brevo failure, health). No account nee
 
 ## Limits
 
-Brevo free plan: 300 e-mails a day. Attachments: PDF, Word, ODT, RTF, TXT, JPEG or PNG, 4 MB per
+Brevo free plan: 300 e-mails a day, i.e. about 150 forms with their acknowledgement. Attachments: PDF, Word, ODT, RTF, TXT, JPEG or PNG, 4 MB per
 file (Brevo's limit) and 8 MB per form; beyond that the site offers the e-mail fallback right away
 (CV attached by hand). Only the origins listed in `ALLOWED_ORIGINS` (and localhost) may post.

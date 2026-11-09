@@ -95,6 +95,71 @@ test('Brevo failure becomes a 502 (the site shows its e-mail fallback)', async (
   assert.equal((await response.json()).ok, false);
 });
 
+const withReply = (type, lang, topic, email = 'visiteur@example.com') => {
+  const form = new FormData();
+  form.append('Message', 'Bonjour <script>');
+  form.append('_subject', 'Formulaire');
+  if (email) form.append('_replyto', email);
+  form.append('_autoreply', type);
+  if (lang) form.append('_lang', lang);
+  if (topic !== undefined) form.append('_topic', topic);
+  return form;
+};
+
+test('autoreply: team mail first, then the visitor gets a French acknowledgement', async () => {
+  const response = await post(withReply('training', 'fr', 'ISTQB® Foundation <b>Level</b>'));
+  assert.deepEqual(await response.json(), { ok: true });
+  assert.equal(sent.length, 2);
+  const [team, reply] = sent;
+  assert.deepEqual(team.to, [{ email: 'digital@q-leap.eu' }]);
+  assert.deepEqual(reply.to, [{ email: 'visiteur@example.com' }]);
+  assert.deepEqual(reply.replyTo, { email: 'digital@q-leap.eu' }, 'answering the acknowledgement reaches the team');
+  assert.equal(reply.sender.name, 'Q-Leap');
+  assert.equal(reply.subject, 'Nous avons bien reçu votre demande de formation – Q-Leap');
+  assert.match(reply.htmlContent, /Bonjour,/);
+  assert.match(reply.htmlContent, /ISTQB® Foundation &lt;b&gt;Level&lt;\/b&gt;/, 'topic is escaped');
+  assert.doesNotMatch(reply.htmlContent, /Bonjour &lt;script|<script/, 'no visitor text in the acknowledgement');
+  assert.equal(reply.attachment, undefined);
+});
+
+test('autoreply in English, and English when the language is unknown', async () => {
+  await post(withReply('job', 'en', 'Test Analyst (M/F)'));
+  assert.equal(sent[1].subject, 'We have received your application – Q-Leap');
+  assert.match(sent[1].htmlContent, /Thank you for applying for the <strong>Test Analyst \(M\/F\)<\/strong> position/);
+  sent = [];
+  await post(withReply('contact', 'de'));
+  assert.equal(sent[1].subject, 'We have received your message – Q-Leap');
+});
+
+test('autoreply without topic uses the generic text (unsolicited application)', async () => {
+  await post(withReply('job', 'fr', ''));
+  assert.match(sent[1].htmlContent, /candidature spontanée/);
+  assert.doesNotMatch(sent[1].htmlContent, /<strong><\/strong>/);
+});
+
+test('no autoreply without a valid visitor address, an unknown type, or AUTOREPLY=off', async () => {
+  await post(withReply('contact', 'fr', undefined, 'not-an-address'));
+  assert.equal(sent.length, 1);
+  sent = [];
+  await post(withReply('hello', 'fr'));
+  assert.equal(sent.length, 1);
+  sent = [];
+  env.AUTOREPLY = 'off';
+  await post(withReply('contact', 'fr'));
+  delete env.AUTOREPLY;
+  assert.equal(sent.length, 1);
+});
+
+test('a failed autoreply does not fail the request (the team got it)', async () => {
+  let calls = 0;
+  const original = globalThis.fetch;
+  globalThis.fetch = async (url, init) => (++calls === 2 ? new Response('quota', { status: 402 }) : original(url, init));
+  const response = await post(withReply('contact', 'fr'));
+  globalThis.fetch = original;
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), { ok: true });
+});
+
 test('preflight', async () => {
   const response = await worker.fetch(new Request('https://relay.test/', { method: 'OPTIONS', headers: { Origin: SITE } }), env);
   assert.equal(response.status, 204);
