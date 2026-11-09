@@ -2,18 +2,22 @@
 # Deploys the relay to the Cloudflare account wrangler is logged in to, then writes its address in
 # the two places that use it (FORM_ENDPOINT in assets/js/main.js, FORM_RELAY in
 # tools/verify/forms_monitor.py) and checks /health. Run it again after any change to worker.js.
-# Usage: tools/forms/relay/deploy.sh   (once before: npx wrangler login)
+# Usage: tools/forms/relay/deploy.sh   (once before: npx wrangler login, with the Q-Leap account;
+#        if wrangler still targets another account: CLOUDFLARE_ACCOUNT_ID=<id> tools/forms/relay/deploy.sh)
 set -e
 cd "$(dirname "$0")"
 ROOT=../../..
 
 npx wrangler whoami | grep -i -E 'logged in|account name|│' || true
-if ! npx wrangler secret list 2>/dev/null | grep -q BREVO_API_KEY; then
+# The key may be a secret (wrangler secret put) or, as set up on 2026-11-06, a variable added in
+# the Cloudflare dashboard: --keep-vars keeps such variables, which a plain deploy would delete.
+if ! npx wrangler secret list 2>/dev/null | grep -q BREVO_API_KEY \
+   && ! npx wrangler versions view "$(npx wrangler versions list 2>/dev/null | awk '/Version ID/{id=$3} END{print id}')" 2>/dev/null | grep -q 'env.BREVO_API_KEY'; then
   echo "La clé Brevo n'est pas encore enregistrée sur ce Worker : collez-la (rien n'est écrit dans le dépôt)."
   npx wrangler secret put BREVO_API_KEY
 fi
 
-npx wrangler deploy | tee deploy.log
+npx wrangler deploy --keep-vars | grep -v xkeysib | tee deploy.log
 URL=$(grep -o 'https://qleap-forms\.[a-z0-9-]*\.workers\.dev' deploy.log | head -1)
 rm -f deploy.log
 [ -n "$URL" ] || { echo "Adresse du Worker introuvable dans la sortie de wrangler deploy." >&2; exit 1; }
