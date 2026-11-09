@@ -1,5 +1,5 @@
 // Chrome for the verify scripts: CHROME_PATH if set, otherwise the usual install path on Windows,
-// macOS or Linux. Shared by pixel.mjs, compare.mjs, audit.mjs and pair-diff.mjs.
+// macOS or Linux. Shared by pixel.mjs, compare.mjs, audit.mjs, responsive.mjs and pair-diff.mjs.
 import fs from 'node:fs';
 
 const candidates = [

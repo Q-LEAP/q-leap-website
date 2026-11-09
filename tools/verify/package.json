@@ -6,7 +6,8 @@
   "scripts": {
     "compare": "node compare.mjs",
     "pixel": "node pixel.mjs",
-    "audit": "node audit.mjs"
+    "audit": "node audit.mjs",
+    "responsive": "node responsive.mjs"
   },
   "devDependencies": {
     "pixelmatch": "^6.0.0",
