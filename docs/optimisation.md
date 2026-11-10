@@ -46,7 +46,7 @@ ne pas refaire deux fois la même chose.
 
 ## À valider avant de toucher
 
-- **Bascule** : le domaine q-leap.eu est posé sur GitHub Pages (étape 2 de `docs/ovh-switch.md`), si bien que le site de test redirige vers le WordPress, mais le workflow de production `deploy.yml` (étape 1) n'existe dans aucune branche : le seul déploiement, `deploy-test-site.yml`, ajoute `noindex, nofollow` à chaque page et publie un `robots.txt` « Disallow: / ». Basculer les serveurs de noms dans cet état retirerait q-leap.eu de Google (2026-11-09).
+- **Bascule** : le domaine q-leap.eu est posé sur GitHub Pages (étape 2 de `docs/ovh-switch.md`), si bien que le site de test redirige vers le WordPress, mais le workflow de production `deploy.yml` (étape 1) n'existe dans aucune branche : le seul déploiement, `deploy-test-site.yml`, ajoute `noindex, nofollow` à chaque page et publie un `robots.txt` « Disallow: / ». Basculer les serveurs de noms dans cet état retirerait q-leap.eu de Google (2026-11-09). → Workflow `deploy.yml` préparé sur la branche `prod-deploy` (à fusionner dans `dev` avant l'étape 4).
 - Licence des polices : europa et sofia-pro sont des polices Adobe Fonts (Typekit) copiées de l'export et servies depuis le site ; la licence Adobe Fonts prévoit leur service par le kit Adobe (`use.typekit.net`). À confirmer (garder le kit Adobe ou acheter une licence auto-hébergée).
 
 - SEO : l'accueil anglais (`en/`) a pour canonical l'accueil français (`https://q-leap.eu/`), comme sur le WordPress en ligne ; Google ignore alors son `hreflang`. Le pointer sur `https://q-leap.eu/en/` ?

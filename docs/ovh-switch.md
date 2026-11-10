@@ -34,7 +34,12 @@ Vérification avant la bascule (comparaison serveur par serveur) : `tools/dns/co
 ## Ordre de la bascule
 
 1. Production sur la branche `dev` (seule branche autorisée par l'environnement `github-pages`) :
-   `.github/workflows/deploy.yml` publie le site sans `noindex`, avec `robots.txt` et `sitemap.xml`.
+   `.github/workflows/deploy.yml` publie le site sans `noindex`, avec `robots.txt` et `sitemap.xml`
+   (il remplace `deploy-test-site.yml`, qui mettait tout en `noindex` et `Disallow: /`). Un contrôle
+   arrête le déploiement si `robots.txt` bloque tout le site ou si l'accueil est en `noindex`. La
+   prévisualisation UXEnhance reste publiée dans `/ux-enhance/`, non indexée.
+   **À fusionner avant l'étape 4** : tant que le domaine est posé (étape 2) sans ce workflow, le site
+   publié est entièrement `noindex` (constaté le 2026-11-09).
 2. Domaine posé sur GitHub Pages (`{"cname":"q-leap.eu"}`), puis redéploiement.
 3. Zone OVH créée et importée (aucun effet en ligne).
 4. **Serveurs de noms remplacés** par ceux d'OVH : le seul geste qui a un effet.
