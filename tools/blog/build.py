@@ -27,6 +27,8 @@ TEMPLATE_SLUG = {'fr': 'quand-les-testeurs-font-face-a-la-dette-de-processus', '
 BLOG_PAGE = {'fr': 'blog', 'en': 'en/blog'}
 BLOG_ORDER = {'fr': 'date', 'en': 'views'}
 HOME_PAGE = {'fr': 'index.html', 'en': 'en/index.html'}
+INNOVATIONS_PAGE = {'fr': 'innovations/index.html', 'en': 'en/innovations/index.html'}
+INNOVATIONS_NEWS = 5
 LABELS = {
     'fr': {'previous': 'Previous', 'next': 'Next', 'tags': 'Tags:', 'minute': 'minute', 'minutes': 'minutes',
            'read_more': 'Lire plus', 'next_page': 'Next page', 'last_page': 'Last page', 'first_page': 'First page',
@@ -452,6 +454,27 @@ def update_home(lang, posts):
     open(file, 'w', encoding='utf-8').write(page[:start] + items + page[end:])
 
 
+def update_innovations(lang, posts):
+    """The Innovations page's news block (WordPress' own choice of « Innovation » posts, not strictly
+    by date): posts newer than the first one shown are added on top, at most INNOVATIONS_NEWS kept."""
+    file = os.path.join(ROOT, INNOVATIONS_PAGE[lang])
+    page = open(file, encoding='utf-8').read()
+    prefix = '../../' if lang == 'en' else '../'
+    news = page.index('class="sc_blogger sc_blogger_news')
+    start = page.index('<div class="sc_blogger_grid_wrap', news)
+    end = element_end(page, start) - len('</div>')
+    start = page.index('>', start) + 1
+    by_slug = {post['slug']: post for post in posts}
+    shown = [by_slug[slug] for slug in dict.fromkeys(
+        link.rstrip('/').split('/')[-1] for link in re.findall(r'class="sc_blogger_item_title[^>]*><a href="([^"]+)"', page[start:end]))
+        if slug in by_slug]
+    newest = published(shown[0]) if shown else ''
+    added = [post for post in posts if 'Innovation' in post['categories'] and post not in shown and published(post) > newest]
+    chosen = (added + shown)[:INNOVATIONS_NEWS]
+    items = ''.join(news_item(post, number, prefix) for number, post in enumerate(chosen, 1))
+    open(file, 'w', encoding='utf-8').write(page[:start] + items + page[end:])
+
+
 # ---------------------------------------------------------------- tidy
 
 REDIRECT = """<!doctype html>
@@ -512,12 +535,13 @@ def build():
                 created.append(path)
         update_blog_page(lang, items)
         update_home(lang, items)
+        update_innovations(lang, items)
     return written, created, removed
 
 
 if __name__ == '__main__':
     written, created, removed = build()
-    print(f'{len(written)} articles, {len(created)} créés, {len(removed)} retirés; blog et accueil FR/EN à jour')
+    print(f'{len(written)} articles, {len(created)} créés, {len(removed)} retirés; blog, accueil et Innovations FR/EN à jour')
     for path in created:
         print('  +', path)
     for path in removed:
