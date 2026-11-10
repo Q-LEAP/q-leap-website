@@ -27,9 +27,12 @@ permissions:
   pages: write
   id-token: write
 
+# A new deploy waits for the running one instead of cancelling it: a run cancelled mid-deploy left
+# Pages deployments pending on GitHub's side (never processed nor closed) and every later deploy
+# timed out behind them (2026-11-10). GitHub's own Pages starter workflow uses false for this reason.
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
