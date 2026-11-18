@@ -361,7 +361,39 @@ function jsonLd(training, lang) {
       node.itemListElement[node.itemListElement.length - 1].name = wpTitle(version.title);
     }
   }
+  graph['@graph'].push(courseNode(training, lang, url, image));
   return JSON.stringify(graph).replace(/\//g, '\\/');
+}
+
+// « 1 650.00€ HTVA », « 2.100€ », « 1.250€ excl.VAT » → "1650.00", "2100", "1250" (a dot followed by
+// exactly three digits is a thousands separator); null when the field holds no price.
+export function priceValue(text) {
+  const match = String(text || '').replace(/\s/g, '').match(/\d[\d.,]*/);
+  if (!match) return null;
+  const number = match[0].replace(/\.(?=\d{3}(?:\D|$))/g, '').replace(',', '.');
+  return Number.isFinite(Number(number)) ? number : null;
+}
+
+// schema.org Course for search engines and answer engines: only what the page itself shows
+// (title, description, price, languages, upcoming sessions), the provider being the site's Organization.
+function courseNode(training, lang, url, image) {
+  const version = training[lang];
+  const plain = (html) => String(html || '').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+  const course = {
+    '@type': 'Course', '@id': `${url}#course`, name: plain(version.title), description: plain(version.description),
+    url, image, inLanguage: lang === 'en' ? 'en' : 'fr', provider: { '@id': `${SITE}/#organization` },
+  };
+  const price = priceValue(version.price);
+  if (price) course.offers = { '@type': 'Offer', category: 'Paid', price, priceCurrency: 'EUR', url };
+  const today = new Date().toISOString().slice(0, 10);
+  const instances = upcoming(version.sessions || [], today).map((session) => ({
+    '@type': 'CourseInstance', courseMode: /virtual|online|distance/i.test(session.format) && /onsite|présentiel/i.test(session.format) ? 'Blended'
+      : /virtual|online|distance/i.test(session.format) ? 'Online' : 'Onsite',
+    startDate: session.start, endDate: session.end || session.start,
+    location: { '@type': 'Place', name: 'Q-Leap', address: { '@type': 'PostalAddress', streetAddress: '10B, rue des Mérovingiens', postalCode: 'L-8070', addressLocality: 'Bertrange', addressCountry: 'LU' } },
+  }));
+  if (instances.length) course.hasCourseInstance = instances;
+  return course;
 }
 
 export function trainingPage(content, training, lang, today = new Date().toISOString().slice(0, 10)) {

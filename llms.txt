@@ -1,35 +1,68 @@
 # Q-Leap
 
-> Q-Leap is a software testing and quality assurance company based in Bertrange, Luxembourg, since 2012. It provides testing services (functional, automated, performance, accessibility, UX, UAT), ISTQB and other certified trainings as an accredited GASQ exam centre, and two test automation products built in Luxembourg: Q-Guard and Q-Bot. Q-Leap also organises the Luxembourg Software Testing Event (LSTE).
+> Q-Leap (Q-LEAP SA) is a software testing and quality assurance company based in Bertrange, Luxembourg, since 2012. It provides testing services (functional, automated, performance, accessibility, UX, UAT), ISTQB and other certified trainings as an accredited GASQ exam centre, and two test automation products built in Luxembourg: Q-Guard and Q-Bot. Q-Leap also organises the Luxembourg Software Testing Event (LSTE).
 
-The site is bilingual: French pages at the root, English pages under /en/. Contact: contact@q-leap.eu, +352 20 21 17.
+The site is bilingual: English pages under /en/, French pages at the root. Contact: contact@q-leap.eu, +352 20 21 17, 10B, rue des Mérovingiens, L-8070 Bertrange, Luxembourg.
 
-## Services
+## English
+
+### Services
 - [Testing services](https://q-leap.eu/en/testing/): functional, manual and automated testing, test management and quality steering
-- [Test automation](https://q-leap.eu/automatisation-des-tests/): automated and cross-platform tests (French)
+- [Test automation](https://q-leap.eu/en/test-automation/): automated and cross-platform tests
 - [Performance testing](https://q-leap.eu/en/performance-testing/): load, endurance and stability tests
 - [Accessibility testing](https://q-leap.eu/en/accessibility-testing/): audits for the European Accessibility Act and RGAA/RAWeb
-- [User experience testing](https://q-leap.eu/test-dexperience-utilisateur-ux/): UX test sessions with real users (French)
-- [User acceptance testing](https://q-leap.eu/tests-uat-user-acceptance-testing/): UAT support (French)
+- [User experience testing](https://q-leap.eu/en/user-experience-ux-testing/): UX test sessions with real users
+- [User acceptance testing](https://q-leap.eu/en/uat-user-acceptance-testing/): UAT support
 - [Q-Leap Factory](https://q-leap.eu/en/q-leap-factory/): on-demand testing paid with tester-day credits
 
-## Products
+### Products
 - [Products overview](https://q-leap.eu/en/innovations/): Q-Guard and Q-Bot
 - [Q-Guard](https://q-guard.app/): generates test cases from how an application is really used
 - [Q-Bot](https://q-bot.eu/): automates tests that go through two-factor authentication (2FA)
 
-## Training
+### Training
 - [Training catalogue](https://q-leap.eu/en/training/): ISTQB Foundation, Advanced, AI and generative AI testing, Agile, Test Manager, IREB, IQBBA, TMMi
+- [ISTQB Certified Tester Foundation Level](https://q-leap.eu/en/trainings/istqb-certified-tester-foundation-level/)
 - [Training calendar](https://q-leap.eu/en/training-calendar/): upcoming sessions in Luxembourg
 - [ISTQB Foundation exam: practical details](https://q-leap.eu/practical-details-of-the-istqb-foundation-exam/)
+- [ISTQB Foundation mock exam](https://q-leap.eu/en/istqb-exam-practice-test/)
 
-## Company
+### Company
 - [About us](https://q-leap.eu/en/about-us/)
 - [References and case studies](https://q-leap.eu/en/references/): Cargolux, POST Luxembourg, CFL, LuxairGroup and others
 - [Events](https://q-leap.eu/en/our-events/): Luxembourg Software Testing Event and the Luxembourg testing meetup; [LSTE website](https://www.lste.lu/)
 - [Careers](https://q-leap.eu/en/career/)
 - [Contact](https://q-leap.eu/en/contact/)
+- [Blog](https://q-leap.eu/en/blog/)
+
+## Français
+
+### Services
+- [Services de test](https://q-leap.eu/testing-service/) : tests fonctionnels manuels ou automatisés, pilotage de la qualité
+- [Automatisation des tests](https://q-leap.eu/automatisation-des-tests/)
+- [Tests de performance](https://q-leap.eu/test-performance-testing/)
+- [Tests d'accessibilité](https://q-leap.eu/tests-daccessibilite/) : European Accessibility Act, RGAA et RAWeb
+- [Tests d'expérience utilisateur (UX)](https://q-leap.eu/test-dexperience-utilisateur-ux/)
+- [Tests UAT (recette utilisateur)](https://q-leap.eu/tests-uat-user-acceptance-testing/)
+- [Q-Leap Factory](https://q-leap.eu/q-leap-factory/) : tests à la demande, en crédits de journées de testeur
+
+### Produits
+- [Nos produits](https://q-leap.eu/innovations/) : Q-Guard et Q-Bot
+
+### Formations
+- [Catalogue des formations](https://q-leap.eu/training/)
+- [ISTQB Testeur Certifié – Niveau Fondation](https://q-leap.eu/trainings/istqb-certified-tester-foundation-level/)
+- [Calendrier des formations](https://q-leap.eu/calendrier-formation/)
+- [Modalités pratiques de l'examen ISTQB Foundation](https://q-leap.eu/modalites-pratiques-de-lexamen-istqb-foundation/)
+- [Examen blanc ISTQB Foundation](https://q-leap.eu/istqb-exam-practice-test/)
+
+### Entreprise
+- [À propos](https://q-leap.eu/about-us/)
+- [Références et études de cas](https://q-leap.eu/our-references/)
+- [Nos événements](https://q-leap.eu/our-events/)
+- [Carrière](https://q-leap.eu/join-us/)
+- [Contact](https://q-leap.eu/contact/)
+- [Blog](https://q-leap.eu/blog/)
 
 ## Optional
-- [Blog (English)](https://q-leap.eu/en/blog/) and [blog (French)](https://q-leap.eu/blog/)
 - [Sitemap](https://q-leap.eu/sitemap.xml)
