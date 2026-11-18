@@ -94,9 +94,11 @@
   "trainings/istqb-certifie-ia/": "Formation CFTL / ISTQB Testeur Certifié Intelligence Artificielle : apprenez à tester les modèles d’apprentissage automatique, biais et transparence compris.",
   "trainings/istqb-certified-technical-test-analyst-advanced-level/": "Formation ISTQB Analyste de Tests Techniques Niveau Avancé : 3 jours sur les techniques de test de performance, sécurité et fiabilité, examen compris.",
   "trainings/istqb-certified-test-analyst-advanced-level/": "Formation ISTQB Test Analyst Niveau Avancé : 4 jours pour analyser un système et appliquer les techniques de test de la stratégie, examen compris.",
-  "trainings/istqb-certified-tester-foundation-level/": "Formation ISTQB Testeur Certifié Niveau Fondation : 3 jours en présentiel ou à distance pour testeurs, analystes et développeurs, examen compris.",
+  "trainings/istqb-certified-tester-foundation-level/": "Formation ISTQB Testeur Certifié Niveau Fondation (CTFL 4.0) à Bertrange ou à distance : 3 jours, exercices pratiques et examen officiel compris, en français ou en anglais.",
   "trainings/istqb-test-manager-certifie-niveau-avance/": "Formation ISTQB Test Manager Niveau Avancé : 5 jours sur la stratégie de test, l’organisation, la gestion d’équipe et les parties prenantes, examen compris.",
   "trainings/tester-avec-lia-generative-formation-certifiante-istqb/": "Tester avec l’IA générative : formation pratique certifiante ISTQB sur les prompts, les LLM et l’intégration de l’IA dans vos processus de tests.",
   "trainings/tmmi-certified-professional/": "Formation TMMi Certified Professional : 3 jours pour comprendre les 5 niveaux du modèle et évaluer puis faire progresser un centre de test, examen compris.",
-  "practical-details-of-the-istqb-foundation-exam/": "What to know before the ISTQB Certified Tester Foundation Level exam: its structure, number of questions, duration and extra time for non-native speakers."
+  "practical-details-of-the-istqb-foundation-exam/": "What to know before the ISTQB Certified Tester Foundation Level exam: its structure, number of questions, duration and extra time for non-native speakers.",
+  "european-accessibility-act-luxembourg-audit/": "Ce que la loi luxembourgeoise du 8 mars 2023 (EAA) impose aux services numériques, et comment un audit RAWeb / EN 301 549 vérifie la conformité de votre site ou application.",
+  "externalisation-tests-logiciels-luxembourg/": "Régie, forfait ou tests à la demande : comment confier vos tests logiciels à Q-Leap à Bertrange, avec des exemples de missions pour Cargolux, POST, CFL et LuxairGroup."
 }

@@ -328,7 +328,14 @@ export function articleHtml(training, lang, labels, today) {
 
 			</div>
 
-		</section>
+		</section>${version.details ? `
+		<section class="trainings_page_details">
+			<div class="content_container">
+				<div class="post_content entry-content">
+					${version.details}
+				</div>
+			</div>
+		</section>` : ''}
 
 		${sessionsOrRequest}
 					<section class="form" id="form-ninja" style="display:none;">

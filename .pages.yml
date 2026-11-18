@@ -59,6 +59,12 @@ components:
         options:
           format: html
           media: images
+      - name: details
+        label: Contenu détaillé (sous les informations, facultatif)
+        type: rich-text
+        options:
+          format: html
+          media: images
       - name: price
         label: Prix
         type: string

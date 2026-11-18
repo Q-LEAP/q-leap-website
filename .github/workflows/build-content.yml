@@ -41,6 +41,8 @@ jobs:
         run: node tools/trainings/build.mjs
       - name: Blog
         run: python3 tools/blog/build.py
+      - name: Content pages (content/pages)
+        run: python3 tools/pages/build.py
       - name: Site search (index and results pages)
         run: python3 tools/search/build.py
       - name: Meta descriptions (content/seo/descriptions.json and the blog posts)

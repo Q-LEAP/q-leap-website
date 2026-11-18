@@ -26,3 +26,16 @@
 
 /* Site search results (initSearch): message when there is nothing to list. */
 .ql-search-message { margin: 0 0 2em; }
+
+/* Long-form content blocks (training « Contenu détaillé », GEO pages): same white band and width as
+   .trainings_page_info, readable line length, callout for the free mock exam. */
+.trainings_page_details { padding: 10px 0 40px; background-color: #fff; }
+.trainings_page_details .entry-content { max-width: 860px; }
+.trainings_page_details h2 { margin: 1.6em 0 0.6em; }
+.trainings_page_details h3 { margin: 1.4em 0 0.4em; }
+.geo-callout { border-left: 4px solid var(--theme-color-link, #1f6fd1); background: #f4f7fb; padding: 18px 24px; margin: 0 0 1.5em; }
+.geo-callout h3 { margin-top: 0; }
+.geo-updated { margin-top: 2em; color: #6b7280; }
+/* Wide tables in the GEO pages and guide: scroll sideways on phones instead of squeezing columns. */
+.wp-block-table.ql-scroll { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+@media (max-width: 767px) { .wp-block-table.ql-scroll table { min-width: 560px; margin-left: 0; margin-right: 0; } }
