@@ -331,7 +331,21 @@ def lazy_images(markup):
         # The tag may continue on the next line (<img\n src=…, The Events Calendar's markup)
         attributes = 'loading="lazy" ' if 'decoding=' in img else 'loading="lazy" decoding="async" '
         return re.sub(r'^<img\s+', '<img ' + attributes, img, count=1)
-    return head + re.sub(r'<img\s[^>]*>', tag, body)
+    return header_logos(head) + re.sub(r'<img\s[^>]*>', tag, body)
+
+
+def header_logos(head):
+    """The header logo is the mobile LCP element, but the theme printed it with loading="lazy": the browser
+    found it only after layout. Header logos load eagerly, the first one with high priority."""
+    first = [True]
+
+    def eager(match):
+        img = re.sub(r'\sloading="lazy"', '', match.group(0), count=1)
+        if first[0] and 'fetchpriority' not in img:
+            img = re.sub(r'^<img\s+', '<img fetchpriority="high" ', img, count=1)
+            first[0] = False
+        return img
+    return re.sub(r'<img\s[^>]*class="logo_image"[^>]*>', eager, head)
 
 
 # ---------------------------------------------------------------- icon fonts
