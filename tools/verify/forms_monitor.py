@@ -67,6 +67,8 @@ def page_has(path, marker, label):
         problems.append(f'{label} : {BASE + path} est une simple redirection, sans formulaire.')
     elif marker not in html:
         problems.append(f'{label} : {BASE + path} n\'a plus de formulaire.')
+    elif 'Invalid job ID' in html:  # broken WP Job Openings shortcode left in a page
+        problems.append(f'{label} : {BASE + path} affiche « Invalid job ID. ».')
     return html if status == 200 else ''
 
 
