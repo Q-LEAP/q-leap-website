@@ -1,0 +1,23 @@
+{
+  "_comment": "Sites watched by tools/verify/sites_monitor.py. url: address tested; expect: where the visitor must land after redirects (default: url itself); marker: text the page must contain (optional); cert: false to skip the TLS check (plain-http redirects).",
+  "sites": [
+    {"name": "Q-Leap", "url": "https://q-leap.eu/", "marker": "Q-Leap"},
+    {"name": "Q-Leap (www)", "url": "https://www.q-leap.eu/", "expect": "https://q-leap.eu/"},
+    {"name": "Q-Leap (.lu)", "url": "https://q-leap.lu/", "expect": "https://q-leap.eu/"},
+    {"name": "Q-Bot", "url": "https://q-bot.eu/", "marker": "Q-Bot"},
+    {"name": "Q-Bot (www)", "url": "https://www.q-bot.eu/", "expect": "https://q-bot.eu/"},
+    {"name": "Q-Bot (.lu)", "url": "https://q-bot.lu/"},
+    {"name": "Q-Bot (ancien lien bot.q-leap.eu)", "url": "http://bot.q-leap.eu/", "expect": "https://q-bot.eu/", "cert": false},
+    {"name": "Q-Guard", "url": "https://q-guard.app/", "marker": "Q-Guard"},
+    {"name": "Q-Guard (www)", "url": "https://www.q-guard.app/", "expect": "https://q-guard.app/"},
+    {"name": "Q-Guard (.eu)", "url": "https://q-guard.eu/"},
+    {"name": "Q-Guard (.io)", "url": "https://q-guard.io/"},
+    {"name": "Q-Guard (.lu)", "url": "https://q-guard.lu/"},
+    {"name": "LSTE", "url": "https://www.lste.lu/", "marker": "LSTE"},
+    {"name": "LSTE (sans www)", "url": "https://lste.lu/", "expect": "https://www.lste.lu/"},
+    {"name": "Odoo Q-Leap", "url": "https://q-leap.odoo.com/"},
+    {"name": "Veille QA Luxembourg", "url": "https://q-leap.github.io/veille-qa-luxembourg/"},
+    {"name": "Q-Signature", "url": "https://q-leap.github.io/q-signature/"},
+    {"name": "Relais des formulaires", "url": "https://qleap-forms.qleapdigital.workers.dev/health"}
+  ]
+}

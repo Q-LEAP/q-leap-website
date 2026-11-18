@@ -2,7 +2,7 @@
 # site's forms can deliver. Nothing happens while they work. On the first failure an issue
 # « Alerte formulaires » is opened and assigned (GitHub e-mails the assignee); while it lasts the
 # issue text is kept up to date without new e-mails; when the forms work again the issue is closed
-# with a comment (one more e-mail). SITE: the test site until q-leap.eu is switched to GitHub Pages.
+# with a comment (one more e-mail). SITE: the production site.
 name: Forms monitor
 
 on:
@@ -19,7 +19,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  SITE: https://q-leap.github.io/q-leap-website/
+  SITE: https://q-leap.eu/
   ASSIGNEE: Komorebideuxiemedunom
   LABEL: alerte-formulaires
 

@@ -1,0 +1,60 @@
+# Sites alert: every 15 minutes, tools/verify/sites_monitor.py checks every site of tools/verify/sites.json
+# (DNS, HTTPS certificate, HTTP 200, expected landing page, marker text). Nothing happens while they work.
+# When a site breaks, an issue « Site en panne : <site> » is opened and assigned (GitHub e-mails the
+# assignee); while it lasts the issue text is kept up to date without new e-mails; when the site works
+# again the issue is closed without comment.
+name: Sites monitor
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: sites-monitor
+  cancel-in-progress: false
+
+env:
+  ASSIGNEE: Komorebideuxiemedunom
+  LABEL: alerte-sites
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev
+          sparse-checkout: tools/verify
+      - name: Check the sites
+        run: |
+          set +e
+          python3 tools/verify/sites_monitor.py > problems.tsv
+          echo "exit code $?"; cat problems.tsv
+      - name: Open, update or close one alert issue per site
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create "$LABEL" --color B60205 --description "Site de l'organisation en panne" --force >/dev/null
+          gh issue list --label "$LABEL" --state open --limit 100 --json number,title > open.json
+          run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          now=$(date -u '+%Y-%m-%d %H:%M UTC')
+          while IFS=$'\t' read -r name problem; do
+            [ -z "$name" ] && continue
+            title="Site en panne : $name"
+            printf '%s\n\nDernier contrôle : %s ([détails](%s)).\n' "$problem" "$now" "$run_url" > body.md
+            number=$(jq -r --arg t "$title" '.[] | select(.title == $t) | .number' open.json)
+            if [ -z "$number" ]; then
+              gh issue create --title "$title" --body-file body.md --label "$LABEL" --assignee "$ASSIGNEE"
+            else
+              gh issue edit "$number" --body-file body.md
+            fi
+          done < problems.tsv
+          jq -r '.[] | "\(.number)\t\(.title)"' open.json | while IFS=$'\t' read -r number title; do
+            name=${title#Site en panne : }
+            cut -f1 problems.tsv | grep -qxF "$name" || gh issue close "$number"
+          done
