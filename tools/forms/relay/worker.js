@@ -28,6 +28,8 @@ const ALLOWED_EXTENSIONS = ['pdf', 'doc', 'docx', 'odt', 'rtf', 'txt', 'jpg', 'j
 const MAX_FIELDS = 60;
 const MAX_FIELD_LENGTH = 10000;
 const MAX_TOPIC_LENGTH = 150;
+// White Q-Leap logo for the acknowledgement header, served by the site (1382×414, shown at 140×42).
+const LOGO_URL = 'https://q-leap.eu/assets/images/2020/07/q-leap-logo-blanc.png';
 
 // Acknowledgements sent to the visitor. {topic} = the training or job title (escaped), when known.
 const AUTOREPLIES = {
@@ -180,7 +182,8 @@ function renderHtml(fields, files) {
 }
 
 // The visitor's acknowledgement: fixed text in their language, same look as the site (dark header,
-// violet accent), no image so it reads the same with images blocked.
+// violet accent). The header is the site's white logo; with images blocked its alt text shows
+// « Q-Leap » in the same white bold type as before.
 function autoreply(instructions) {
   const texts = AUTOREPLIES[instructions._lang === 'fr' ? 'fr' : 'en'];
   const kind = texts[instructions._autoreply];
@@ -190,7 +193,7 @@ function autoreply(instructions) {
   const p = (html, style = '') => `<p style="margin:0 0 16px;line-height:1.6;${style}">${html}</p>`;
   const html = `<div style="background:#f4f4f6;padding:24px 12px;font-family:Arial,Helvetica,sans-serif;font-size:15px;color:#222">
 <table role="presentation" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;margin:0 auto;background:#ffffff;border-collapse:collapse">
-<tr><td style="background:#1a1726;padding:18px 28px;color:#ffffff;font-size:20px;font-weight:bold;letter-spacing:.5px">Q-Leap</td></tr>
+<tr><td style="background:#1a1726;padding:18px 28px;color:#ffffff;font-size:20px;font-weight:bold;letter-spacing:.5px"><a href="https://q-leap.eu/" style="text-decoration:none;color:#ffffff"><img src="${LOGO_URL}" width="140" height="42" alt="Q-Leap" style="display:block;width:140px;height:42px;border:0;outline:none;color:#ffffff;font-family:Arial,Helvetica,sans-serif;font-size:20px;font-weight:bold"></a></td></tr>
 <tr><td style="padding:28px">${p(texts.hello)}${paragraphs.map((line) => p(line)).join('')}${p(texts.signature, 'margin-bottom:0')}</td></tr>
 <tr><td style="padding:16px 28px;border-top:1px solid #e5e5ea;font-size:12px;line-height:1.5;color:#777">${texts.automatic}<br>Q-Leap · 10B, rue des Mérovingiens · L-8070 Bertrange · +352 20 21 17 · <a href="https://q-leap.eu/" style="color:#6d28d9">q-leap.eu</a></td></tr>
 </table></div>`;
