@@ -11,6 +11,7 @@ import html
 import json
 import os
 import re
+import urllib.parse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SKIP_DIRS = {'tools', 'reference', 'node_modules', 'content', 'assets', 'docs', 'search', 'category', 'tag',
@@ -84,7 +85,7 @@ def results_page(language):
 
 
 def sitemap(entries):
-    urls = ''.join(f'<url><loc>https://q-leap.eu/{html.escape(item["u"])}</loc></url>\n'
+    urls = ''.join(f'<url><loc>https://q-leap.eu/{html.escape(urllib.parse.quote(item["u"], safe="/"))}</loc></url>\n'
                    for language in ('fr', 'en') for item in entries[language])
     with open(os.path.join(ROOT, 'sitemap.xml'), 'w', encoding='utf-8') as handle:
         handle.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
