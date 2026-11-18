@@ -138,6 +138,10 @@
     document.querySelectorAll('.sc_skills_item').forEach((item) => {
       const total = item.querySelector('.sc_skills_total');
       if (!total) return;
+      // The HTML holds the final digits (what crawlers and no-JS visitors read); the odometer starts from 0.
+      if (total.dataset.style === 'odometer' && !reducedMotion) {
+        total.querySelectorAll('.sc_skills_digit_value').forEach((value) => { value.textContent = '0'; });
+      }
       whenVisible(item, () => {
         item.classList.add('trx_addons_in_viewport', 'inited');
         const stop = parseFloat(total.dataset.stop);

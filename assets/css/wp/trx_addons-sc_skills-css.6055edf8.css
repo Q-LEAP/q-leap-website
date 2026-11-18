@@ -261,3 +261,5 @@
 }
 
 /*# sourceMappingURL=skills.css.map */
+/* Width placeholder drawn by CSS so the page text holds only the real value (crawlers read "100%", not "808080%"). */
+.sc_skills_digit_placeholder:empty::before{content:"8"}
