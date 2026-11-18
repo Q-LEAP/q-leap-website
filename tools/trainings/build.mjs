@@ -31,7 +31,7 @@ export const DEFAULT_LABELS = {
     format: 'Format / Location', certificate: 'Certificate / Diploma', documentation: 'Documentation',
     program: ['Download the', 'program (PDF)'], syllabus: ['Download the syllabus', '(PDF)'],
     sessions: 'Our next sessions', previousSessions: 'Previous sessions', nextSessions: 'Next sessions',
-    register: "S'inscrire", sessionLanguage: 'Langue:', sessionFormat: 'Format:', noscript: 'Notice: JavaScript is required for this content.',
+    register: 'Register', sessionLanguage: 'Language:', sessionFormat: 'Format:', noscript: 'Notice: JavaScript is required for this content.',
     readMore: 'Read more »', readMoreAria: 'Read more about', previous: 'Previous', next: 'Next',
     months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
   },
