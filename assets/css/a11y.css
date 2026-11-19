@@ -1,0 +1,17 @@
+/* Accessibility fixes for every page (added by tools/perf/optimize.py when publishing). */
+/* Contrast (WCAG AA, 4.5:1): the theme's grey text (#7A7E83, 4.1:1 on white) and light grey (dates,
+   portfolio meta: #A5A6AA, 2.4:1) darkened just enough to pass on white and on the #F6F6F6 sections.
+   The dark scheme keeps its own colours. */
+.scheme_default, body.scheme_default,
+.scheme_light, body.scheme_light,
+.scheme_title_footer, body.scheme_title_footer {
+  --theme-color-text: #6D7176;
+  --theme-color-text_light: #707175;
+}
+
+/* Slider dots: 24px between centres so each dot can be tapped (WCAG 2.5.8 target spacing). */
+.slider_outer.slider_outer_pagination_pos_bottom .swiper-pagination-bullets .swiper-pagination-bullet,
+.swiper-container-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet {
+  margin-left: 7px;
+  margin-right: 7px;
+}

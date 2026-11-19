@@ -20,6 +20,15 @@ generated (export + components.py, trainings, blog, UX layer) and no generated C
    fontTools and brotli (pip install fonttools brotli); skipped without them.
 4. Stylesheets that only fed the bundles (assets/css/wp/…, main.css: ~170 files, 12 MB) are not
    published when no page, script or stylesheet names them any more. Published copy only.
+5. Text fonts show their text in a fallback font while they load (font-display: swap; the home page
+   title, set in europa, stayed invisible up to 3 s on a phone). Icon fonts keep their setting.
+6. Small stylesheets the pages link besides the bundle (static.css, hero.css, lste-promo.css: a few kB
+   each) are written into the page: one request less each before the first paint on a phone.
+7. Large images get lighter copies at a few widths (srcset), so a phone or a small column downloads
+   the size it shows; SVG icons without width/height get the ones written in the file.
+8. assets/css/a11y.css (contrast of the theme's greys, slider dots) on every page.
+9. Accessibility of the exported markup: heading levels that skip a level get the level they stand
+   for (aria-level), and the language switcher's links lose role="menuitem" (no menu around them).
 Usage: python3 tools/perf/optimize.py [--root DIR] [page.html …]   (default: every page of DIR)"""
 import functools
 import hashlib
@@ -45,6 +54,13 @@ WEBP_QUALITY = 84
 WEBP_SOURCE = r'(?<!\.jpg)(?<!\.jpeg)(?<!\.png)(?<!\.webp)\.(?:jpe?g|png|webp)'
 WEBP_MIN_GAIN = 0.2
 INLINE_FONT_MAX = 4 * 1024  # base64 characters; smaller fonts (Swiper's arrows, 2.3 kB) stay in the CSS
+# Families drawn with private-use characters or ligatures: a fallback font would show the codes, not icons
+ICON_FONT_WORDS = ('icon', 'fontello', 'awesome', 'eicons', 'material', 'dashicons', 'star', 'rating', 'swiper')
+INLINE_CSS_MAX = 6 * 1024
+A11Y_CSS = 'assets/css/a11y.css'
+# Widths of the lighter copies (srcset); an image gets the ones below its own width
+RESPONSIVE_WIDTHS = (420, 840, 1440)
+RESPONSIVE_MIN_WIDTH = 600
 BLOCK = re.compile(r'<!-- wp-styles(?::bundle)? -->\n?(.*?)\n?<!-- /wp-styles -->', re.S)
 
 
@@ -254,12 +270,48 @@ def bundle(block, page, page_dir, tokens):
     css = re.sub(r'url\((["\']?)([^)"\']+' + WEBP_SOURCE + r')\1\)', lambda m: f'url({m.group(1)}{m.group(2)}.webp{m.group(1)})'
                  if not re.match(r'(data:|https?:|//)', m.group(2)) and webp_copy(os.path.normpath(os.path.join(BUNDLES, m.group(2)))) else m.group(0), css, flags=re.I)
     css = re.sub(r'url\((["\']?)data:([^;,)]*font[^;,)]*)(?:;[^,)]*)?;base64,([A-Za-z0-9+/=]+)\1\)', inline_font_file, css)
+    css = swap_text_fonts(css)
     digest = hashlib.sha1(css.encode()).hexdigest()[:12]
     os.makedirs(BUNDLES, exist_ok=True)
     target = os.path.join(BUNDLES, digest + '.css')
     if not os.path.exists(target):
         open(target, 'w', encoding='utf-8').write(css)
     return f'assets/css/bundle/{digest}.css', len(css)
+
+
+def swap_text_fonts(css):
+    """@font-face of text fonts without font-display (or auto / block, which hide the text up to 3 s):
+    font-display: swap. Icon fonts are left as they are."""
+    def fix(match):
+        body = match.group(1)
+        family = re.search(r'font-family:\s*["\']?([^;"\']+)', body)
+        if not family or any(word in family.group(1).lower() for word in ICON_FONT_WORDS):
+            return match.group(0)
+        if re.search(r'font-display:\s*(swap|fallback|optional)', body):
+            return match.group(0)
+        body = re.sub(r';?\s*font-display:\s*[\w-]+', '', body).strip().rstrip(';')
+        return '@font-face{' + body + ';font-display:swap}'
+    return re.sub(r'@font-face\s*\{([^}]*)\}', fix, css)
+
+
+def inline_small_stylesheets(markup, page_dir):
+    """<link rel="stylesheet"> to a small file of the site (not a bundle) becomes a <style> with the
+    file's rules, url()s made relative to the page."""
+    def inline(match):
+        href = html.unescape(match.group(1))
+        if re.match(r'(https?:|//)', href) or '/bundle/' in href:
+            return match.group(0)
+        file = os.path.normpath(os.path.join(ROOT, page_dir, href))
+        if not os.path.isfile(file) or os.path.getsize(file) > INLINE_CSS_MAX:
+            return match.group(0)
+        base = os.path.dirname(href)
+        css = open(file, encoding='utf-8').read()
+        css = re.sub(r'url\((["\']?)(?!data:|https?:|//|#)([^)"\']+)\1\)',
+                     lambda url: f'url({url.group(1)}{os.path.normpath(os.path.join(base, url.group(2))).replace(os.sep, "/")}{url.group(1)})', css)
+        media = re.search(r'\bmedia="([^"]*)"', match.group(0))
+        media = f' media="{media.group(1)}"' if media and media.group(1) != 'all' else ''
+        return f'<style{media}>/* {href} */\n{css.strip()}\n</style>'
+    return re.sub(r'<link\b(?=[^>]*\brel="stylesheet")[^>]*\bhref="([^"]+\.css)"[^>]*>', inline, markup)
 
 
 def inline_font_file(match):
@@ -315,6 +367,106 @@ def use_webp(markup, page_dir):
     markup = re.sub(r'\b(srcset|data-srcset)="([^"]+)"', lambda m: m.group(1) + '="' + ', '.join(
         ' '.join([swap(part.strip().split(' ')[0])] + part.strip().split(' ')[1:]) for part in m.group(2).split(',') if part.strip()) + '"', markup)
     return re.sub(r'url\((&quot;|["\']?)([^)"\'&]+)(&quot;|["\']?)\)', lambda m: f'url({m.group(1)}{swap(m.group(2))}{m.group(3)})', markup)
+
+
+@functools.lru_cache(maxsize=None)
+def image_size(path):
+    if path.lower().endswith('.svg'):
+        head = open(path, encoding='utf-8', errors='ignore').read(1000)
+        tag = re.search(r'<svg\b[^>]*>', head)
+        width = tag and re.search(r'\swidth="([\d.]+)(?:px)?"', tag.group(0))
+        height = tag and re.search(r'\sheight="([\d.]+)(?:px)?"', tag.group(0))
+        return (round(float(width.group(1))), round(float(height.group(1)))) if width and height else None
+    try:
+        from PIL import Image
+        with Image.open(path) as image:
+            return image.size
+    except Exception:
+        return None
+
+
+def resized_copy(path, width):
+    """<image>-<width>w.webp next to the image (created once), from the original when it exists."""
+    stem = path[:-5] if path.endswith('.webp') and re.search(WEBP_SOURCE + r'\.webp$', path, re.I) else path
+    target = re.sub(r'\.webp$', '', stem) + f'-{width}w.webp'
+    if not os.path.exists(target):
+        from PIL import Image
+        source = stem if os.path.exists(stem) else path
+        with Image.open(source) as image:
+            image = image.convert('RGBA' if image.mode in ('RGBA', 'LA', 'P') else 'RGB')
+            image.resize((width, round(image.height * width / image.width)), Image.LANCZOS).save(target, 'WEBP', quality=WEBP_QUALITY, method=6)
+    return target
+
+
+def responsive_images(markup, page_dir):
+    """Lighter copies (srcset) for large images that have none, and sizes="auto" on lazy images with a
+    srcset: the browser picks the copy for the size the image is shown at (the theme's sizes said
+    840px for the 347px slider thumbnails). SVG icons without width/height get the file's."""
+    try:
+        import PIL  # noqa: F401
+    except ImportError:
+        return markup
+
+    def tag(match):
+        img = match.group(0)
+        src = re.search(r'\ssrc="([^"]+)"', img)
+        if not src or re.match(r'(data:|https?:|//)', src.group(1)):
+            return img
+        file = os.path.normpath(os.path.join(ROOT, page_dir, html.unescape(src.group(1))))
+        size = image_size(file) if os.path.isfile(file) else None
+        if not size:
+            return img
+        img = re.sub(r'(\sloading="lazy")(?=[^>]*\sloading=)', '', img)  # the export wrote it twice
+        # SVG icons (language flags) only: some theme images are 0×0 on purpose until hovered (the
+        # "fit" pictures of the home page), and dimensions would give them their file's size
+        if file.endswith('.svg') and not re.search(r'\swidth=', img) and not re.search(r'\sheight=', img):
+            img = re.sub(r'^<img\s', f'<img width="{size[0]}" height="{size[1]}" ', img)
+        lazy = 'loading="lazy"' in img
+        if 'srcset=' not in img and not file.endswith('.svg') and size[0] >= RESPONSIVE_MIN_WIDTH and (lazy or 'ql-hero' in match.string[max(0, match.start() - 200):match.start()]):
+            folder = os.path.dirname(src.group(1))
+            candidates = [f'{folder}/{os.path.basename(resized_copy(file, width))} {width}w' for width in RESPONSIVE_WIDTHS if width < size[0] * 0.9]
+            if candidates:
+                if lazy:
+                    shown = re.search(r'\swidth="(\d+)"', img)
+                    shown = shown.group(1) if shown else size[0]
+                    sizes = f'auto, (max-width: {shown}px) 100vw, {shown}px'
+                else:  # hero background: full width, cover (as tall as the screen)
+                    sizes = f'max(100vw, {round(100 * size[0] / size[1])}vh)'
+                img = re.sub(r'^<img\s', f'<img srcset="{", ".join(candidates + [src.group(1) + f" {size[0]}w"])}" sizes="{sizes}" ', img)
+        elif lazy and 'srcset=' in img and 'sizes="auto' not in img:
+            img = re.sub(r'\ssizes="([^"]*)"', r' sizes="auto, \1"', img) if ' sizes="' in img else img
+        return img
+    return re.sub(r'<img\s[^>]*>', tag, markup)
+
+
+HEADING = re.compile(r'<h([1-6])\b([^>]*)>')
+
+
+def heading_levels(markup):
+    """A heading one level below the enclosing one at most: the theme's widgets print fixed tags (an h4
+    service title after an h2, an h6 over a section), which screen readers announce as skipped levels.
+    The tag and its look stay; aria-level gives the level it stands for (siblings keep the same one)."""
+    body = markup.find('<body')
+    open_levels = []  # (tag level, level given) of the headings the current one sits under
+
+    def level(match):
+        tag_level = int(match.group(1))
+        while open_levels and open_levels[-1][0] >= tag_level:
+            open_levels.pop()
+        given = re.search(r'aria-level="(\d)"', match.group(2))
+        wanted = int(given.group(1)) if given else min(tag_level, open_levels[-1][1] + 1 if open_levels else tag_level)
+        open_levels.append((tag_level, wanted))
+        if given or wanted == tag_level:
+            return match.group(0)
+        return f'<h{tag_level} aria-level="{wanted}"{match.group(2)}>'
+    return markup[:body] + HEADING.sub(level, markup[body:])
+
+
+def language_menu_roles(markup):
+    """WPML printed role="menuitem" on the language links of a plain <ul> (no role="menu" around them)."""
+    if re.search(r'role="(menu|menubar)"', markup):
+        return markup
+    return re.sub(r'(<a\b[^>]*?)\srole="menuitem"', r'\1', markup)
 
 
 def lazy_images(markup):
@@ -475,7 +627,10 @@ def optimize(file, script_text):
     tokens = page_tokens(rest + block, script_text)
     href, size = bundle(block, rest, page_dir, tokens)
     markup = markup[:match.start()] + f'<!-- wp-styles:bundle -->\n<link rel="stylesheet" href="{prefix}{href}">\n<!-- /wp-styles -->' + markup[match.end():]
-    markup = lazy_images(use_webp(markup, page_dir))
+    if os.path.exists(os.path.join(ROOT, A11Y_CSS)) and A11Y_CSS not in markup:
+        markup = markup.replace('<!-- /wp-styles -->', f'<!-- /wp-styles -->\n<link rel="stylesheet" href="{prefix}{A11Y_CSS}">', 1)
+    markup = responsive_images(lazy_images(use_webp(markup, page_dir)), page_dir)
+    markup = language_menu_roles(heading_levels(inline_small_stylesheets(markup, page_dir)))
     open(path, 'w', encoding='utf-8', newline='').write(markup)
     return size
 
