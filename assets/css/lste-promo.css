@@ -1,0 +1,33 @@
+@font-face{font-family:"LSTE Space Grotesk";font-style:normal;font-weight:500 700;font-display:swap;src:url("../fonts/ext/e01def25-space-grotesk-variable.woff2") format("woff2")}
+@font-face{font-family:"LSTE Mono";font-style:normal;font-weight:500;font-display:swap;src:url("../fonts/ext/21d50b78-jetbrains-mono-500.woff2") format("woff2")}
+.lste-promo{position:relative;z-index:100001;display:block;background:#17141f radial-gradient(120% 220% at 12% 0%,rgba(109,40,217,.55) 0%,rgba(109,40,217,0) 55%) no-repeat;color:#fbfafc;border-bottom:1px solid rgba(139,92,246,.35);font:500 15px/1.35 "LSTE Space Grotesk","Space Grotesk",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+.lste-promo[hidden]{display:none!important}
+.lste-promo *{box-sizing:border-box}
+.lste-promo__in{max-width:1290px;margin:0 auto;padding:10px 56px 10px 24px;display:flex;align-items:center;gap:20px;min-height:56px}
+.lste-promo__logo{display:flex;align-items:center;gap:14px;flex-shrink:0;color:#fbfafc;text-decoration:none!important}
+.lste-promo__logo svg{height:22px;width:auto;display:block}
+.lste-promo__date{font:500 12px/1 "LSTE Mono","JetBrains Mono",ui-monospace,Menlo,monospace;letter-spacing:.06em;text-transform:uppercase;color:#a3e635;padding-left:14px;border-left:1px solid rgba(255,255,255,.16);white-space:nowrap}
+.lste-promo__text{flex:1;min-width:0;margin:0;color:#b8b2c4;font-size:15px}
+.lste-promo__text strong{color:#fbfafc;font-weight:700}
+.lste-promo__text em{font-style:normal;color:#c4b5fd}
+.lste-promo__cta{flex-shrink:0;display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:12px;background:#6d28d9;color:#fff!important;text-decoration:none!important;font:700 12.5px/1.2 "LSTE Mono","JetBrains Mono",ui-monospace,Menlo,monospace;letter-spacing:.045em;text-transform:uppercase;box-shadow:0 6px 18px rgba(109,40,217,.45);transition:background .15s,transform .15s}
+.lste-promo__cta:hover,.lste-promo__cta:focus-visible{background:#7c3aed;transform:translateY(-1px)}
+.lste-promo__cta:focus-visible,.lste-promo__close:focus-visible{outline:2px solid #22d3ee;outline-offset:2px}
+.lste-promo__close{position:absolute;top:50%;right:14px;transform:translateY(-50%);width:32px;height:32px;padding:0;margin:0;border:0;border-radius:8px;background:transparent;color:#9a94a8;cursor:pointer;display:grid;place-items:center;line-height:1}
+.lste-promo__close:hover{background:rgba(255,255,255,.08);color:#fbfafc}
+.lste-promo__close svg{width:14px;height:14px;display:block}
+.lste-promo__short{display:none}
+@media (max-width:1279px){.lste-promo__text .lste-promo__long{display:none}}
+@media (max-width:767px){
+ .lste-promo__in{gap:10px;padding:8px 44px 8px 14px;min-height:52px}
+ .lste-promo__logo{gap:9px}
+ .lste-promo__logo svg{height:16px}
+ .lste-promo__date{font-size:10.5px;padding-left:9px}
+ .lste-promo__text{display:none}
+ .lste-promo__cta{margin-left:auto;padding:9px 12px;font-size:11px;border-radius:10px;gap:6px}
+ .lste-promo__cta .lste-promo__full{display:none}
+ .lste-promo__cta .lste-promo__short{display:inline}
+ .lste-promo__close{right:6px;width:30px;height:30px}
+}
+@media (max-width:359px){.lste-promo__date{display:none}}
+@media (prefers-reduced-motion:reduce){.lste-promo__cta{transition:none}}

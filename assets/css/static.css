@@ -26,3 +26,12 @@
 
 /* Site search results (initSearch): message when there is nothing to list. */
 .ql-search-message { margin: 0 0 2em; }
+
+/* Blog filtered by category (?category=<slug>, see initBlogPagination in main.js) */
+.blog-category-filter { margin: 0 0 1.5em; }
+.blog-category-filter a { text-decoration: underline; }
+.widget_categories li.current-cat > a { font-weight: 600; }
+
+/* ISTQB quiz section of the training pages: hidden until a new quiz is written (the old one ran on a
+   WordPress plugin). Remove the `hidden` attribute on section 15bc108 to show it again. */
+.elementor-section[hidden] { display: none !important; }

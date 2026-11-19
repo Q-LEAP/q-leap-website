@@ -774,13 +774,53 @@
     apply();
   }
 
+  // LSTE banner (tools/promo/lste_banner.py adds it at deploy time until the event): the cross
+  // closes it for the current page only, and a page still cached after the event hides it.
+  function initLstePromo() {
+    const banner = document.getElementById('lste-promo');
+    if (!banner) return;
+    if (Date.now() > Date.UTC(2026, 10, 26, 20, 0)) {
+      banner.hidden = true;
+      return;
+    }
+    banner.querySelector('.lste-promo__close')?.addEventListener('click', () => { banner.hidden = true; });
+  }
+
   // trx_addons blogger "advanced pages" pagination (blog listings). The theme loaded each page with
   // Ajax; tools/blog/build.py writes every post in the list and this shows them a page at a time,
   // with the same navigation markup (First / Prev / numbers / Next / Last, "Page x of y").
   function initBlogPagination() {
     document.querySelectorAll('.sc_blogger_content[data-cards-per-page]').forEach((list) => {
       const navigation = list.parentElement.querySelector('nav[data-blog-pagination]');
-      const items = [...list.children].filter((item) => item.matches('article'));
+      let items = [...list.children].filter((item) => item.matches('article'));
+      // ?category=<slug> (category/<slug>/ redirects here): only that category's posts, and the
+      // sidebar's category link marked as current, as on WordPress's category archives.
+      const category = new URLSearchParams(window.location.search).get('category');
+      const matching = category ? items.filter((item) => (item.dataset.categories || '').split(' ').includes(category)) : [];
+      if (matching.length) {
+        items.forEach((item) => { if (!matching.includes(item)) item.remove(); });
+        items = matching;
+        const english = document.documentElement.lang.startsWith('en');
+        let name = category;
+        document.querySelectorAll('.widget_categories a[href]').forEach((anchor) => {
+          if (new URL(anchor.href).pathname.replace(/\/$/, '').endsWith(`/category/${category}`)) {
+            anchor.parentElement.classList.add('current-cat');
+            anchor.setAttribute('aria-current', 'page');
+            name = anchor.textContent.trim();
+          }
+        });
+        const note = document.createElement('p');
+        note.className = 'blog-category-filter';
+        note.append(english ? 'Category: ' : 'Catégorie : ');
+        const strong = document.createElement('strong');
+        strong.textContent = name;
+        const all = document.createElement('a');
+        all.href = window.location.pathname;
+        all.textContent = english ? 'All posts' : 'Tous les articles';
+        note.append(strong, ' · ', all);
+        list.before(note);
+        document.title = `${name} – ${document.title}`;
+      }
       const perPage = Number(list.dataset.cardsPerPage) || 6;
       const pages = Math.max(1, Math.ceil(items.length / perPage));
       const windowSize = 5;
@@ -1464,6 +1504,7 @@
   }
 
   document.querySelectorAll('.ql-hero').forEach(initHero);
+  initLstePromo();
   initStretchedSections();
   initEventsBreakpoints();
   initGalleries();

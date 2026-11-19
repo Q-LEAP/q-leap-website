@@ -63,6 +63,8 @@ jobs:
           # Page speed on the published copy only (tools/perf/optimize.py): one stylesheet per page,
           # WebP images, lazy loading. Each site is optimized with its own scripts and assets.
           copy_site dev "$PWD/_site"
+          # LSTE 2026 banner on every page until the event (adds nothing afterwards)
+          python3 dev/tools/promo/lste_banner.py --root _site
           python3 dev/tools/perf/optimize.py --root _site
           copy_site ux "$PWD/_site/ux-enhance"
           python3 ux/tools/perf/optimize.py --root _site/ux-enhance || python3 dev/tools/perf/optimize.py --root _site/ux-enhance

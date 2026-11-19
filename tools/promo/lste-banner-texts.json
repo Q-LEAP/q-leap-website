@@ -1,0 +1,18 @@
+{
+ "fr": {
+  "aria": "Promotion LSTE 2026",
+  "date": "26 nov. 2026",
+  "text": "<strong>LSTE 2026</strong><span class=\"lste-promo__long\"> · Luxembourg Software Testing Event</span> — Hôtel Parc Belle-Vue, Luxembourg. <em>Entrée gratuite.</em>",
+  "cta": "Réserver ma place",
+  "close": "Fermer le bandeau",
+  "ctaShort": "Inscription"
+ },
+ "en": {
+  "aria": "LSTE 2026 promotion",
+  "date": "26 Nov 2026",
+  "text": "<strong>LSTE 2026</strong><span class=\"lste-promo__long\"> · Luxembourg Software Testing Event</span> — Hôtel Parc Belle-Vue, Luxembourg. <em>Free entry.</em>",
+  "cta": "Get your free ticket",
+  "close": "Close the banner",
+  "ctaShort": "Free ticket"
+ }
+}

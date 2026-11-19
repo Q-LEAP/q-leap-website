@@ -157,10 +157,14 @@ def set_meta(page, attribute, name, value):
     return re.sub(rf'(<meta {attribute}="{re.escape(name)}" content=")[^"]*(")', lambda m: m.group(1) + escaped + m.group(2), page)
 
 
+def category_slug(lang, name):
+    return CATEGORY_SLUGS[lang].get(name, slugify(name))
+
+
 def categories_html(post, prefix, separator):
     links = []
     for name in post.get('categories') or []:
-        slug = CATEGORY_SLUGS[post['lang']].get(name, slugify(name))
+        slug = category_slug(post['lang'], name)
         folder = 'en/category' if post['lang'] == 'en' else 'category'
         links.append(f'<a href="{prefix}{folder}/{slug}/" rel="category tag">{html.escape(name, quote=False)}</a>')
     return f'<span class="post_meta_item_cat_separator">{separator}</span>'.join(links)
@@ -363,7 +367,8 @@ def band_card(post, prefix, hidden=False):
     image = f' style="background-image: url(&quot;{prefix}{post["image"]}&quot;);"' if post['image'] else ''
     classes = ' '.join(['post_item post_item_container post_layout_band post_format_standard', f'post-{post.get("postId") or 0}',
                         'post type-post status-publish format-standard', 'has-post-thumbnail' if post['image'] else '', 'hentry'])
-    return f'''<article id="post-{post.get("postId") or 0}" data-post-id="{post.get("postId") or 0}"{" hidden" if hidden else ""}
+    slugs = ' '.join(dict.fromkeys(category_slug(post['lang'], name) for name in post.get('categories') or []))
+    return f'''<article id="post-{post.get("postId") or 0}" data-post-id="{post.get("postId") or 0}" data-categories="{slugs}"{" hidden" if hidden else ""}
 	class="{re.sub(' +', ' ', classes)}">
 	<div class="post_featured with_thumb hover_dots post_featured_bg" data-ratio="1:1"><span class="post_thumb post_thumb_bg bg_in"{image}></span>						<div class="mask"></div>
 									<a href="{link}"  aria-hidden="true" class="icons"><span></span><span></span><span></span></a>
@@ -518,6 +523,26 @@ def tidy(posts):
     return changed
 
 
+def update_category_pages(lang, posts):
+    """WordPress category archives were not migrated: category/<slug>/ (en/category/<slug>/) sends
+    to the blog with ?category=<slug>, where main.js shows only that category's posts."""
+    slugs = set(CATEGORY_SLUGS[lang].values())
+    for post in posts:
+        slugs.update(category_slug(lang, name) for name in post.get('categories') or [])
+    folder = 'en/category' if lang == 'en' else 'category'
+    prefix = '../../../' if lang == 'en' else '../../'
+    for slug in sorted(slugs):
+        directory = os.path.join(ROOT, folder, slug)
+        file = os.path.join(directory, 'index.html')
+        if os.path.exists(file):
+            with open(file, encoding='utf-8') as handle:
+                if '<title>Redirection</title>' not in handle.read(400):
+                    continue  # a real page: never replaced
+        os.makedirs(directory, exist_ok=True)
+        target = f'{BLOG_PAGE[lang]}/?category={slug}'
+        open(file, 'w', encoding='utf-8').write(REDIRECT.format(lang=lang, site=SITE, target=target, prefix=prefix))
+
+
 def build():
     posts = load_posts()
     removed = tidy(posts)
@@ -534,6 +559,7 @@ def build():
             if new:
                 created.append(path)
         update_blog_page(lang, items)
+        update_category_pages(lang, items)
         update_home(lang, items)
         update_innovations(lang, items)
     return written, created, removed
