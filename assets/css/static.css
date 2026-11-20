@@ -38,3 +38,6 @@
 
 /* About pages: third row of partner logos (OctoPerf, A4Q), 2 logos centred under the rows of 4. */
 .ql-partners-extra > .elementor-container { justify-content: center; }
+
+/* About pages, "Innovation": the Q-Bot and Q-Guard titles are their logos (height of the old text titles). */
+.sc_icons_item_title .ql-product-logo { display: block; height: 26px; width: auto; }
