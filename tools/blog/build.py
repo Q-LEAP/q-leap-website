@@ -271,11 +271,44 @@ def current_values(page, prefix):
     }
 
 
+FLAGS = {'fr': ('2a07e562-fr.svg', 'Français', 'Passer à', 'Switch to'), 'en': ('320b5fd0-en.svg', 'English', 'Passer à', 'Switch to')}
+
+
+def post_url(lang, slug):
+    return f"{SITE}/{'en/' if lang == 'en' else ''}{slug}/"
+
+
+def language_links(page, post, other, translation, other_href):
+    """A post and its translation point to each other: canonical, hreflang alternates (x-default = French)
+    and, when WordPress had no translation for it, the other language in the language menu."""
+    lang, prefix = post['lang'], ('../../' if post['lang'] == 'en' else '../')
+    urls = {lang: post_url(lang, post['slug']), other: post_url(other, translation)}
+    page = re.sub(r'<link rel="alternate" hreflang="[^"]*" href="[^"]*" />\n?', '', page)
+    page = re.sub(r'<link rel="canonical" href="[^"]*" />', f'<link rel="canonical" href="{urls[lang]}" />', page, count=1)
+    alternates = ''.join(f'<link rel="alternate" hreflang="{code}" href="{urls[code]}" />\n' for code in ('fr', 'en'))
+    alternates += f'<link rel="alternate" hreflang="x-default" href="{urls["fr"]}" />\n'
+    page = page.replace('<link rel="canonical"', alternates + '<link rel="canonical"', 1)
+    if f'wpml-ls-item-{other}' not in page:
+        flag, name, verb_fr, verb_en = FLAGS[other]
+        label = f'{verb_fr if lang == "fr" else verb_en} {name}'
+        def add(match):
+            slot = match.group(1)
+            item = (f' <ul class="sub-menu"><li id="menu-item-wpml-ls-{slot}-{other}" class="menu-item wpml-ls-slot-{slot} wpml-ls-item wpml-ls-item-{other} '
+                    f'wpml-ls-menu-item wpml-ls-last-item menu-item-type-wpml_ls_menu_item menu-item-object-wpml_ls_menu_item menu-item-wpml-ls-{slot}-{other}">'
+                    f'<a href="{other_href}" title="{label}" aria-label="{label}" role="menuitem"><span><img class="wpml-ls-flag" src="{prefix}assets/images/ext/{flag}" alt="" />'
+                    f'<span class="wpml-ls-native" lang="{other}">{name}</span></span></a></li></ul> ')
+            classes = match.group(2).replace(' wpml-ls-last-item', '').replace(f'menu-item-wpml-ls-{slot}-{lang}', f'menu-item-has-children menu-item-wpml-ls-{slot}-{lang}')
+            return f'<li id="menu-item-wpml-ls-{slot}-{lang}" class="{classes}">{match.group(3)}{item}</li>'
+        page = re.sub(rf'<li id="menu-item-wpml-ls-(\d+)-{lang}" class="([^"]*)">(<a href="[^"]*"[^>]*>.*?</a>)</li>', add, page, flags=re.S)
+    return page
+
+
 def render_post(post, older, newer, tags, all_slugs):
     lang = post['lang']
     prefix = '../../' if lang == 'en' else '../'
     target = os.path.join(page_dir(post), 'index.html')
-    created = not os.path.exists(target)
+    # a post published again after being a draft: its page is a redirect (write_draft_redirects), start over
+    created = not os.path.exists(target) or 'data-blog-redirect' in open(target, encoding='utf-8').read(600)
     source = os.path.join(HERE, 'templates', f'post.{lang}.html') if created else target
     page = open(source, encoding='utf-8').read()
     if created:  # the template's address becomes this post's
@@ -341,6 +374,8 @@ def render_post(post, older, newer, tags, all_slugs):
         other_href = f"{prefix}{BLOG_PAGE[other]}/"
     if created or translation:
         page = re.sub(rf'(wpml-ls-item-{other}\b[^>]*><a href=")[^"]*(")', lambda m: m.group(1) + other_href + m.group(2), page)
+    if translation in all_slugs[other]:
+        page = language_links(page, post, other, translation, other_href)
 
     page = update_linked_data(page, post, changed, words)
     os.makedirs(os.path.dirname(target), exist_ok=True)
