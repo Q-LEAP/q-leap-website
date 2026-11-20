@@ -35,3 +35,6 @@
 /* ISTQB quiz section of the training pages: hidden until a new quiz is written (the old one ran on a
    WordPress plugin). Remove the `hidden` attribute on section 15bc108 to show it again. */
 .elementor-section[hidden] { display: none !important; }
+
+/* About pages: third row of partner logos (OctoPerf, A4Q), 2 logos centred under the rows of 4. */
+.ql-partners-extra > .elementor-container { justify-content: center; }

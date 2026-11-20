@@ -27,7 +27,9 @@ generated (export + components.py, trainings, blog, UX layer) and no generated C
 7. Large images get lighter copies at a few widths (srcset), so a phone or a small column downloads
    the size it shows; SVG icons without width/height get the ones written in the file.
 8. assets/css/a11y.css (contrast of the theme's greys, slider dots) on every page.
-9. Accessibility of the exported markup: heading levels that skip a level get the level they stand
+9. Q-LEAP logos (header, search overlay, footer): copies at the size they are shown, ×1/×2/×3
+   (srcset + sizes): the 1382 px file shrunk 8 times by the browser looked jagged (Safari).
+10. Accessibility of the exported markup: heading levels that skip a level get the level they stand
    for (aria-level), and the language switcher's links lose role="menuitem" (no menu around them).
 Usage: python3 tools/perf/optimize.py [--root DIR] [page.html …]   (default: every page of DIR)"""
 import functools
@@ -58,6 +60,9 @@ INLINE_FONT_MAX = 4 * 1024  # base64 characters; smaller fonts (Swiper's arrows,
 ICON_FONT_WORDS = ('icon', 'fontello', 'awesome', 'eicons', 'material', 'dashicons', 'star', 'rating', 'swiper')
 INLINE_CSS_MAX = 6 * 1024
 A11Y_CSS = 'assets/css/a11y.css'
+# Logo file → height (CSS px) it is shown at; 100 px in the search overlay (search_header_wrap)
+LOGO_HEIGHTS = {'q-leap-logo-blanc.png': 50, 'q-leap-logo-blanc-e1705650899725.png': 50, 'QLEAP_01-logo-2.png': 50, 'Q_02.png': 55}
+SEARCH_LOGO_HEIGHT = 100
 # Widths of the lighter copies (srcset); an image gets the ones below its own width
 RESPONSIVE_WIDTHS = (420, 840, 1440)
 RESPONSIVE_MIN_WIDTH = 600
@@ -439,6 +444,34 @@ def responsive_images(markup, page_dir):
     return re.sub(r'<img\s[^>]*>', tag, markup)
 
 
+def sharp_logos(markup, page_dir):
+    """srcset of the Q-LEAP logos: copies at the width shown (from LOGO_HEIGHTS) ×1, ×2, ×3, so the
+    browser no longer shrinks the 1382 px file 8 times (jagged edges in Safari)."""
+    try:
+        import PIL  # noqa: F401
+    except ImportError:
+        return markup
+
+    def tag(match):
+        img = match.group(0)
+        src = re.search(r'\ssrc="([^"]+)"', img)
+        name = src and re.sub(r'(\.png)\.webp$', r'\1', os.path.basename(src.group(1)))  # after use_webp
+        if name not in LOGO_HEIGHTS:
+            return img
+        file = os.path.normpath(os.path.join(ROOT, page_dir, html.unescape(src.group(1))))
+        size = image_size(file) if os.path.isfile(file) else None
+        if not size:
+            return img
+        height = SEARCH_LOGO_HEIGHT if 'search_header_wrap' in match.string[max(0, match.start() - 120):match.start()] else LOGO_HEIGHTS[name]
+        shown = round(height * size[0] / size[1])
+        folder = os.path.dirname(src.group(1))
+        widths = sorted({shown * factor for factor in (1, 2, 3) if shown * factor < size[0] * 0.9})
+        candidates = [f'{folder}/{os.path.basename(resized_copy(file, width))} {width}w' for width in widths] + [f'{src.group(1)} {size[0]}w']
+        img = re.sub(r'\s(srcset|sizes)="[^"]*"', '', img)
+        return re.sub(r'^<img\s', f'<img srcset="{", ".join(candidates)}" sizes="{shown}px" ', img)
+    return re.sub(r'<img\s[^>]*>', tag, markup)
+
+
 HEADING = re.compile(r'<h([1-6])\b([^>]*)>')
 
 
@@ -629,7 +662,7 @@ def optimize(file, script_text):
     markup = markup[:match.start()] + f'<!-- wp-styles:bundle -->\n<link rel="stylesheet" href="{prefix}{href}">\n<!-- /wp-styles -->' + markup[match.end():]
     if os.path.exists(os.path.join(ROOT, A11Y_CSS)) and A11Y_CSS not in markup:
         markup = markup.replace('<!-- /wp-styles -->', f'<!-- /wp-styles -->\n<link rel="stylesheet" href="{prefix}{A11Y_CSS}">', 1)
-    markup = responsive_images(lazy_images(use_webp(markup, page_dir)), page_dir)
+    markup = sharp_logos(responsive_images(lazy_images(use_webp(markup, page_dir)), page_dir), page_dir)
     markup = language_menu_roles(heading_levels(inline_small_stylesheets(markup, page_dir)))
     open(path, 'w', encoding='utf-8', newline='').write(markup)
     return size
