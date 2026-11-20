@@ -131,6 +131,19 @@ def image_size(path):
         return image.size
 
 
+def share_image(path):
+    """og:image for LinkedIn and Facebook, which show no preview for AVIF or WebP: a JPEG copy
+    <name>-share.jpg next to the original, created if missing. Other formats are used as they are."""
+    if not path.endswith(('.avif', '.webp')):
+        return path
+    share = re.sub(r'(\.(jpe?g|png))?\.(avif|webp)$', '', path) + '-share.jpg'
+    if not os.path.exists(os.path.join(ROOT, share)):
+        from PIL import Image
+        with Image.open(os.path.join(ROOT, path)) as image:
+            image.convert('RGB').save(os.path.join(ROOT, share), 'JPEG', quality=85, optimize=True, progressive=True)
+    return share
+
+
 def crop(path, width, height):
     """WordPress-style centre crop <name>-<w>x<h>.<ext>, created next to the original if missing."""
     stem, ext = os.path.splitext(path)
@@ -258,6 +271,9 @@ def current_values(page, prefix):
         value = html.unescape(value).split('?')[0]
         path = 'assets/images/' + value.split('/wp-content/uploads/')[1] if '/wp-content/uploads/' in value else value.replace(SITE + '/', '')
         images.update({path, re.sub(r'-\d+x\d+(\.\w+)$', r'\1', path)})
+    featured = first(r'<div class="post_featured alignwide with_thumb"><img [^>]*src="(?:\.\./)*([^"]+)"')
+    if featured and any(path.endswith('-share.jpg') for path in images):
+        images.add(featured)
     return {
         'title': html.unescape(re.sub(r'<[^>]+>', '', title)).strip() if title is not None else None,
         'seoTitle': html.unescape(first(r'<title>(.*?)</title>') or ''),
@@ -313,6 +329,8 @@ def render_post(post, older, newer, tags, all_slugs):
     page = open(source, encoding='utf-8').read()
     if created:  # the template's address becomes this post's
         page = page.replace(f'/{TEMPLATE_SLUG[lang]}/', f'/{post["slug"]}/').replace('<html ', '<html data-blog-generated ', 1)
+    if post['slug'] != TEMPLATE_SLUG[lang]:  # Yoast's JSON-LD writes \/ : its @id and url kept the template's address
+        page = page.replace(f'\\/{TEMPLATE_SLUG[lang]}\\/', f'\\/{post["slug"]}\\/')
     now = current_values(page, prefix)
     changed = set()
 
@@ -337,11 +355,13 @@ def render_post(post, older, newer, tags, all_slugs):
     if post['image'] and post['image'] not in now['images']:
         changed.add('image')
         page = re.sub(r'<div class="post_featured alignwide with_thumb">.*?</div>', lambda _: featured_html(post, prefix), page, count=1, flags=re.S)
-        width, height = image_size(post['image'])
-        page = re.sub(r'(<meta property="og:image" content=")[^"]*(")', lambda m: m.group(1) + html.escape(f"{SITE}/{post['image']}") + m.group(2), page)
+    share = share_image(post['image']) if post['image'] else None
+    if share and ('image' in changed or share != post['image']):
+        width, height = image_size(share)
+        page = re.sub(r'(<meta property="og:image" content=")[^"]*(")', lambda m: m.group(1) + html.escape(f"{SITE}/{share}") + m.group(2), page)
         page = set_meta(page, 'property', 'og:image:width', str(width))
         page = set_meta(page, 'property', 'og:image:height', str(height))
-        page = set_meta(page, 'property', 'og:image:type', 'image/png' if post['image'].endswith('.png') else 'image/jpeg')
+        page = set_meta(page, 'property', 'og:image:type', 'image/png' if share.endswith('.png') else 'image/jpeg')
     if now['categories'] != (post.get('categories') or []) and CATEGORIES.search(page):
         changed.add('categories')
         page = CATEGORIES.sub(lambda m: m.group(1) + categories_html(post, prefix, ' ') + m.group(3), page, count=1)

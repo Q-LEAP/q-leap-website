@@ -1,6 +1,14 @@
 {
   "$comment": "pages: WordPress redirections and replaced addresses (exact path → target). prefixes: archives not migrated, for every linked address starting with the prefix (most specific first). Targets are paths from the site root.",
   "pages": {
+    "session/istqb-testeur-certifie-niveau-fondation-18": "trainings/istqb-certified-tester-foundation-level/",
+    "session/istqb-testeur-certifie-niveau-fondation-19": "trainings/istqb-certified-tester-foundation-level/",
+    "en/session/istqb-certified-tester-foundation-level-20": "en/trainings/istqb-certified-tester-foundation-level/",
+    "en/session/istqb-certified-tester-foundation-level-21": "en/trainings/istqb-certified-tester-foundation-level/",
+    "en/session/testing-with-generative-ai-istqb-certification-course-8": "en/trainings/testing-with-generative-ai-istqb-certification-course/",
+    "en/session/testing-with-generative-ai-istqb-certification-course-9": "en/trainings/testing-with-generative-ai-istqb-certification-course/",
+    "en/session/testing-with-generative-ai-istqb-certification-course-10": "en/trainings/testing-with-generative-ai-istqb-certification-course/",
+    "en/session/testing-with-generative-ai-istqb-certification-course-16": "en/trainings/testing-with-generative-ai-istqb-certification-course/",
     "testing": "testing-service/",
     "references": "our-references/",
     "en/about-us-2": "en/about-us/",
